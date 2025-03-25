@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+{% include 'include/alert_error_message.html' %}
+
+<div class="container box_inserItem">
+    <form action="{% url 'new_item' %}" method="post" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success" style="margin-left: 40%; width: 130px;">Enviar</button>
+    </form>
+</div>
+
+{% endblock content %}

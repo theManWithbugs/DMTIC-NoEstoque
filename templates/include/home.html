@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row align-items-start gap-2">
+        <div class="col bg-white rounded d-flex justify-content-center p-3">
+            <a href="{% url 'new_item' %}" class="fs-5">
+                <button class="btn btn-success">
+                    Entrada de material
+                </button>
+            </a>
+        </div>
+        <div class="col bg-white rounded d-flex justify-content-center p-3">
+            <a href="{% url 'add_contr' %}" class="fs-5">
+                <button class="btn btn-success">
+                    Adicionar Contrato 
+                </button>
+            </a>
+            <a href="{% url 'add_unidade' %}" class="fs-5 ms-3">
+                <button class="btn btn-warning">
+                    Adicionar 
+                </button>
+            </a>
+        </div>
+        <div class="col bg-white roundedm d-flex justify-content-center">
+            <div class="col bg-white rounded d-flex justify-content-center p-3">
+                <a href="{% url 'listar_contr' %}" class="fs-5">
+                    <button class="btn btn-info">
+                        Contratos // Items
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
