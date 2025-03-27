@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="container bg-white p-4 rounded">
+    <form action="{% url 'saida_mater' %}" method="post">
+        {% csrf_token %}
+        <h3>Adicionar Material</h3>
+        {{ form.as_p }}
+
+        <h3>Adicionar Tipos de Material</h3>
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div>
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit" style="margin-left: 42%; width: 110px;" class="btn btn-success">Salvar</button>
+    </form>
+</div>
+
+{% endblock content %}

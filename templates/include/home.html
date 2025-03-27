@@ -6,9 +6,14 @@
 <div class="container">
     <div class="row align-items-start gap-2">
         <div class="col bg-white rounded d-flex justify-content-center p-3">
-            <a href="{% url 'new_item' %}" class="fs-5">
+            <a href="{% url 'new_item' %}" class="fs-5 me-2">
                 <button class="btn btn-success">
                     Entrada de material
+                </button>
+            </a>
+            <a href="{% url 'saida_mater' %}" class="fs-5">
+                <button class="btn btn-danger">
+                    Saida de material
                 </button>
             </a>
         </div>
@@ -26,9 +31,9 @@
         </div>
         <div class="col bg-white roundedm d-flex justify-content-center">
             <div class="col bg-white rounded d-flex justify-content-center p-3">
-                <a href="{% url 'listar_contr' %}" class="fs-5">
+                <a href="#" class="fs-5">
                     <button class="btn btn-info">
-                        Contratos // Items
+                        Nada aqui
                     </button>
                 </a>
             </div>

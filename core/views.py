@@ -6,6 +6,7 @@ from django.contrib import messages
 from . models import *
 from django.http import JsonResponse
 from . utils import *
+from django.forms import inlineformset_factory
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -82,6 +83,60 @@ def inserirItem(request):
 
     return render(request, template_name, {'form': form})
 
+def itemSaidaView(request):
+    template_name = 'include/saida_mater.html'
+
+    if request.method == "GET":
+        form = AddMaterialForm()
+        TipoMaterFormset = inlineformset_factory(
+            MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1
+        )
+        formset = TipoMaterFormset()
+        context = {
+            'form': form,
+            'formset': formset,
+        }
+        return render(request, template_name, context)
+
+    elif request.method == "POST":
+        form = AddMaterialForm(request.POST)
+        TipoMaterFormset = inlineformset_factory(MaterialObj, MaterialTipo, 
+                                                 form=TipoMaterForm)
+        formset = TipoMaterFormset(request.POST)
+        if form.is_valid() and formset.is_valid():
+            obj_paiSaved = form.save()
+            formset.instance = obj_paiSaved
+            formset.save()
+            return redirect('saida_mater')
+        else:
+            context = {
+                'form': form,
+                'formset': formset,
+            }
+            return render(request, template_name, context)
+        
+def listarItemsView(request):
+    template_name = 'include/listar.html'
+
+    obj = MaterialTipo.objects.values().all()
+
+    context = {
+        'obj': obj,
+    }
+
+    return render(request, template_name, context)
+
+def editarItemsView(request, id):
+    template_name = 'include/edit_material.html'
+
+    try:
+        item = MaterialTipo.objects.get(id=id)
+    except MaterialObj.DoesNotExist:
+        messages.error(request, 'O objeto não existe!')
+        return redirect('editar_items')
+
+    return render(request, template_name)
+
 def addContratoView(request):  
     template_name = 'include/add_contrato.html'
     form = AddContratoForm(request.POST or None)  
@@ -95,6 +150,3 @@ def addContratoView(request):
 
     return render(request, template_name, {'form': form})
 
-def listarView(request):
-    template_name = 'include/listar.html'
-    return render(request, template_name)

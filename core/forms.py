@@ -6,23 +6,81 @@ class AddMaterialForm(forms.ModelForm):
         model = MaterialObj
         fields = '__all__'
         widgets = {
-            'marca': forms.TextInput(attrs={
-                'style': 'width: 300px',
+            'contrato': forms.Select(attrs={
+                'class': 'form-control form-control-sm',
+                'style': 'width: 400px;',
             }),
-            'modelo': forms.TextInput(attrs={
-                'style': 'width: 300px;',
+            'descricao': forms.Textarea(attrs={
+                'class': 'form-control form-control-sm',
+                'rows': 3,
+                'placeholder': 'Descrição do material...',
             }),
-            'garantia': forms.TextInput(attrs={
-                'style': 'width: 300px',
-            }),
-            'observacao': forms.Textarea(attrs={
-                'rows': 4,
-                'style': 'width: 600px',
+            'data': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control form-control-sm',
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super(AddMaterialForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class TipoMaterForm(forms.ModelForm):
+    class Meta:
+        model = MaterialTipo
+        fields = '__all__'
+        widgets = {
+            'material_obj': forms.Select(attrs={
+                'class': 'form-control form-control-sm',
+                'style': 'width: 300px;',
+            }),
+            'marca': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Marca do material...',
+            }),
+            'modelo': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Modelo do material...',
+            }),
+            'quantidade': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Quantidade...',
+            }),
+            'observacao': forms.Textarea(attrs={
+                'class': 'form-control form-control-sm',
+                'rows': 3,
+                'placeholder': 'Observações...',
+            }),
+            'garantia': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Garantia...',
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TipoMaterForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class SaidaMaterialForm(forms.ModelForm):
+    class Meta:
+        model = MaterialSaida
+        fields = '__all__'
+        widgets = {
+            'unidade': forms.Select(attrs={
+            'style': 'width: 500px',
+            }),
+            'departamento': forms.Select(attrs={
+            'style': 'width: 500px',
+            }),
+            'divisao_field': forms.Select(attrs={
+            'style': 'width: 500px',
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SaidaMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
@@ -107,6 +165,7 @@ class AddDivisãoForm(forms.ModelForm):
         super(AddDivisãoForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
 
 
 
