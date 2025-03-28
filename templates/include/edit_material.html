@@ -3,6 +3,16 @@
 
 {% block content %}
 
+{% include 'include/alert_error_message.html' %}
 
+<div class="container bg-white rounded" style="width: 800px;">
+    <div class="p-4">
+        <form method="post">
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <button class="btn btn-success" style="margin-left: 41%; width: 120px;">Salvar</button>
+        </form>
+    </div>
+</div>
 
 {% endblock content %}

@@ -7,9 +7,7 @@
 
 {% block content %}
 
-<span>
-    {% include 'include/alert_error_message.html' %}
-</span>
+{% include 'include/alert_error_message.html' %}
 
 <div class="container box_inserItem">
     <form action="{% url 'add_contr' %}" method="post" >

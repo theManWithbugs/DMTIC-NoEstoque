@@ -9,7 +9,7 @@
 
 {% include 'include/alert_error_message.html' %}
 
-<div class="container box_inserItem">
+<div class="container box_inserItem" style="width: 800px;">
     <form action="{% url 'new_item' %}" method="post" >
         {% csrf_token %}
         {{ form.as_p }}

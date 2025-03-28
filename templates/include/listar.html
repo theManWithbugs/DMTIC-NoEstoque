@@ -3,6 +3,8 @@
 
 {% block content %}
 
+{% include 'include/alert_error_message.html' %}
+
 <div class="bg-white rounded" style="width: 900px; margin-left: 27%;">
     <div class="container p-3">
         <a href="{% url 'saida_mater' %}">
@@ -17,34 +19,29 @@
 <div class="rounded mt-4 bg-white" style="width: 900px; margin-left: 27%;">
     <div class="container p-5">
         <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Quantidade</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
             <tbody>
-                {% for i in obj %}
-                <tr>
-                    <td>{{ i.marca }}</td>
-                    <td>{{ i.modelo }}</td>
-                    <td>{{ i.quantidade }}</td>
-                    <td>
-                        <a href="{% url 'editar_items' i.id %}" class="btn btn-warning">
-                            Editar
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a href="#" class="ms-2 btn btn-danger">
-                            Excluir
-                            <i class="bi bi-file-earmark-x"></i>
-                        </a>
-                    </td>
-                </tr>
+                {% for obj in objs %}
+                    <tr>
+                        <td>{{ obj.marca }} </td>  
+                        <td>{{ obj.modelo }} </td>
+                        <td>{{ obj.quantidade }}</td> 
+                        <td>
+                            <a href="{% url 'editar_items' obj.id %}" class="btn btn-warning">
+                                Editar
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{% url 'excluir_item' obj.id %}" class="ms-2 btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este item?');">
+                                Excluir
+                                <i class="bi bi-file-earmark-x"></i>
+                            </a>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
+            <div class="d-flex justify-content-center">
+                {% include 'include/pagination.html' %}
+            </div>
     </div>
 </div>
 

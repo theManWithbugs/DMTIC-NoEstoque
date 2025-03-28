@@ -11,7 +11,9 @@ urlpatterns = [
     path('home/listar_items/editar/<int:id>/', views.editarItemsView, name='editar_items'),
 
     path('home/add_contrato/', views.addContratoView, name='add_contr'),
-    path('home/listar_items/', views.listarItemsView, name='listar_contr'),
+    path('home/listar_items/', views.listarItemsView, name='listar_items'),
     path('home/addUnidade/', views.addUnidadeView, name='add_unidade'),
+
+    path('home/listar_items/excluir/<int:id>/', views.excluirItems, name='excluir_item'),
 ]
 

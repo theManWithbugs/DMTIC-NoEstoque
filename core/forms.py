@@ -166,6 +166,16 @@ class AddDivisãoForm(forms.ModelForm):
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
+class EditarMaterialForm(forms.ModelForm):
+    class Meta:
+        model = MaterialTipo
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super(EditarMaterialForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
 
 
 

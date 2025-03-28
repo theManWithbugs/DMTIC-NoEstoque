@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
 from . forms import *
@@ -6,6 +6,7 @@ from django.contrib import messages
 from . models import *
 from django.http import JsonResponse
 from . utils import *
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
 
 msgSucesso = 'Operação realizada com sucesso!'
@@ -86,7 +87,7 @@ def inserirItem(request):
 def itemSaidaView(request):
     template_name = 'include/saida_mater.html'
 
-    if request.method == "GET":
+    if request.method == 'GET':
         form = AddMaterialForm()
         TipoMaterFormset = inlineformset_factory(
             MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1
@@ -98,7 +99,7 @@ def itemSaidaView(request):
         }
         return render(request, template_name, context)
 
-    elif request.method == "POST":
+    elif request.method == 'POST':
         form = AddMaterialForm(request.POST)
         TipoMaterFormset = inlineformset_factory(MaterialObj, MaterialTipo, 
                                                  form=TipoMaterForm)
@@ -118,10 +119,24 @@ def itemSaidaView(request):
 def listarItemsView(request):
     template_name = 'include/listar.html'
 
-    obj = MaterialTipo.objects.values().all()
+    objs = []
+
+    items__queryset = MaterialTipo.objects.all()
+    paginator = Paginator(items__queryset, 10)
+    page = request.GET.get('page')
+
+    try:
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        item = objs.object_list.all()
 
     context = {
-        'obj': obj,
+        'objs': objs,
     }
 
     return render(request, template_name, context)
@@ -129,13 +144,27 @@ def listarItemsView(request):
 def editarItemsView(request, id):
     template_name = 'include/edit_material.html'
 
-    try:
-        item = MaterialTipo.objects.get(id=id)
-    except MaterialObj.DoesNotExist:
-        messages.error(request, 'O objeto não existe!')
-        return redirect('editar_items')
+    item = get_object_or_404(MaterialTipo, id=id)
+    
+    if request.method == 'POST':
 
-    return render(request, template_name)
+        form = EditarMaterialForm(request.POST, instance=item)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, msgSucesso)
+            return redirect('listar_items')
+        else:
+            messages.error(request, msgError)
+
+    else:
+        form = EditarMaterialForm(instance=item)
+    
+    context = {
+        'form': form,
+    }
+    
+    return render(request, template_name, context)
 
 def addContratoView(request):  
     template_name = 'include/add_contrato.html'
@@ -149,4 +178,16 @@ def addContratoView(request):
             return redirect('add_contr')
 
     return render(request, template_name, {'form': form})
+
+def excluirItems(request, id):
+
+    item = get_object_or_404(MaterialTipo, id=id)
+
+    if item:
+        item.delete()
+        messages.success(request, msgSucesso)
+        return redirect('listar_items')
+
+
+    return request
 
