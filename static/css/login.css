@@ -1,0 +1,43 @@
+#login_box {
+    margin-top: 90px;
+    width: 500px;
+    height: 545px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.524);
+    margin-left: 35%;
+
+}
+
+#ddms_msg {
+    color: white;
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+#ddms_msg img {
+    width: 25px;
+}
+
+#icon_drsi_login {
+    width: 240px;
+}
+
+#box_input1 {
+    margin-left: 33%;
+}
+
+#box_input2 {
+    margin-left: 33%;
+}
+
+@media (max-width: 1300px) {
+    #login_box {
+        margin-left: 30%;
+    }
+}
+
+@media (max-width: 1800px) {
+    #login_box {
+        margin-left: 32%;
+    }
+}

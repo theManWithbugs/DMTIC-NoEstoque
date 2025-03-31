@@ -30,7 +30,6 @@ var/
 /core/migrations
 __pycache__/
 db.sqlite3
-/static
 /media
 
 # Environments

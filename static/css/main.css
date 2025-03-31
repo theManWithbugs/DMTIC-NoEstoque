@@ -1,0 +1,44 @@
+body {
+    background: linear-gradient(to right, #00008B, #000000);
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+    height: 100vh;
+}
+
+footer {
+    backdrop-filter: blur(5px);
+    padding: 10px;
+}
+
+footer .text-white {
+    margin-left: 36%;
+}
+
+footer span img {
+    width: 20px;
+    height: 20px;
+}
+
+#grade_home_inside {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#img_footer {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
