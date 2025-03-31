@@ -85,12 +85,12 @@ def inserirItem(request):
     return render(request, template_name, {'form': form})
 
 def itemSaidaView(request):
-    template_name = 'include/saida_mater.html'
+    template_name = 'include/entrada_items.html'
 
     if request.method == 'GET':
         form = AddMaterialForm()
         TipoMaterFormset = inlineformset_factory(
-            MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1
+            MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1, can_delete=False
         )
         formset = TipoMaterFormset()
         context = {
@@ -104,11 +104,13 @@ def itemSaidaView(request):
         TipoMaterFormset = inlineformset_factory(MaterialObj, MaterialTipo, 
                                                  form=TipoMaterForm)
         formset = TipoMaterFormset(request.POST)
+
         if form.is_valid() and formset.is_valid():
             obj_paiSaved = form.save()
             formset.instance = obj_paiSaved
             formset.save()
-            return redirect('saida_mater')
+            return redirect('entrada_material')
+            
         else:
             context = {
                 'form': form,
@@ -121,11 +123,13 @@ def listarItemsView(request):
 
     objs = []
 
-    items__queryset = MaterialTipo.objects.all()
-    paginator = Paginator(items__queryset, 10)
+    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj').all()
+    
+    # items__queryset = MaterialObj.objects.all()
+    paginator = Paginator(objs_tipo, 10)
     page = request.GET.get('page')
 
-    try:
+    try:    
         objs = paginator.page(page)
     except PageNotAnInteger:
         objs = paginator.page(1)
@@ -133,7 +137,7 @@ def listarItemsView(request):
         objs = paginator.page(paginator.num_pages)
 
     if objs.object_list.exists():
-        item = objs.object_list.all()
+        pass
 
     context = {
         'objs': objs,

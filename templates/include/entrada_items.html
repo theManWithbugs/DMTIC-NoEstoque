@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container bg-white p-4 rounded">
+    <form action="{% url 'entrada_material' %}" method="post">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+        <hr>
+    
+        <div class="col-md-auto">
+            <div class="row">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="col-md-auto inline_form">
+                        {{ form.as_p }}
+                        <hr>
+                    </div>
+                {% endfor %}
+                <br>
+                <div class="col-12 text-center mt-5">
+                    <button type="submit" style="width: 110px;" class="btn btn-success">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/jquery_3.7.1.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('.inline_form').formset({
+                prefix: '{{ form.prefix }}',
+                deleteText: '',
+                addText: '<button class="btn btn-primary">Adicionar novo</button>',
+            });
+        })
+    </script>
+{% endblock js %}
