@@ -24,7 +24,9 @@
                 {% endfor %}
                 <br>
                 <div class="col-12 text-center mt-5">
-                    <button type="submit" style="width: 110px;" class="btn btn-success">Salvar</button>
+                    <button type="submit" style="width: 110px;" class="btn btn-success">
+                        Salvar
+                    </button>
                 </div>
             </div>
         </div>
@@ -38,9 +40,9 @@
     <script type="text/javascript">
         $(function() {
             $('.inline_form').formset({
-                prefix: '{{ form.prefix }}',
+                prefix: 'tipo_obj',
                 deleteText: '',
-                addText: '<button class="btn btn-primary">Adicionar novo</button>',
+                addText: 'adicionar',
             });
         })
     </script>

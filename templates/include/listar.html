@@ -45,24 +45,26 @@
                 </tr>
             </thead>
             <tbody>
+           
             {% for obj in objs %}
-                    <tr>
-                        <td>{{ obj }} </td>  
-                        <td>{{ obj.modelo }} </td>
-                        <td>{{ obj.quantidade }}</td> 
-                        <td>
-                            <a href="{% url 'editar_items' obj.id %}" class="btn btn-warning">
-                                Editar
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <!-- <a href="{% url 'excluir_item' obj.id %}" class="ms-2 btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este item?');">
+                {% for obj_inside in obj.tipo_obj.all %}
+                <tr>
+                    <td>{{ obj_inside.marca }}</td>  
+                    <td>{{ obj_inside.modelo }}</td>
+                    <td>{{ obj_inside.quantidade }}</td> 
+                    <td>
+                        <a href="{% url 'editar_items' obj_inside.id %}" class="btn btn-warning">
+                            Editar
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                         <!-- <a href="{% url 'excluir_item' obj.id %}" class="ms-2 btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este item?');">
                                 Excluir
                                 <i class="bi bi-file-earmark-x"></i>
-                            </a> -->
-                        </td>
-                    </tr>
+                        </a> -->
+                    </td>
+                </tr>
+                {% endfor %}
             {% endfor %}
-
             </tbody>
         </table>
             <div class="d-flex justify-content-center">

@@ -84,14 +84,20 @@ def inserirItem(request):
 
     return render(request, template_name, {'form': form})
 
+def save_formset(formset):
+    for form in formset:
+        if form.is_valid() and form.has_changed():
+            form.save()
+
 def itemSaidaView(request):
     template_name = 'include/entrada_items.html'
 
+    TipoMaterFormset = inlineformset_factory(
+        MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1, can_delete=False
+    )
+
     if request.method == 'GET':
         form = AddMaterialForm()
-        TipoMaterFormset = inlineformset_factory(
-            MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1, can_delete=False
-        )
         formset = TipoMaterFormset()
         context = {
             'form': form,
@@ -101,31 +107,34 @@ def itemSaidaView(request):
 
     elif request.method == 'POST':
         form = AddMaterialForm(request.POST)
-        TipoMaterFormset = inlineformset_factory(MaterialObj, MaterialTipo, 
-                                                 form=TipoMaterForm)
-        formset = TipoMaterFormset(request.POST)
-
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             obj_paiSaved = form.save()
-            formset.instance = obj_paiSaved
-            formset.save()
-            return redirect('entrada_material')
-            
+
+            formset = TipoMaterFormset(request.POST, instance=obj_paiSaved)
+
+            if formset.is_valid():
+                formset.save()
+                messages.success(request, "Itens salvos com sucesso!")
+                return redirect('listar_items')
+            else:
+                messages.error(request, "Erro ao salvar os itens do formset.")
         else:
-            context = {
-                'form': form,
-                'formset': formset,
-            }
-            return render(request, template_name, context)
+            formset = TipoMaterFormset(request.POST)
+            messages.error(request, "Erro ao salvar o formulário principal.")
+
+        context = {
+            'form': form,
+            'formset': formset,
+        }
+        return render(request, template_name, context)
         
 def listarItemsView(request):
     template_name = 'include/listar.html'
 
     objs = []
 
-    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj').all()
-    
-    # items__queryset = MaterialObj.objects.all()
+    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
+
     paginator = Paginator(objs_tipo, 10)
     page = request.GET.get('page')
 

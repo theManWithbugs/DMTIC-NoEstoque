@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block css %} 
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
-{% endblock css %}
-
 {% block content %}
 
 {% include 'include/alert_error_message.html' %}
 
 <div class="container box_inserItem">
     <form action="{% url 'add_contr' %}" method="post" >
+        <h4>Adicionar contrato</h4>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success mt-4" style="margin-left: 40%; width: 130px;">Enviar</button>
+        <button type="submit" class="btn btn-success mt-4 btn_center_form">Enviar</button>
     </form>
 </div>
 

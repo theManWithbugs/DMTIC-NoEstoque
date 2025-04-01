@@ -10,7 +10,7 @@ class MaterialObj(models.Model):
         return f" -{self.contrato}- "
     
 class MaterialTipo(models.Model):
-    material_obj = models.ForeignKey('MaterialObj', on_delete=models.CASCADE, related_name='tipo_obj')
+    material_obj = models.ForeignKey('MaterialObj', on_delete=models.CASCADE, related_name='tipo_obj', verbose_name='Contrato')
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
     modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
     quantidade = models.IntegerField(blank=False, null=False, verbose_name='Quantidade ')

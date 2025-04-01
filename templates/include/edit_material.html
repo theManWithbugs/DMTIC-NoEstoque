@@ -5,12 +5,12 @@
 
 {% include 'include/alert_error_message.html' %}
 
-<div class="container bg-white rounded" style="width: 600px;">
+<div class="container bg-white rounded">
     <div class="p-4">
         <form method="post">
             {% csrf_token %} 
             {{ form.as_p }}
-            <button class="btn btn-success" style="margin-left: 41%; width: 120px;">Salvar</button>
+            <button class="btn btn-success btn_center_form">Salvar</button>
         </form>
     </div>
 </div>

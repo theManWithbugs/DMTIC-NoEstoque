@@ -171,12 +171,17 @@ class EditarMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialTipo
         fields = '__all__'
+        widgets = {
+            'observacao': forms.Textarea(attrs={
+                'rows': 3,
+            }),
+        }
 
     def __init__(self, *args, **kwargs):
         super(EditarMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
-            self.fields[i].widget.attrs['style'] = 'width: 500px'
+            
 
 
 

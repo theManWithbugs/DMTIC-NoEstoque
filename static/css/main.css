@@ -31,6 +31,21 @@ footer span img {
     height: 20px;
 }
 
+.box_inserItem {
+    background-color: white;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding: 20px;
+}
+
+.btn_center_form {
+    margin-left: 41%;
+    width: 120px;
+}
+
+
 
 
 
