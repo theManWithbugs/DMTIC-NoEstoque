@@ -11,6 +11,7 @@ class MaterialObj(models.Model):
     
 class MaterialTipo(models.Model):
     material_obj = models.ForeignKey('MaterialObj', on_delete=models.CASCADE, related_name='tipo_obj', verbose_name='Contrato')
+    saida_obj = models.ForeignKey('MaterialSaida', on_delete=models.CASCADE, related_name='saida_obj', blank=True, verbose_name='Saida')
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
     modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
     quantidade = models.IntegerField(blank=False, null=False, verbose_name='Quantidade ')

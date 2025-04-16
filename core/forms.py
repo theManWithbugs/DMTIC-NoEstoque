@@ -31,6 +31,7 @@ class TipoMaterForm(forms.ModelForm):
     class Meta:
         model = MaterialTipo
         fields = '__all__'
+        exclude = ['saida_obj']
         widgets = {
             'material_obj': forms.Select(attrs={
                 'class': 'form-control form-control-sm',
@@ -179,6 +180,26 @@ class EditarMaterialForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EditarMaterialForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class objMaterialForm(forms.ModelForm):
+    class Meta:
+        model = MaterialTipo
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super(EditarMaterialForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class SaidaMaterialForm(forms.ModelForm):
+    class Meta:
+        model = MaterialTipo
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super(SaidaMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
             

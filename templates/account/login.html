@@ -17,11 +17,11 @@
         <form action="{% url 'login_page' %}" method="post">
           {% csrf_token %}
           <div class="form__group field" id="box_input1">
-            <input type="input" class="form__field" placeholder="Name" required="" autocomplete="on" name="username" id="username">
+            <input type="input" class="form__field" placeholder="Name" required="" autocomplete="off" name="username" id="username">
             <label for="name" class="form__label">Usuario</label>
           </div>
           <div class="form__group field" id="box_input2">
-            <input type="password" class="form__field" placeholder="senha" required="" autocomplete="on" name="password" id="senha">
+            <input type="password" class="form__field" placeholder="senha" required="" autocomplete="off" name="password" id="senha">
             <label for="senha" class="form__label">Senha</label>
           </div>
             <button class="animated-button mt-4" style="margin-left: 40%;" type="submit">

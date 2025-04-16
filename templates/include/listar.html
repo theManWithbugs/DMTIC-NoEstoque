@@ -16,16 +16,19 @@
             <a href="{% url 'entrada_material' %}" style="text-decoration: none; color: inherit;">
                 <button type="button" class="button">
                     <span class="button__text">Adicionar</span>
-                    <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                    <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" 
+                        width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" 
+                        stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
                 </button>
             </a>
         </div>
         <div class="col-auto">
             <a href="#" style="text-decoration: none; color: inherit;">
                 <button class="saida_item_btn">
-                    <span class="texto">Saida</span>
+                    <span class="texto">Saidas</span>
                     <span class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                        width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
                     </span>
                 </button>
             </a>
@@ -53,7 +56,7 @@
                     <td>{{ obj_inside.modelo }}</td>
                     <td>{{ obj_inside.quantidade }}</td> 
                     <td>
-                        <a href="{% url 'editar_items' obj_inside.id %}" class="btn btn-warning">
+                        <a href="{% url 'editar_items' obj_inside.id %}" class="btn btn-warning me-4">
                             Editar
                             <i class="bi bi-pencil-square"></i>
                         </a>
@@ -61,6 +64,10 @@
                                 Excluir
                                 <i class="bi bi-file-earmark-x"></i>
                         </a> -->
+                        <a href="{% url 'saida_item' obj_inside.id %}" class="btn btn-primary">
+                            Saida
+                            <i class="bi bi-arrow-right-square"></i>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

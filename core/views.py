@@ -201,6 +201,18 @@ def excluirItems(request, id):
         messages.success(request, msgSucesso)
         return redirect('listar_items')
 
-
     return request
+
+def saida_ItemView(request, id):
+    template_name = 'include/saida.html'
+
+    material = get_object_or_404(MaterialTipo, id=id)
+
+    form = objMaterialForm(request.POST, instance=material) 
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, template_name, context)
 

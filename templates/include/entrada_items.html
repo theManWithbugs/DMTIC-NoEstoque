@@ -17,14 +17,15 @@
             <div class="row">
                 {{ formset.management_form }}
                 {% for form in formset %}
-                    <div class="col-md-auto inline_form">
+                    <div class="col-md-auto inline_form ms-5" id="inline_formset">
                         {{ form.as_p }}
                         <hr>
                     </div>
                 {% endfor %}
                 <br>
                 <div class="col-12 text-center mt-5">
-                    <button type="submit" style="width: 110px;" class="btn btn-success">
+                    <button type="submit" style="width: 110px;" 
+                    class="btn btn-success">
                         Salvar
                     </button>
                 </div>
@@ -39,11 +40,20 @@
     <script src="{% static 'js/jquery.formset.js' %}"></script>
     <script type="text/javascript">
         $(function() {
-            $('.inline_form').formset({
-                prefix: 'tipo_obj',
-                deleteText: '',
-                addText: 'adicionar',
-            });
-        })
+        $('.inline_form').formset({
+            prefix: 'tipo_obj',
+            deleteText: '',
+            addText: 'adicionar',
+            added: function(row) {
+                $(row).css({
+                    'border': '1px solid #ddd',
+                    'padding': '10px',
+                    'margin-bottom': '10px',
+                    'border-radius': '5px',
+                    'background-color': '#f9f9f9'
+                });
+            }
+        });
+    });
     </script>
 {% endblock js %}

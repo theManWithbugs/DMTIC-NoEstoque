@@ -15,5 +15,7 @@ urlpatterns = [
     path('home/addUnidade/', views.addUnidadeView, name='add_unidade'),
 
     path('home/listar_items/excluir/<int:id>/', views.excluirItems, name='excluir_item'),
+
+    path('base/listar_items/saida_item/<int:id>/', views.saida_ItemView, name='saida_item'),
 ]
 
