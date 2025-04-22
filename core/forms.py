@@ -189,13 +189,13 @@ class objMaterialForm(forms.ModelForm):
         fields = '__all__'
     
     def __init__(self, *args, **kwargs):
-        super(EditarMaterialForm, self).__init__(*args, **kwargs)
+        super(objMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
 class SaidaMaterialForm(forms.ModelForm):
     class Meta:
-        model = MaterialTipo
+        model = MaterialSaida
         fields = '__all__'
     
     def __init__(self, *args, **kwargs):

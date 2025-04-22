@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="bg-white p-4 rounded">
+    <form action="#" method="post">
+        {% csrf_token %} 
+        {{ form.as_p }}
+        <button class="btn btn-success">
+            Enviar
+        </button>
+    </form>
+</div>
+
+{% endblock content %}

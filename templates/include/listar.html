@@ -23,7 +23,7 @@
             </a>
         </div>
         <div class="col-auto">
-            <a href="#" style="text-decoration: none; color: inherit;">
+            <a href="{% url 'items_saida' %}" style="text-decoration: none; color: inherit;">
                 <button class="saida_item_btn">
                     <span class="texto">Saidas</span>
                     <span class="icon">
@@ -45,6 +45,8 @@
                     <td>Modelo</td>
                     <td>Quantidade</td>
                     <td>Editar</td>
+                    <td>Saida</td>
+                    <td>Saida (status)</td>
                 </tr>
             </thead>
             <tbody>
@@ -56,7 +58,8 @@
                     <td>{{ obj_inside.modelo }}</td>
                     <td>{{ obj_inside.quantidade }}</td> 
                     <td>
-                        <a href="{% url 'editar_items' obj_inside.id %}" class="btn btn-warning me-4">
+                        <a href="{% url 'editar_items' obj_inside.id %}" 
+                        class="btn btn-warning me-4">
                             Editar
                             <i class="bi bi-pencil-square"></i>
                         </a>
@@ -64,10 +67,21 @@
                                 Excluir
                                 <i class="bi bi-file-earmark-x"></i>
                         </a> -->
-                        <a href="{% url 'saida_item' obj_inside.id %}" class="btn btn-primary">
+                    </td>
+                    <td>
+                        <a href="{% url 'saida_item' obj_inside.id %}" 
+                        class="btn btn-primary">
                             Saida
                             <i class="bi bi-arrow-right-square"></i>
                         </a>
+                    </td>
+                    <td>
+                        <!-- {% if obj_inside.tipo_obj.saida_obj != '' %}
+                            <p>Nulo</p>
+                            {% else %}
+                                <p>Saida</p>
+                        {% endif %} -->
+                        {{ obj_inside.saida_obj }}
                     </td>
                 </tr>
                 {% endfor %}

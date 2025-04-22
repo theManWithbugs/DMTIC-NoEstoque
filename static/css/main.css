@@ -20,6 +20,10 @@ footer span img {
     height: 20px;
 }
 
+#img_home {
+    max-width: 9rem;
+}
+
 #grade_home_inside {
     background-color: white;
     border-radius: 5px;

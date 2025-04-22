@@ -204,15 +204,82 @@ def excluirItems(request, id):
     return request
 
 def saida_ItemView(request, id):
-    template_name = 'include/saida.html'
+    template_name = 'include/saida_obj.html'
 
-    material = get_object_or_404(MaterialTipo, id=id)
+    material_tipo = get_object_or_404(MaterialTipo, id=id)
 
-    form = objMaterialForm(request.POST, instance=material) 
+    if not material_tipo.saida_obj:
+        return redirect('create_material_saida', material_tipo_id=material_tipo.id)
+
+    material_saida = material_tipo.saida_obj
+
+    if request.method == 'POST':
+        form = SaidaMaterialForm(request.POST, instance=material_saida)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Atualizado com sucesso!")
+            return redirect('listar_items')  
+        else:
+            messages.error(request, msgError)
+    else:
+        form = SaidaMaterialForm(instance=material_saida)
 
     context = {
         'form': form,
+        'material_tipo': material_tipo,
     }
 
     return render(request, template_name, context)
+
+def create_material_saida(request, material_tipo_id):
+    template_name = 'include/create_material_saida.html'
+
+    material_tipo = get_object_or_404(MaterialTipo, id=material_tipo_id)
+
+    if request.method == 'POST':
+        form = SaidaMaterialForm(request.POST)
+        if form.is_valid():
+            
+            material_saida = form.save()
+            material_tipo.saida_obj = material_saida
+            material_tipo.save()
+
+            messages.success(request, msgSucesso)
+            return redirect('listar_items')
+    else:
+        form = SaidaMaterialForm()
+
+    context = {
+        'form': form,
+        'material_tipo': material_tipo,
+    }
+
+    return render(request, template_name, context)
+
+def itemSaidaViewLista(request):
+    template_name = 'include/listar_saida.html' 
+
+    objs = []
+
+    objs_tipo = MaterialSaida.objects.prefetch_related('saida_obj')  
+
+    paginator = Paginator(objs_tipo, 10)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
+    context = {
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
 

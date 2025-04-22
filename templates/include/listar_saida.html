@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container rounded mt-4 bg-white">
+    <div class="p-5">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Unidade</th>
+                    <th>Departamento</th>
+                    <th>Divisão</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objs %}
+                <tr>
+                    <td>{{ obj.unidade }}</td>
+                    <td>{{ obj.departamento }}</td>
+                    <td>{{ obj.divisao_field }}</td>
+
+                    {% for material in obj.saida_obj.all %}
+                        <td>{{ material.marca }}</td>
+                        <td>{{ material.modelo }}</td>
+                        <td>{{ material.quantidade }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            <div class="d-flex justify-content-center">
+                {% include 'include/pagination.html' %}
+            </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+

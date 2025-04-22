@@ -11,7 +11,7 @@ class MaterialObj(models.Model):
     
 class MaterialTipo(models.Model):
     material_obj = models.ForeignKey('MaterialObj', on_delete=models.CASCADE, related_name='tipo_obj', verbose_name='Contrato')
-    saida_obj = models.ForeignKey('MaterialSaida', on_delete=models.CASCADE, related_name='saida_obj', blank=True, verbose_name='Saida')
+    saida_obj = models.ForeignKey('MaterialSaida', on_delete=models.CASCADE, related_name='saida_obj', blank=True, null=True, verbose_name='Saida')
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
     modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
     quantidade = models.IntegerField(blank=False, null=False, verbose_name='Quantidade ')
@@ -25,7 +25,6 @@ class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_departamento', verbose_name='Departamento')
     divisao_field = models.ForeignKey('Divisao', on_delete=models.CASCADE, blank=False, null=False, related_name='materiais_divisao', verbose_name='Divisão ')
-    marca = models.ForeignKey('MaterialObj', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"-{self.unidade}- ({self.departamento} ({self.divisao_field}))"
