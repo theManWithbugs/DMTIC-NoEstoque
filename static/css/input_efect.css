@@ -55,8 +55,7 @@
     color: #38caef;
     font-weight: 700;
   }
-  
-  /* reset input */
+
   .form__field:required, .form__field:invalid {
     box-shadow: none;
   }

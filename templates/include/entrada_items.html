@@ -4,10 +4,11 @@
 {% block css %} 
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
     <link rel="stylesheet" href="{% static 'css/add_form_btn.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fundo_form.css' %}">
 {% endblock css %}
 
 {% block content %}
-<div class="container bg-white p-4 rounded">
+<div class="container p-4 rounded fundo_papel" id="fundo_adjust">
     <form action="{% url 'entrada_material' %}" method="post">
 
         {% csrf_token %}
@@ -35,6 +36,7 @@
         </div>
     </form>
 </div>
+<br>
 
 {% endblock content %}
 
@@ -53,7 +55,7 @@
                     'padding': '10px',
                     'margin-bottom': '10px',
                     'border-radius': '5px',
-                    'background-color': '#f9f9f9'
+                    'background-color': '#FFFFFF'
                 });
             }
         });

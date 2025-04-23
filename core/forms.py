@@ -172,6 +172,7 @@ class EditarMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialTipo
         fields = '__all__'
+        exclude = ['saida_obj']
         widgets = {
             'observacao': forms.Textarea(attrs={
                 'rows': 3,

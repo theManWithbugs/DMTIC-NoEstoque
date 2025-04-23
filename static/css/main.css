@@ -20,19 +20,13 @@ footer span img {
     height: 20px;
 }
 
-#img_home {
-    max-width: 9rem;
-}
-
-#grade_home_inside {
+.box_home {
     background-color: white;
-    border-radius: 5px;
-    padding: 10px;
+    border: solid 3px black;
 }
 
-#img_footer {
-    width: 20px;
-    height: 20px;
+.box_home:hover {
+    border-color: aqua;
 }
 
 .box_inserItem {
@@ -47,6 +41,21 @@ footer span img {
 .btn_center_form {
     margin-left: 41%;
     width: 120px;
+}
+
+#img_home {
+    max-width: 8rem;
+}
+
+#grade_home_inside {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#img_footer {
+    width: 20px;
+    height: 20px;
 }
 
 

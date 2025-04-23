@@ -28,7 +28,10 @@
                     <span class="texto">Saidas</span>
                     <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" 
-                        width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="15" y2="12" class="text-white"></line>
+                            <polyline points="15 6 20 12 15 18" class="text-white"></polyline>
+                        </svg>
                     </span>
                 </button>
             </a>
@@ -44,7 +47,7 @@
                     <td>Marca</td>
                     <td>Modelo</td>
                     <td>Quantidade</td>
-                    <td>Editar</td>
+                    <!-- <td>Editar</td> -->
                     <td>Saida</td>
                     <td>Saida (status)</td>
                 </tr>
@@ -57,31 +60,28 @@
                     <td>{{ obj_inside.marca }}</td>  
                     <td>{{ obj_inside.modelo }}</td>
                     <td>{{ obj_inside.quantidade }}</td> 
-                    <td>
-                        <a href="{% url 'editar_items' obj_inside.id %}" 
-                        class="btn btn-warning me-4">
+                    <!-- <td>
+                        <a href="{% url 'editar_items' obj_inside.id %}" >
                             Editar
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                         <!-- <a href="{% url 'excluir_item' obj.id %}" class="ms-2 btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este item?');">
+                         <a href="{% url 'excluir_item' obj.id %}" class="ms-2" onclick="return confirm('Tem certeza que deseja excluir este item?');">
                                 Excluir
                                 <i class="bi bi-file-earmark-x"></i>
-                        </a> -->
-                    </td>
+                        </a>
+                    </td> -->
                     <td>
-                        <a href="{% url 'saida_item' obj_inside.id %}" 
-                        class="btn btn-primary">
+                        <a href="{% url 'saida_item' obj_inside.id %}">
                             Saida
                             <i class="bi bi-arrow-right-square"></i>
                         </a>
                     </td>
                     <td>
-                        <!-- {% if obj_inside.tipo_obj.saida_obj != '' %}
-                            <p>Nulo</p>
+                        {% if obj_inside.saida_obj %}
+                                <img src="{% static 'img/icon_check_ok.png' %}" class="img img-fluid" style="max-width: 2rem;">
                             {% else %}
-                                <p>Saida</p>
-                        {% endif %} -->
-                        {{ obj_inside.saida_obj }}
+                                <img src="{% static 'img/icon_not_ok.png' %}" class="img img-fluid" style="max-width: 2rem;">
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

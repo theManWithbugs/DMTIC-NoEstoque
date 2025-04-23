@@ -15,7 +15,6 @@ msgIntegridade = 'Você tentou salvar um registro que já existe! Por favor, ver
 msgCPF = 'CPF deve conter apenas números!'
 
 def loginView(request):
-    
     template_name = 'account/login.html'
 
     if request.method == 'POST':
@@ -25,6 +24,8 @@ def loginView(request):
         if user is not None:
             login(request, user)
             return redirect('home')
+        else:
+            messages.error(request, 'Login ou senha incorretos!')
   
     return render(request, template_name)
 
@@ -93,7 +94,7 @@ def itemSaidaView(request):
     template_name = 'include/entrada_items.html'
 
     TipoMaterFormset = inlineformset_factory(
-        MaterialObj, MaterialTipo, form=TipoMaterForm, extra=1, can_delete=False
+        MaterialObj, MaterialTipo, form=TipoMaterForm, extra=3, can_delete=False
     )
 
     if request.method == 'GET':
@@ -134,6 +135,32 @@ def listarItemsView(request):
     objs = []
 
     objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
+
+    paginator = Paginator(objs_tipo, 4)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
+    context = {
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
+def itemSaidaViewLista(request):
+    template_name = 'include/listar_saida.html' 
+
+    objs = []
+
+    objs_tipo = MaterialSaida.objects.prefetch_related('saida_obj')  
 
     paginator = Paginator(objs_tipo, 10)
     page = request.GET.get('page')
@@ -256,30 +283,8 @@ def create_material_saida(request, material_tipo_id):
 
     return render(request, template_name, context)
 
-def itemSaidaViewLista(request):
-    template_name = 'include/listar_saida.html' 
-
-    objs = []
-
-    objs_tipo = MaterialSaida.objects.prefetch_related('saida_obj')  
-
-    paginator = Paginator(objs_tipo, 10)
-    page = request.GET.get('page')
-
-    try:    
-        objs = paginator.page(page)
-    except PageNotAnInteger:
-        objs = paginator.page(1)
-    except EmptyPage:
-        objs = paginator.page(paginator.num_pages)
-
-    if objs.object_list.exists():
-        pass
-
-    context = {
-        'objs': objs,
-    }
-
-    return render(request, template_name, context)
+def reg_itensView(request):
+    template_name = 'include/his_entrada_items.html'
+    return render(request, template_name)
 
 
