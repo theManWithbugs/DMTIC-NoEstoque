@@ -90,7 +90,7 @@ def save_formset(formset):
         if form.is_valid() and form.has_changed():
             form.save()
 
-def itemSaidaView(request):
+def itemAddView(request):
     template_name = 'include/entrada_items.html'
 
     TipoMaterFormset = inlineformset_factory(
@@ -181,6 +181,32 @@ def itemSaidaViewLista(request):
 
     return render(request, template_name, context)
 
+def noExitItemsView(request):
+    template_name = 'include/listar_dispo.html'
+    
+    objs = []
+
+    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
+
+    paginator = Paginator(objs_tipo, 4)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
+    context = {
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
 def editarItemsView(request, id):
     template_name = 'include/edit_material.html'
 
@@ -225,8 +251,12 @@ def excluirItems(request, id):
 
     if item:
         item.delete()
+        HistoricoUser.objects.create(
+                nome_user = request.user.first_name,
+                acao_realizada = 'Exclusão de item'
+            )
         messages.success(request, msgSucesso)
-        return redirect('listar_items')
+        return redirect('itens_disponiveis')
 
     return request
 
@@ -244,6 +274,11 @@ def saida_ItemView(request, id):
         form = SaidaMaterialForm(request.POST, instance=material_saida)
         if form.is_valid():
             form.save()
+            HistoricoUser.objects.create(
+                nome_user = request.user.first_name,
+                acao_realizada = 'Atualização de saida',
+                modelo_item = material_tipo.modelo
+            )
             messages.success(request, "Atualizado com sucesso!")
             return redirect('listar_items')  
         else:
@@ -266,11 +301,14 @@ def create_material_saida(request, material_tipo_id):
     if request.method == 'POST':
         form = SaidaMaterialForm(request.POST)
         if form.is_valid():
-            
             material_saida = form.save()
             material_tipo.saida_obj = material_saida
             material_tipo.save()
-
+            HistoricoUser.objects.create(
+                nome_user = request.user.first_name,
+                acao_realizada = 'Saida de material',
+                modelo_item = material_tipo.modelo
+            )
             messages.success(request, msgSucesso)
             return redirect('listar_items')
     else:
@@ -283,8 +321,49 @@ def create_material_saida(request, material_tipo_id):
 
     return render(request, template_name, context)
 
-def reg_itensView(request):
-    template_name = 'include/his_entrada_items.html'
-    return render(request, template_name)
+def histUsuarioView(request):
+    template_name = 'include/hist_usuario.html'
+
+    user = HistoricoUser.objects.all()
+
+    objs = []
+
+    objs_tipo = HistoricoUser.objects.all()
+
+    paginator = Paginator(objs_tipo, 10)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
+    context = {
+        'user': user,
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
+def filtro_view(request):
+    unidade_id = request.GET.get('unidade')  
+    departamento_id = request.GET.get('departamento')  
+
+    form = FiltroForm(
+        unidade_id=unidade_id,
+        departamento_id=departamento_id,
+        data=request.GET  
+    )
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'include/teste.html', context)
+
 
 

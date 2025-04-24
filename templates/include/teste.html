@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="bg-white p-4">
+    <form method="get" id="filtro-form" action="{% url 'filtro_view' %}">
+        <div class="form-group">
+            <label for="id_unidade">Unidade</label>
+            {{ form.unidade }}
+        </div>
+        <div class="form-group">
+            <label for="id_departamento">Departamento</label>
+            {{ form.departamento }}
+        </div>
+        <div class="form-group">
+            <label for="id_divisao">Divisão</label>
+            {{ form.divisao }}
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+</div>
+
+<script>
+    // Atualiza os selects dinamicamente ao mudar a unidade ou o departamento
+    document.getElementById('id_unidade').addEventListener('change', function() {
+        document.getElementById('filtro-form').submit();
+    });
+
+    document.getElementById('id_departamento').addEventListener('change', function() {
+        document.getElementById('filtro-form').submit();
+    });
+</script>
+
+{% endblock content %}

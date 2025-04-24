@@ -5,6 +5,7 @@ class AddMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialObj
         fields = '__all__'
+        exclude = ['data']
         widgets = {
             'contrato': forms.Select(attrs={
                 'class': 'form-control form-control-sm',
@@ -30,7 +31,6 @@ class AddMaterialForm(forms.ModelForm):
 class TipoMaterForm(forms.ModelForm):
     class Meta:
         model = MaterialTipo
-        fields = '__all__'
         exclude = ['saida_obj']
         widgets = {
             'material_obj': forms.Select(attrs={
@@ -69,6 +69,7 @@ class SaidaMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialSaida
         fields = '__all__'
+        exclude = ['data_saida']
         widgets = {
             'unidade': forms.Select(attrs={
             'style': 'width: 500px',
@@ -90,6 +91,7 @@ class AddContratoForm(forms.ModelForm):
     class Meta:
         model = Contrato
         fields = '__all__'
+        exclude = ['data_abert']
         widgets = {
             'nome_contrato': forms.TextInput(attrs={
                 'style': 'width: 600px',
@@ -198,11 +200,46 @@ class SaidaMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialSaida
         fields = '__all__'
+        exclude = ['data_saida']
     
     def __init__(self, *args, **kwargs):
         super(SaidaMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+class FiltroForm(forms.Form):
+    unidade = forms.ModelChoiceField(
+        queryset=Unidade.objects.all(),
+        label="Unidade",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    departamento = forms.ModelChoiceField(
+        queryset=Departamento.objects.none(),  # Inicialmente vazio
+        label="Departamento",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    divisao = forms.ModelChoiceField(
+        queryset=Divisao.objects.none(),  # Inicialmente vazio
+        label="Divisão",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        unidade_id = kwargs.pop('unidade_id', None)
+        departamento_id = kwargs.pop('departamento_id', None)
+        super().__init__(*args, **kwargs)
+
+        # Filtra os departamentos com base na unidade selecionada
+        if unidade_id:
+            self.fields['departamento'].queryset = Departamento.objects.filter(unidade_id=unidade_id)
+        else:
+            self.fields['departamento'].queryset = Departamento.objects.none()
+
+        # Filtra as divisões com base no departamento selecionado
+        if departamento_id:
+            self.fields['divisao'].queryset = Divisao.objects.filter(departamento_id=departamento_id)
+        else:
+            self.fields['divisao'].queryset = Divisao.objects.none()
             
 
 

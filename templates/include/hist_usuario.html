@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container rounded mt-3 bg-white p-4">
+    <table class="table table-bordered bg-white">
+        <thead>
+            <tr>
+                <td>Usuario</td>
+                <td>Ação Realizada</td>
+                <td>Modelo do item</td>
+                <td>Data</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for i in user %}
+                <tr>
+                    <td>{{ i.nome_user }}</td>
+                    <td>{{ i.acao_realizada }}</td>
+                    <td>{{ i.modelo_item }}</td>
+                    <td>{{ i.data }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        {% include 'include/pagination.html' %}
+    </div>
+</div>
+
+{% endblock content %}

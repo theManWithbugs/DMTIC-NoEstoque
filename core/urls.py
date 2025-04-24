@@ -7,7 +7,7 @@ urlpatterns = [
     path('logout/', views.logoutView, name='logout'),
     path('home/', views.homeView, name='home'),
     path('inse_item/', views.inserirItem, name='new_item'),
-    path('home/entrada_material/', views.itemSaidaView, name='entrada_material'),
+    path('home/entrada_material/', views.itemAddView, name='entrada_material'),
     path('home/listar_items/editar/<int:id>/', views.editarItemsView, name='editar_items'),
 
     path('home/add_contrato/', views.addContratoView, name='add_contr'),
@@ -20,6 +20,9 @@ urlpatterns = [
     path('create_material_saida/<int:material_tipo_id>/', views.create_material_saida, name='create_material_saida'),
     
     path('home/listar_items/listar_saida/', views.itemSaidaViewLista, name='items_saida'),
-    path('home/historic_entr/', views.reg_itensView, name='hist_itens'),
+    path('home/historic_entr/', views.histUsuarioView, name='hist_usuario'),
+
+    path('home/filtro/', views.filtro_view, name='filtro_view'),  
+    path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
 ]
 

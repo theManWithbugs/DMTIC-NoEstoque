@@ -46,7 +46,6 @@ class Unidade(models.Model):
     def __str__(self):
         return self.unidade
 
-
 class Departamento(models.Model):
     nome = models.CharField(max_length=30, verbose_name='Adicionar Departamento')
     unidade = models.ForeignKey(
@@ -61,3 +60,14 @@ class Divisao(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.departamento})"
+    
+class HistoricoUser(models.Model):
+    nome_user = models.CharField(max_length=30, blank=True, null=True)
+    acao_realizada = models.CharField(max_length=50)
+    modelo_item = models.CharField(max_length=80)
+    data = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.nome_user} {self.data}"
+
+    
