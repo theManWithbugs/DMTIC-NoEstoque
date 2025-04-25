@@ -45,6 +45,10 @@ class TipoMaterForm(forms.ModelForm):
                 'class': 'form-control form-control-sm',
                 'placeholder': 'Modelo do material...',
             }),
+            'n_serie': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Númeração do item..',
+            }),
             'quantidade': forms.NumberInput(attrs={
                 'class': 'form-control form-control-sm',
                 'placeholder': 'Quantidade...',
@@ -70,17 +74,6 @@ class SaidaMaterialForm(forms.ModelForm):
         model = MaterialSaida
         fields = '__all__'
         exclude = ['data_saida']
-        widgets = {
-            'unidade': forms.Select(attrs={
-            'style': 'width: 500px',
-            }),
-            'departamento': forms.Select(attrs={
-            'style': 'width: 500px',
-            }),
-            'divisao_field': forms.Select(attrs={
-            'style': 'width: 500px',
-            }),
-        }
 
     def __init__(self, *args, **kwargs):
         super(SaidaMaterialForm, self).__init__(*args, **kwargs)

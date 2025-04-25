@@ -16,8 +16,9 @@ class MaterialTipo(models.Model):
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
     modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
     quantidade = models.IntegerField(blank=False, null=False, verbose_name='Quantidade ')
-    observacao = models.CharField(max_length=450, blank=True, null=True, verbose_name='Observações ')
-    garantia = models.CharField(max_length=20, blank=False, null=False, verbose_name='Garantia ')
+    n_serie = models.CharField(blank=False, null=False, verbose_name='Número de série', max_length=30)
+    observacao = models.CharField(max_length=450, blank=True, null=True, verbose_name='Observações')
+    garantia = models.CharField(max_length=20, blank=False, null=False, verbose_name='Garantia')
 
     def __str__(self):
         return f"-{self.marca}- ( {self.modelo} ) ( {self.quantidade} )"
@@ -25,7 +26,8 @@ class MaterialTipo(models.Model):
 class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_departamento', verbose_name='Departamento')
-    divisao_field = models.ForeignKey('Divisao', on_delete=models.CASCADE, blank=False, null=False, related_name='materiais_divisao', verbose_name='Divisão ')
+    divisao_field = models.ForeignKey('Divisao', on_delete=models.CASCADE, blank=False, null=False, related_name='materiais_divisao', verbose_name='Divisão')
+    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', blank=True, null=True)
     data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):

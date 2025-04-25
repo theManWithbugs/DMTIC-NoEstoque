@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from . forms import *
 from django.contrib import messages
+from . forms import *
 from . models import *
-from django.http import JsonResponse
 from . utils import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
@@ -29,10 +29,12 @@ def loginView(request):
   
     return render(request, template_name)
 
+@login_required
 def baseView(request):
     template_name = 'base.html'
     return render(request, template_name)
 
+@login_required
 def homeView(request):
     template_name = 'include/home.html'
     return render(request, template_name)
@@ -41,6 +43,7 @@ def logoutView(request):
     auth_logout(request)
     return redirect('login_page')
 
+@login_required
 def addUnidadeView(request):
     template_name = 'include/add_unidade.html'
     form = AddUnidadeForm(request.POST or None)
@@ -72,6 +75,7 @@ def addUnidadeView(request):
 
     return render(request, template_name, context)
 
+@login_required
 def inserirItem(request): 
     template_name = 'include/inse_item.html'
     form = AddMaterialForm(request.POST or None)
@@ -85,11 +89,13 @@ def inserirItem(request):
 
     return render(request, template_name, {'form': form})
 
+@login_required
 def save_formset(formset):
     for form in formset:
         if form.is_valid() and form.has_changed():
             form.save()
 
+@login_required
 def itemAddView(request):
     template_name = 'include/entrada_items.html'
 
@@ -115,6 +121,10 @@ def itemAddView(request):
 
             if formset.is_valid():
                 formset.save()
+                HistoricoUser.objects.create(
+                    nome_user = request.user.first_name,
+                    acao_realizada = 'Entrada de item'
+                )
                 messages.success(request, "Itens salvos com sucesso!")
                 return redirect('listar_items')
             else:
@@ -129,6 +139,7 @@ def itemAddView(request):
         }
         return render(request, template_name, context)
         
+@login_required
 def listarItemsView(request):
     template_name = 'include/listar.html'
 
@@ -136,7 +147,7 @@ def listarItemsView(request):
 
     objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
 
-    paginator = Paginator(objs_tipo, 4)
+    paginator = Paginator(objs_tipo, 5)
     page = request.GET.get('page')
 
     try:    
@@ -155,6 +166,7 @@ def listarItemsView(request):
 
     return render(request, template_name, context)
 
+@login_required
 def itemSaidaViewLista(request):
     template_name = 'include/listar_saida.html' 
 
@@ -181,6 +193,7 @@ def itemSaidaViewLista(request):
 
     return render(request, template_name, context)
 
+@login_required
 def noExitItemsView(request):
     template_name = 'include/listar_dispo.html'
     
@@ -188,7 +201,7 @@ def noExitItemsView(request):
 
     objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
 
-    paginator = Paginator(objs_tipo, 4)
+    paginator = Paginator(objs_tipo, 14)
     page = request.GET.get('page')
 
     try:    
@@ -207,6 +220,7 @@ def noExitItemsView(request):
 
     return render(request, template_name, context)
 
+@login_required
 def editarItemsView(request, id):
     template_name = 'include/edit_material.html'
 
@@ -232,6 +246,7 @@ def editarItemsView(request, id):
     
     return render(request, template_name, context)
 
+@login_required
 def addContratoView(request):  
     template_name = 'include/add_contrato.html'
     form = AddContratoForm(request.POST or None)  
@@ -245,6 +260,7 @@ def addContratoView(request):
 
     return render(request, template_name, {'form': form})
 
+@login_required
 def excluirItems(request, id):
 
     item = get_object_or_404(MaterialTipo, id=id)
@@ -260,6 +276,7 @@ def excluirItems(request, id):
 
     return request
 
+@login_required
 def saida_ItemView(request, id):
     template_name = 'include/saida_obj.html'
 
@@ -293,6 +310,7 @@ def saida_ItemView(request, id):
 
     return render(request, template_name, context)
 
+@login_required
 def create_material_saida(request, material_tipo_id):
     template_name = 'include/create_material_saida.html'
 
