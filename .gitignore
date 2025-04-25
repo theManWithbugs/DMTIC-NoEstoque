@@ -53,3 +53,6 @@ Thumbs.db
 
 # Git files
 .git/
+
+#Static files for server
+static_collected/
