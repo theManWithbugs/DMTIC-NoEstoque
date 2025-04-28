@@ -1,5 +1,6 @@
-from django.urls import include, path
+from django.urls import path
 from core import views
+from core.views import *
 
 urlpatterns = [
     path('', views.loginView, name='login_page'),
@@ -24,5 +25,8 @@ urlpatterns = [
 
     path('home/filtro/', views.filtro_view, name='filtro_view'),  
     path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
+
+    path('home/filtrojs/', views.testeJsFiltroView, name='filtrojs'),
+    path('filtro_json/', jsFiltroJson.as_view(), name='response_filtro'),
 ]
 

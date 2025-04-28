@@ -8,6 +8,9 @@ from . models import *
 from . utils import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -381,7 +384,43 @@ def filtro_view(request):
     context = {
         'form': form,
     }
+
     return render(request, 'include/teste.html', context)
+
+class jsFiltroJson(APIView):
+    def get(self, request):
+        unidades = Unidade.objects.all()
+
+        # departamentos = Departamento.objects.all()
+
+        departamentos = Departamento.objects.prefetch_related('unidade')
+
+        divisoes = Divisao.objects.all()
+
+        unidades_serialized = UnidadeSerializer(unidades, many=True).data
+        departamentos_serialized = DepartamentoSerializer(departamentos, many=True).data
+        divisoes_serialized = DivisaoSerializer(divisoes, many=True).data
+
+        return Response({
+            'unidades': unidades_serialized,
+            'departamentos': departamentos_serialized,
+            'divisoes': divisoes_serialized,
+        })
+
+def testeJsFiltroView(request):
+    template_name = 'include/teste_filtrojs.html'
+
+    unidades = Unidade.objects.all()
+    departamentos = Departamento.objects.all()
+    divisoes = Divisao.objects.all()
+
+    context = {
+        'unidades': unidades,
+        'departamentos': departamentos,
+        'divisoes': divisoes,
+    }
+
+    return render(request, template_name, context)
 
 
 

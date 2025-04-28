@@ -50,8 +50,7 @@ class Unidade(models.Model):
 
 class Departamento(models.Model):
     nome = models.CharField(max_length=30, verbose_name='Adicionar Departamento')
-    unidade = models.ForeignKey(
-        'Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
+    unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
 
     def __str__(self):
         return f"{self.nome} ({self.unidade})"

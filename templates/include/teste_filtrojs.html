@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="bg-white p-3">
+    <label for="select" class="fs-5 rounded mb-2">
+        Selecione a unidade</label>
+    <br>
+    <select title="Selecione a unidade" id="select">
+        <option value="" id="option">Selecione</option>
+    </select>
+    <br><br>
+
+    <label for="select_depar" class="fs-5 rounded mb-2">
+        Selecione o departamento</label>
+    <br>
+    <select title="Selecione o departamento" id="select_depar">
+        <option value="" id="option2">Selecione</option>
+    </select>
+    <br><br>
+
+    <label for="select_divi" class="fs-5 rounded mb-2">
+        Selecione a divisão</label>
+    <br>
+    <select title="Selecione a divisão" id="select_divi">
+        <option value="" id="option3">Selecione</option>
+    </select>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/filtrojs.js' %}"></script>
+{% endblock js %}
