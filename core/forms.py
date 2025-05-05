@@ -179,6 +179,21 @@ class EditarMaterialForm(forms.ModelForm):
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
+class MaterialTipoForm(forms.ModelForm):
+    class Meta:
+        model = MaterialTipo
+        fields = '__all__'
+        widgets = {
+            'observacao': forms.Textarea(attrs={
+                'rows': 3,
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(MaterialTipoForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
 class objMaterialForm(forms.ModelForm):
     class Meta:
         model = MaterialTipo
@@ -216,10 +231,18 @@ class FiltroForm(forms.Form):
         label="Divisão",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    n_processo = forms.IntegerField(
+        label="Número do Processo",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite o número do processo...'
+        })
+    )
 
     def __init__(self, *args, **kwargs):
         unidade_id = kwargs.pop('unidade_id', None)
         departamento_id = kwargs.pop('departamento_id', None)
+        divisao_id = kwargs.pop('divisao_id', None)
         super().__init__(*args, **kwargs)
 
         # Filtra os departamentos com base na unidade selecionada

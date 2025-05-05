@@ -4,7 +4,6 @@ function getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Verifica se o cookie começa com o nome desejado
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -53,8 +52,7 @@ fetch('/filtro_json/')
         });
 
         selectUnidade.addEventListener('change', function () {
-            unidadeSelecionadaValor = selectUnidade.value; // Atualiza a variável
-            // console.log('Unidade selecionada:', unidadeSelecionadaValor);
+            unidadeSelecionadaValor = selectUnidade.value;
 
             const selectDepartamento = document.getElementById('select_depar');
             selectDepartamento.innerHTML = '<option value="">Selecione</option>'; 
@@ -71,8 +69,7 @@ fetch('/filtro_json/')
 
         const selectDepartamento = document.getElementById('select_depar');
         selectDepartamento.addEventListener('change', function () {
-            departamentoSelecionadoValor = selectDepartamento.value; // Atualiza a variável
-            // console.log('Departamento selecionado:', departamentoSelecionadoValor);
+            departamentoSelecionadoValor = selectDepartamento.value;
 
             const selectDivisao = document.getElementById('select_divi');
             selectDivisao.innerHTML = '<option value="">Selecione</option>'; 
@@ -89,33 +86,36 @@ fetch('/filtro_json/')
 
         const selectDivisao = document.getElementById('select_divi');
         selectDivisao.addEventListener('change', function () {
-            divisaoSelecionadaValor = selectDivisao.value; // Atualiza a variável
-            console.log('Divisão selecionada:', divisaoSelecionadaValor);
+            divisaoSelecionadaValor = selectDivisao.value;
         });
 
-        const dados = {
-            unidadeSelecionadaValor,
-            departamentoSelecionadoValor,
-            divisaoSelecionadaValor
-        };
+        // Adiciona evento ao botão para enviar os dados
+        const enviarButton = document.getElementById('enviar');
+        enviarButton.addEventListener('click', function () {
+            const dados = {
+                unidadeSelecionadaValor,
+                departamentoSelecionadoValor,
+                divisaoSelecionadaValor
+            };
 
-        fetch('/filtrojs/' , {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            body: JSON.stringify(dados)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao enviar os dados');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Resposta ao backend', data);
-        })
-        .catch(error => console.error('Erro:', error));
+            fetch('/filtrojs/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao enviar os dados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Resposta ao backend', data);
+            })
+            .catch(error => console.error('Erro:', error));
+        });
     })
     .catch(error => console.error('Erro ao receber os dados:', error));

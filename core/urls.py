@@ -23,7 +23,7 @@ urlpatterns = [
     path('home/listar_items/listar_saida/', views.itemSaidaViewLista, name='items_saida'),
     path('home/historic_entr/', views.histUsuarioView, name='hist_usuario'),
 
-    path('home/filtro/', views.filtro_view, name='filtro_view'),  
+    path('home/filtro/<int:id>/', views.filtro_view, name='filtro_view'),  
     path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
 
     path('home/filtrojs/', views.testeJsFiltroView, name='filtrojs'),

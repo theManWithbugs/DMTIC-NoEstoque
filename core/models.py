@@ -27,7 +27,7 @@ class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_departamento', verbose_name='Departamento')
     divisao_field = models.ForeignKey('Divisao', on_delete=models.CASCADE, blank=False, null=False, related_name='materiais_divisao', verbose_name='Divisão')
-    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', blank=True, null=True)
+    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', unique=True, blank=True, null=True)
     data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -38,7 +38,7 @@ class Contrato(models.Model):
     descricao_contr = models.CharField(max_length=400, blank=False, null=False, default='', verbose_name='Descrição do contrato ')
     num_contrato = models.CharField(blank=False, null=False, max_length=80, verbose_name='Número do contrato ')
     data_abert = models.DateField(default=timezone.now)
-    
+
     def __str__(self):
         return f"-{self.nome_contrato}- ( {self.num_contrato} )"
 
@@ -58,7 +58,7 @@ class Departamento(models.Model):
 class Divisao(models.Model):
     nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, related_name='divisoes', verbose_name='A qual departamento pertence?')
-
+    
     def __str__(self):
         return f"{self.nome} ({self.departamento})"
     

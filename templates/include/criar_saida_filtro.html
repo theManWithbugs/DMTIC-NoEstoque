@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div class="bg-white p-4">
-    <form method="get" id="filtro-form" action="{% url 'filtro_view' %}">
+<div class="bg-white p-4 rounded">
+    <form method="get" id="filtro-form">
         <div class="form-group">
             <label for="id_unidade">Unidade</label>
             {{ form.unidade }}
@@ -16,9 +16,15 @@
             <label for="id_divisao">Divisão</label>
             {{ form.divisao }}
         </div>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <div class="form-group">
+            <label for="n_processo">Número do processo</label>
+            {{ form.n_processo }}
+        </div>
+        <br>
+        <button type="submit" id="enviar">Enviar</button>
     </form>
 </div>
+<br>
 
 <script>
     document.getElementById('id_unidade').addEventListener('change', function() {

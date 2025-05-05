@@ -11,6 +11,8 @@ from django.forms import inlineformset_factory
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -371,27 +373,56 @@ def histUsuarioView(request):
 
     return render(request, template_name, context)
 
-def filtro_view(request):
-    unidade_id = request.GET.get('unidade')  
-    departamento_id = request.GET.get('departamento')  
+def filtro_view(request, id):
 
-    form = FiltroForm(
-        unidade_id=unidade_id,
-        departamento_id=departamento_id,
-        data=request.GET  
-    )
+    unidade_id = request.GET.get('unidade') 
+    departamento_id = request.GET.get('departamento')  
+    divisao_id = request.GET.get('divisao') 
+    n_processo = request.GET.get('n_processo')
+
+    if unidade_id and departamento_id and divisao_id:
+
+        try:
+            unidade = Unidade.objects.get(id=unidade_id)
+            departamento = Departamento.objects.get(id=departamento_id)
+            divisao = Divisao.objects.get(id=divisao_id)
+            n_processo = MaterialSaida.objects.get(n_processo=n_processo)
+        except ObjectDoesNotExist:
+            pass
+
+        if request.method == 'GET':
+            saida = MaterialSaida.objects.create(
+                    unidade=unidade,
+                    departamento=departamento,
+                    divisao_field=divisao,
+                    n_processo=n_processo,
+                )
+            print(saida.id)
+            messages.success(request, "MaterialSaida criado com sucesso!")
+
+    try:
+        material_tipo = get_object_or_404(MaterialTipo, id=id)
+        material_tipo.saida_obj = saida
+        material_tipo.save()
+        return redirect('listar_items')
+    except NameError:
+        pass
 
     context = {
-        'form': form,
+        'form': FiltroForm(
+            unidade_id=unidade_id,
+            departamento_id=departamento_id,
+            divisao_id=divisao_id,
+            data=request.GET
+        ),
+        'material_tipo': material_tipo,
     }
 
-    return render(request, 'include/teste.html', context)
+    return render(request, 'include/criar_saida_filtro.html', context)
 
 class jsFiltroJson(APIView):
     def get(self, request):
         unidades = Unidade.objects.all()
-
-        # departamentos = Departamento.objects.all()
 
         departamentos = Departamento.objects.prefetch_related('unidade')
 
