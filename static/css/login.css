@@ -1,3 +1,11 @@
+body {
+    background-image: url('../img/4882066.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+    height: 100vh;
+}
+
 #login_box {
     margin-top: 90px;
     width: 500px;

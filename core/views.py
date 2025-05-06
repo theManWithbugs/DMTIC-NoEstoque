@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 
 msgSucesso = 'Operação realizada com sucesso!'
@@ -262,6 +263,8 @@ def addContratoView(request):
             form.save()
             messages.success(request, 'Operação realizada com sucesso!')
             return redirect('add_contr')
+        else:
+            messages.error(request, 'Não foi possível realizar!')
 
     return render(request, template_name, {'form': form})
 
@@ -373,6 +376,7 @@ def histUsuarioView(request):
 
     return render(request, template_name, context)
 
+@login_required
 def filtro_view(request, id):
 
     unidade_id = request.GET.get('unidade') 
@@ -421,6 +425,8 @@ def filtro_view(request, id):
     return render(request, 'include/criar_saida_filtro.html', context)
 
 class jsFiltroJson(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         unidades = Unidade.objects.all()
 
@@ -438,6 +444,7 @@ class jsFiltroJson(APIView):
             'divisoes': divisoes_serialized,
         })
 
+@login_required
 def testeJsFiltroView(request):
     template_name = 'include/teste_filtrojs.html'
 
