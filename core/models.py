@@ -21,7 +21,7 @@ class MaterialTipo(models.Model):
     garantia = models.CharField(max_length=20, blank=False, null=False, verbose_name='Garantia')
 
     def __str__(self):
-        return f"-{self.marca}- ( {self.modelo} ) ( {self.quantidade} )"
+        return f"-{self.marca}- ( {self.modelo} )"
 
 class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')

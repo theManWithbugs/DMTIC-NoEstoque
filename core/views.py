@@ -15,6 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.db import IntegrityError
+from collections import Counter
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -151,6 +152,8 @@ def itemAddView(request):
 def listarItemsView(request):
     template_name = 'include/listar.html'
 
+    marca_modelo = Counter()
+
     objs = []
 
     objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
@@ -168,8 +171,14 @@ def listarItemsView(request):
     if objs.object_list.exists():
         pass
 
+    for obj in objs:
+        for obj_inside in obj.tipo_obj.all():
+            if obj_inside.marca and obj_inside.modelo:
+                marca_modelo[( f"( Marca: {obj_inside.marca} ) ( Modelo: {obj_inside.modelo} ) ")] += 1
+
     context = {
         'objs': objs,
+        'marca_modelo': marca_modelo,
     }
 
     return render(request, template_name, context)
@@ -200,24 +209,11 @@ def itemSaidaViewLista(request):
         departmento = str(obj.departamento).split(" ")[0]
         divisao = str(obj.divisao_field).split(" ")[0]
 
-    iguais = []
-    count = 0
-
-    for obj in objs:
-        for other_obj in objs:
-            if obj == other_obj and obj not in iguais:
-                iguais.append(obj)
-    
-    print(obj)
-    print(len(iguais))
-
     context = {
         'objs': objs,
         'unidade': unidade,
         'departamento': departmento,
         'divisao': divisao,
-        'iguais': iguais,
-        'count': count,
     }
 
     return render(request, template_name, context)

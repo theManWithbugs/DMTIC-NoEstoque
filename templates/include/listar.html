@@ -70,21 +70,26 @@
     </div>
 </div>
 
-<!-- <div class="bg-white p-4">
-    {% for obj in objs %}
-        <ul>
-            {% for obj_inside in obj.tipo_obj.all %}
-                <li>
-                    Marca {{ obj_inside.marca }}
-                    Modelo {{ obj_inside.modelo }}
-                    Quantidade {{ obj_inside.patrimonio }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-</div> -->
+<br>
+    <div>
+        <div class="bg-white p-3 rounded">
+            <button type="button" onclick="exibir()" id="btn_exibir">
+                Exibir</button>
+            <button type="button" onclick="ocultar()" id="btn_exibir">
+                Ocultar</button>
+        </div>
+        <br>
+        <div id="box_words">
+            {{ marca_modelo }}
+        </div>
+    </div>
 <br>
 
 {% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/listar.js' %}"></script>
+{% endblock js %}
+    
 
 
