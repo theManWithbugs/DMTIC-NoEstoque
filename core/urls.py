@@ -28,5 +28,9 @@ urlpatterns = [
 
     path('home/filtrojs/', views.testeJsFiltroView, name='filtrojs'),
     path('filtro_json/', jsFiltroJson.as_view(), name='response_filtro'),
+
+    path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
+
+    path('home/async_view_teste/', views.teste_async, name='teste_async'),
 ]
 

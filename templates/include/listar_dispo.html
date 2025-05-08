@@ -14,18 +14,16 @@
 
 <div class="container rounded mt-4 bg-white">
     <div class="p-2">
-        <p class="fs-5 border border-botom d-flex justify-content-center">
-            ITEMS NO ESTOQUE</p>
+        <u class="fs-5 d-flex justify-content-center">
+            ITEMS NO ESTOQUE</u>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <td>Marca</td>
                     <td>Modelo</td>
-                    <td>Quantidade</td>
                     <td>Data entrada</td>
                     <td>Excluir</td>
                     <td>Saida</td>
-                    <td>Saida (status)</td>
                 </tr>
             </thead>
             <tbody>
@@ -36,7 +34,6 @@
                         <tr>
                             <td>{{ obj_inside.marca }}</td>
                             <td>{{ obj_inside.modelo }}</td>
-                            <td>{{ obj_inside.quantidade }}</td>
                             <td>{{ obj.data }}</td>
                             <td>
                                 <a href="{% url 'excluir_item' obj_inside.id %}" 
@@ -50,10 +47,6 @@
                                     Saida
                                     <i class="bi bi-arrow-right-square"></i>
                                 </a>
-                            </td>
-                            <td class="text-center">
-                                <img src="{% static 'img/icon_not_ok.png' %}" 
-                                class="img img-fluid" style="max-width: 2rem;">
                             </td>
                         </tr>
                     {% endif %}

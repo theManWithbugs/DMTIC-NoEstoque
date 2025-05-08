@@ -14,16 +14,16 @@
 
 <div class="container rounded mt-4 bg-white">
     <div class="p-2">
-        <p class="fs-5 border border-botom d-flex justify-content-center">
-            TODOS OS ITEMS</p>
+        <u class="fs-5 d-flex justify-content-center">
+            TODOS OS ITEMS</u>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <td>Marca</td>
                     <td>Modelo</td>
-                    <td>Quantidade</td>
                     <!-- <td>Editar</td> -->
                     <!-- <td>Saida</td> -->
+                     <td>Número de série</td>
                     <td>Saida (status)</td>
                 </tr>
             </thead>
@@ -33,7 +33,7 @@
                 <tr>
                     <td>{{ obj_inside.marca }}</td>
                     <td>{{ obj_inside.modelo }}</td>
-                    <td>{{ obj_inside.quantidade }}</td>
+                    <td>{{ obj_inside.patrimonio }}</td>
                     <!-- <td>
                         <a href="{% url 'editar_items' obj_inside.id %}" >
                             Editar
@@ -69,6 +69,20 @@
             </div>
     </div>
 </div>
+
+<!-- <div class="bg-white p-4">
+    {% for obj in objs %}
+        <ul>
+            {% for obj_inside in obj.tipo_obj.all %}
+                <li>
+                    Marca {{ obj_inside.marca }}
+                    Modelo {{ obj_inside.modelo }}
+                    Quantidade {{ obj_inside.patrimonio }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</div> -->
 <br>
 
 {% endblock content %}

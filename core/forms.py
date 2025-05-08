@@ -45,9 +45,13 @@ class TipoMaterForm(forms.ModelForm):
                 'class': 'form-control form-control-sm',
                 'placeholder': 'Modelo do material...',
             }),
-            'n_serie': forms.NumberInput(attrs={
+            'n_serie': forms.TextInput(attrs={
                 'class': 'form-control form-control-sm',
                 'placeholder': 'Númeração do item..',
+            }),
+            'patrimonio': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Patrimonio do item...',
             }),
             'quantidade': forms.NumberInput(attrs={
                 'class': 'form-control form-control-sm',

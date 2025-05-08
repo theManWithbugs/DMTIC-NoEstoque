@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 from django.db import IntegrityError
 
 msgSucesso = 'Operação realizada com sucesso!'
@@ -106,7 +107,8 @@ def itemAddView(request):
     template_name = 'include/entrada_items.html'
 
     TipoMaterFormset = inlineformset_factory(
-        MaterialObj, MaterialTipo, form=TipoMaterForm, extra=3, can_delete=False
+        MaterialObj, MaterialTipo, form=TipoMaterForm, 
+        extra=3, can_delete=False
     )
 
     if request.method == 'GET':
@@ -193,8 +195,29 @@ def itemSaidaViewLista(request):
     if objs.object_list.exists():
         pass
 
+    for obj in objs:
+        unidade = str(obj.unidade).split(" ")[0]
+        departmento = str(obj.departamento).split(" ")[0]
+        divisao = str(obj.divisao_field).split(" ")[0]
+
+    iguais = []
+    count = 0
+
+    for obj in objs:
+        for other_obj in objs:
+            if obj == other_obj and obj not in iguais:
+                iguais.append(obj)
+    
+    print(obj)
+    print(len(iguais))
+
     context = {
         'objs': objs,
+        'unidade': unidade,
+        'departamento': departmento,
+        'divisao': divisao,
+        'iguais': iguais,
+        'count': count,
     }
 
     return render(request, template_name, context)
@@ -401,7 +424,6 @@ def filtro_view(request, id):
                     divisao_field=divisao,
                     n_processo=n_processo,
                 )
-            print(saida.id)
             messages.success(request, "MaterialSaida criado com sucesso!")
 
     try:
@@ -434,15 +456,42 @@ class jsFiltroJson(APIView):
 
         divisoes = Divisao.objects.all()
 
-        unidades_serialized = UnidadeSerializer(unidades, many=True).data
-        departamentos_serialized = DepartamentoSerializer(departamentos, many=True).data
-        divisoes_serialized = DivisaoSerializer(divisoes, many=True).data
+        unidades_serialized = UnidadeSerializer(unidades, 
+                                                many=True).data
+        
+        departamentos_serialized = DepartamentoSerializer(departamentos, 
+                                                          many=True).data
+        
+        divisoes_serialized = DivisaoSerializer(divisoes, 
+                                                many=True).data
 
         return Response({
             'unidades': unidades_serialized,
             'departamentos': departamentos_serialized,
             'divisoes': divisoes_serialized,
         })
+
+def GetEstatisticasFunction(request):
+
+    saidas = MaterialSaida.objects.prefetch_related('unidade')
+
+    dados = []
+
+    for i in saidas:
+
+        nome_unidade = str(i.unidade).split(" ")[0]
+        nome_departamento = str(i.departamento).split(" ")[0]
+        nome_divisao = str(i.divisao_field).split(" ")[0]
+
+        qnt_unidade = MaterialSaida.objects.filter(unidade=i.unidade).count()
+        qnt_departmento = MaterialSaida.objects.filter(departamento=i.departamento).count()
+        qnt_divisao = MaterialSaida.objects.filter(divisao_field=i.divisao_field).count()
+
+    dados.append(f"Nome da Unidade: ({nome_unidade}) - Quantidade de Items: ({qnt_unidade})")
+    dados.append(f"Nome da Unidade: ({nome_departamento}) - Quantidade de Items: ({qnt_departmento})")
+    dados.append(f"Nome da Unidade: ({nome_divisao}) - Quantidade de Items: ({qnt_divisao})")
+
+    return dados
 
 @login_required
 def testeJsFiltroView(request):
@@ -459,6 +508,24 @@ def testeJsFiltroView(request):
     }
 
     return render(request, template_name, context)
+
+@login_required
+def EstatisticasView(request):
+    template_name = 'include/estatisticas.html'
+
+    dados =  GetEstatisticasFunction(request)
+
+    context = {
+        'dados': dados
+    }
+
+    return render(request, template_name, context)
+
+def teste_async(request):
+
+    dados = GetEstatisticasFunction(request)
+
+    return JsonResponse(dados, safe=False)
 
 
 
