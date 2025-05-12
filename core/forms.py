@@ -239,7 +239,7 @@ class FiltroForm(forms.Form):
         label="Número do Processo",
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Digite o número do processo...'
+            'placeholder': 'Digite o número do processo sei...'
         })
     )
 

@@ -61,6 +61,15 @@ footer span img {
 #box_words {
     display: none;
 }
+/* FROM JSON RESPONSE */
+
+.caixa {
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+    width: 430px;
+}
 
 
 

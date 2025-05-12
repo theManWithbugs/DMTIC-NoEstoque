@@ -53,14 +53,14 @@ class Departamento(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
 
     def __str__(self):
-        return f"{self.nome} ({self.unidade})"
+        return f"{self.nome}"
 
 class Divisao(models.Model):
     nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, related_name='divisoes', verbose_name='A qual departamento pertence?')
     
     def __str__(self):
-        return f"{self.nome} ({self.departamento})"
+        return f"{self.nome}"
     
 class HistoricoUser(models.Model):
     nome_user = models.CharField(max_length=30, blank=True, null=True)

@@ -32,5 +32,7 @@ urlpatterns = [
     path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
 
     path('home/async_view_teste/', views.teste_async, name='teste_async'),
+    path('home/async_view_two/', views.teste_async_two, name='teste_async_two'),
+    path('home/async_items/', views.dados_items, name='items_dados'),
 ]
 

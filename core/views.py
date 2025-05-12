@@ -187,6 +187,10 @@ def listarItemsView(request):
 def itemSaidaViewLista(request):
     template_name = 'include/listar_saida.html' 
 
+    unidade = None
+    departmento = None
+    divisao = None
+
     objs = []
 
     objs_tipo = MaterialSaida.objects.prefetch_related('saida_obj')  
@@ -467,27 +471,38 @@ class jsFiltroJson(APIView):
             'divisoes': divisoes_serialized,
         })
 
-def GetEstatisticasFunction(request):
+def get_estatisticas_unidades(request):
+    saidas_unidades = MaterialSaida.objects.prefetch_related('unidade').all()
 
-    saidas = MaterialSaida.objects.prefetch_related('unidade')
+    dados_unidades = []
 
-    dados = []
+    if saidas_unidades:
+        for i in saidas_unidades:
+            nome_unidade = str(i.unidade).split(" ")[0]
 
-    for i in saidas:
+            qnt_unidade = MaterialSaida.objects.filter(unidade=i.unidade).count()
 
-        nome_unidade = str(i.unidade).split(" ")[0]
-        nome_departamento = str(i.departamento).split(" ")[0]
-        nome_divisao = str(i.divisao_field).split(" ")[0]
+            dados_unidades.append(f"[ Departamentos: ({nome_unidade}) Quantidade de Items: ({qnt_unidade}) ]")
 
-        qnt_unidade = MaterialSaida.objects.filter(unidade=i.unidade).count()
-        qnt_departmento = MaterialSaida.objects.filter(departamento=i.departamento).count()
-        qnt_divisao = MaterialSaida.objects.filter(divisao_field=i.divisao_field).count()
+    dados_unidades = list(dict.fromkeys(dados_unidades))
 
-    dados.append(f"Nome da Unidade: ({nome_unidade}) - Quantidade de Items: ({qnt_unidade})")
-    dados.append(f"Nome da Unidade: ({nome_departamento}) - Quantidade de Items: ({qnt_departmento})")
-    dados.append(f"Nome da Unidade: ({nome_divisao}) - Quantidade de Items: ({qnt_divisao})")
+    return dados_unidades
 
-    return dados
+def get_estatisticas_departmentos(request):
+    saidas_departamentos = MaterialSaida.objects.prefetch_related('departamento').all()
+
+    dados_departamentos = []
+
+    if saidas_departamentos:
+        for i in saidas_departamentos:
+            nome_departamento = str(i.departamento)
+            qnt_departamento = MaterialSaida.objects.filter(departamento=i.departamento).count()
+
+            dados_departamentos.append(f"[ Unidades: ({nome_departamento}) Quantidade de Items: ({qnt_departamento}) ]")
+
+    dados_departamentos = list(dict.fromkeys(dados_departamentos))
+
+    return dados_departamentos
 
 @login_required
 def testeJsFiltroView(request):
@@ -505,23 +520,65 @@ def testeJsFiltroView(request):
 
     return render(request, template_name, context)
 
-@login_required
+
+def items_dados(request):
+    material_tipo_saida = MaterialSaida.objects.all()
+    material_tipo = MaterialTipo.objects.all()
+
+    each_item = []
+
+    items_iguais = Counter()
+
+    for obj in material_tipo:
+        for obj_saida in material_tipo_saida:
+            if obj.id == obj_saida.id:
+                each_item.append( f"[Material: {obj} Saida: {obj_saida}]")
+                if obj.id and obj_saida.id:
+                    items_iguais[( f"( Marca: {obj.marca} ) (Modelo: {obj_saida} )" )] += 1
+
+    return each_item
+
+def item_agrupados(request):
+    material_tipo_saida = MaterialSaida.objects.all()
+    material_tipo = MaterialTipo.objects.all()
+
+    items_iguais = Counter()
+
+    for obj in material_tipo:
+        for obj_saida in material_tipo_saida:
+            if obj.id == obj_saida.id and obj_saida.unidade:
+                items_iguais[f"[Marca: {obj.marca} Modelo: {obj.modelo} Unidade: {obj_saida.unidade} Departmento: {obj_saida.departamento} Divisão: {obj_saida.divisao_field}]"] += 1
+
+    for item, quantidade in items_iguais.items():
+        print(f"{item}: {quantidade}")
+
+    return items_iguais
+
 def EstatisticasView(request):
     template_name = 'include/estatisticas.html'
 
-    dados =  GetEstatisticasFunction(request)
-
+    dados =  get_estatisticas_unidades(request)
+    dados_items = items_dados(request) 
+    counter_items = item_agrupados(request)
+   
     context = {
-        'dados': dados
+        'dados': dados,
+        'dados_material': dados_items,
+        'quant_items': counter_items
     }
-
     return render(request, template_name, context)
 
 def teste_async(request):
+    dados_unidade = get_estatisticas_unidades(request)
+    return JsonResponse(dados_unidade, safe=False)
 
-    dados = GetEstatisticasFunction(request)
+def teste_async_two(request):
+    dados_departamento = get_estatisticas_departmentos(request)
+    return JsonResponse(dados_departamento, safe=False)
 
-    return JsonResponse(dados, safe=False)
+def dados_items(request):
+    items_info = item_agrupados(request)
+    return JsonResponse(items_info, safe=False)
 
 
 

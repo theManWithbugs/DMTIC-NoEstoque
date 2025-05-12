@@ -1,4 +1,3 @@
-
 function exibir() {
     caixa = document.getElementById('box_words');
     button = document.getElementById('btn_exibir');
