@@ -23,6 +23,18 @@ class MaterialTipo(models.Model):
     def __str__(self):
         return f"-{self.marca}- ( {self.modelo} )"
 
+    def get_complete_object(self):
+        return {
+            "material_obj": str(self.material_obj),
+            "saida_obj": str(self.saida_obj) if self.saida_obj else None,
+            "marca": self.marca,
+            "modelo": self.modelo,
+            "n_serie": self.n_serie,
+            "patrimonio": self.patrimonio,
+            "observacao": self.observacao,
+            "garantia": self.garantia,
+        }
+
 class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_departamento', verbose_name='Departamento')

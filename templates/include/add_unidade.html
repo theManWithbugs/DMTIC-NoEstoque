@@ -9,35 +9,50 @@
 
 {% include 'include/alert_error_message.html' %}
 
-<div class="container box_inserItem">
+<div class="bg-white rounded container mb-4">
+    <div class="p-3 row gap-2">
+        <div class="col-auto border border-1 p-2">
+            <a href="#"  onclick="reg_unidade()"> Add Unidade
+            </a>
+        </div>
+        <div class="col-auto border border-1 p-2">
+            <a href="#" onclick="reg_departmento()"> Add Departmento
+            </a>
+        </div>
+        <div class="col-auto border border-1 p-2">
+            <a href="#" onclick="reg_divisao()"> Add Divisão
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="add_unidade">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success" name="unidade_submit">
+        <button type="submit" class="btn btn-success" 
+        name="unidade_submit" id="btn_unidade">
             Salvar</button>
     </form>
 </div>
 
-<br>
-
-<div class="container box_inserItem">
+<div class="container" id="add_departamento">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form_dep.as_p }}
-        <button type="submit" class="btn btn-success" name="departamento_submit">
+        <button type="submit" class="btn btn-success" 
+        name="departamento_submit" id="btn_departamento">
             Salvar</button>
     </form>
 </div>
 
-<br>
-
-<div class="container box_inserItem">
+<div class="container" id="add_divisao">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form_divis.as_p }}
-        <button type="submit" class="btn btn-success" name="divisao_submit">
+        <button type="submit" class="btn btn-success" 
+        name="divisao_submit" id="btn_divisao">
             Salvar</button>
     </form>
 </div>
-
 {% endblock content %}

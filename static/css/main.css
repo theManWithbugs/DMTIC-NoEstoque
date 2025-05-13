@@ -58,6 +58,10 @@ footer span img {
     height: 20px;
 }
 
+#footer_base img {
+    width: 25px;
+}
+
 #box_words {
     display: none;
 }
@@ -70,6 +74,34 @@ footer span img {
     margin-top: 5px;
     width: 430px;
 }
+
+/* Add unidade, departamento, divisão */
+
+#add_unidade {
+    display: none;
+}
+
+#add_departamento {
+    display: none;
+}
+
+#add_divisao {
+    display: none;
+}
+
+#btn_unidade {
+    
+}
+
+#btn_departamento {
+
+}
+
+#btn_divisao {
+
+}
+
+
 
 
 

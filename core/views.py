@@ -45,6 +45,7 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
+    dados = receber_dados(request)
     return render(request, template_name)
 
 def logoutView(request):
@@ -158,7 +159,7 @@ def listarItemsView(request):
 
     objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
 
-    paginator = Paginator(objs_tipo, 5)
+    paginator = Paginator(objs_tipo, 10)
     page = request.GET.get('page')
 
     try:    
@@ -471,39 +472,6 @@ class jsFiltroJson(APIView):
             'divisoes': divisoes_serialized,
         })
 
-def get_estatisticas_unidades(request):
-    saidas_unidades = MaterialSaida.objects.prefetch_related('unidade').all()
-
-    dados_unidades = []
-
-    if saidas_unidades:
-        for i in saidas_unidades:
-            nome_unidade = str(i.unidade).split(" ")[0]
-
-            qnt_unidade = MaterialSaida.objects.filter(unidade=i.unidade).count()
-
-            dados_unidades.append(f"[ Departamentos: ({nome_unidade}) Quantidade de Items: ({qnt_unidade}) ]")
-
-    dados_unidades = list(dict.fromkeys(dados_unidades))
-
-    return dados_unidades
-
-def get_estatisticas_departmentos(request):
-    saidas_departamentos = MaterialSaida.objects.prefetch_related('departamento').all()
-
-    dados_departamentos = []
-
-    if saidas_departamentos:
-        for i in saidas_departamentos:
-            nome_departamento = str(i.departamento)
-            qnt_departamento = MaterialSaida.objects.filter(departamento=i.departamento).count()
-
-            dados_departamentos.append(f"[ Unidades: ({nome_departamento}) Quantidade de Items: ({qnt_departamento}) ]")
-
-    dados_departamentos = list(dict.fromkeys(dados_departamentos))
-
-    return dados_departamentos
-
 @login_required
 def testeJsFiltroView(request):
     template_name = 'include/teste_filtrojs.html'
@@ -520,53 +488,9 @@ def testeJsFiltroView(request):
 
     return render(request, template_name, context)
 
-
-def items_dados(request):
-    material_tipo_saida = MaterialSaida.objects.all()
-    material_tipo = MaterialTipo.objects.all()
-
-    each_item = []
-
-    items_iguais = Counter()
-
-    for obj in material_tipo:
-        for obj_saida in material_tipo_saida:
-            if obj.id == obj_saida.id:
-                each_item.append( f"[Material: {obj} Saida: {obj_saida}]")
-                if obj.id and obj_saida.id:
-                    items_iguais[( f"( Marca: {obj.marca} ) (Modelo: {obj_saida} )" )] += 1
-
-    return each_item
-
-def item_agrupados(request):
-    material_tipo_saida = MaterialSaida.objects.all()
-    material_tipo = MaterialTipo.objects.all()
-
-    items_iguais = Counter()
-
-    for obj in material_tipo:
-        for obj_saida in material_tipo_saida:
-            if obj.id == obj_saida.id and obj_saida.unidade:
-                items_iguais[f"[Marca: {obj.marca} Modelo: {obj.modelo} Unidade: {obj_saida.unidade} Departmento: {obj_saida.departamento} Divisão: {obj_saida.divisao_field}]"] += 1
-
-    for item, quantidade in items_iguais.items():
-        print(f"{item}: {quantidade}")
-
-    return items_iguais
-
 def EstatisticasView(request):
     template_name = 'include/estatisticas.html'
-
-    dados =  get_estatisticas_unidades(request)
-    dados_items = items_dados(request) 
-    counter_items = item_agrupados(request)
-   
-    context = {
-        'dados': dados,
-        'dados_material': dados_items,
-        'quant_items': counter_items
-    }
-    return render(request, template_name, context)
+    return render(request, template_name)
 
 def teste_async(request):
     dados_unidade = get_estatisticas_unidades(request)
@@ -579,6 +503,10 @@ def teste_async_two(request):
 def dados_items(request):
     items_info = item_agrupados(request)
     return JsonResponse(items_info, safe=False)
+
+def materiais_info(request):
+    data = 'Envio funcionando!'
+    return JsonResponse(data, safe=False)
 
 
 
