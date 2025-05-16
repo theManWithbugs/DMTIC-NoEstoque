@@ -21,7 +21,7 @@
             {{ form.n_processo }}
         </div>
         <br>
-        <button type="submit" id="enviar">Enviar</button>
+        <button type="submit" id="enviar" onclick="enviar()">Enviar</button>
     </form>
 </div>
 <br>
@@ -34,6 +34,23 @@
     document.getElementById('id_departamento').addEventListener('change', function() {
         document.getElementById('filtro-form').submit();
     });
+
+    // function enviar() {
+    //     document.getElementById('id_unidade').addEventListener('change', function() {
+    //         document.getElementById('filtro-form').submit();
+    //     });
+    //     document.getElementById('id_departamento').addEventListener('change', function() {
+    //         document.getElementById('filtro-form').submit();
+    //     });
+    // }
+
+    // document.getElementById('enviar').addEventListener('click', function(event) {
+    //     var nProcesso = document.getElementById('id_n_processo').value;
+    //     if (!nProcesso) {
+    //         alert('Preencha o campo número de processo!');
+    //         event.preventDefault();
+    //     }
+    // });
 </script>
 
 {% endblock content %}

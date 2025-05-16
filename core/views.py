@@ -16,6 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.db import IntegrityError
 from collections import Counter
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.utils.decorators import method_decorator
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -45,7 +48,6 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
-    dados = receber_dados(request)
     return render(request, template_name)
 
 def logoutView(request):
@@ -400,6 +402,53 @@ def histUsuarioView(request):
 
     return render(request, template_name, context)
 
+# @login_required
+# def filtro_view(request, id):
+
+#     unidade_id = request.GET.get('unidade') 
+#     departamento_id = request.GET.get('departamento')  
+#     divisao_id = request.GET.get('divisao') 
+#     n_processo = request.GET.get('n_processo')
+
+#     if unidade_id and departamento_id and divisao_id:
+
+#         try:
+#             unidade = Unidade.objects.get(id=unidade_id)
+#             departamento = Departamento.objects.get(id=departamento_id)
+#             divisao = Divisao.objects.get(id=divisao_id)
+#             n_processo = MaterialSaida.objects.get(n_processo=n_processo)
+#         except ObjectDoesNotExist:
+#             pass
+
+#         if request.method == 'GET':
+#             saida = MaterialSaida.objects.create(
+#                     unidade=unidade,
+#                     departamento=departamento,
+#                     divisao_field=divisao,
+#                     n_processo=n_processo,
+#                 )
+#             messages.success(request, "MaterialSaida criado com sucesso!")
+
+#     try:
+#         material_tipo = get_object_or_404(MaterialTipo, id=id)
+#         material_tipo.saida_obj = saida
+#         material_tipo.save()
+#         return redirect('listar_items')
+#     except NameError:
+#         pass
+
+#     context = {
+#         'form': FiltroForm(
+#             unidade_id=unidade_id,
+#             departamento_id=departamento_id,
+#             divisao_id=divisao_id,
+#             data=request.GET
+#         ),
+#         'material_tipo': material_tipo,
+#     }
+
+#     return render(request, 'include/criar_saida_filtro.html', context)
+
 @login_required
 def filtro_view(request, id):
 
@@ -408,32 +457,47 @@ def filtro_view(request, id):
     divisao_id = request.GET.get('divisao') 
     n_processo = request.GET.get('n_processo')
 
-    if unidade_id and departamento_id and divisao_id:
+    unidade = departamento = divisao = None
 
+    if unidade_id:
         try:
             unidade = Unidade.objects.get(id=unidade_id)
-            departamento = Departamento.objects.get(id=departamento_id)
-            divisao = Divisao.objects.get(id=divisao_id)
-            n_processo = MaterialSaida.objects.get(n_processo=n_processo)
-        except ObjectDoesNotExist:
-            pass
+        except Unidade.DoesNotExist:
+            unidade = None
 
+    if departamento_id:
+        try:
+            departamento = Departamento.objects.get(id=departamento_id)
+        except Departamento.DoesNotExist:
+            departamento = None
+
+    # Aqui está o tratamento para divisão nula
+    divisao = None
+    if divisao_id:
+        try:
+            divisao = Divisao.objects.get(id=divisao_id)
+        except Divisao.DoesNotExist:
+            divisao = None
+
+    # O mesmo pode ser feito para n_processo se necessário
+
+    if unidade and departamento:  # divisao pode ser None!
         if request.method == 'GET':
             saida = MaterialSaida.objects.create(
-                    unidade=unidade,
-                    departamento=departamento,
-                    divisao_field=divisao,
-                    n_processo=n_processo,
-                )
+                unidade=unidade,
+                departamento=departamento,
+                divisao_field=divisao,  # pode ser None
+                n_processo=n_processo,
+            )
             messages.success(request, "MaterialSaida criado com sucesso!")
 
-    try:
-        material_tipo = get_object_or_404(MaterialTipo, id=id)
-        material_tipo.saida_obj = saida
-        material_tipo.save()
-        return redirect('listar_items')
-    except NameError:
-        pass
+        try:
+            material_tipo = get_object_or_404(MaterialTipo, id=id)
+            material_tipo.saida_obj = saida
+            material_tipo.save()
+            return redirect('listar_items')
+        except NameError:
+            pass
 
     context = {
         'form': FiltroForm(
@@ -442,7 +506,7 @@ def filtro_view(request, id):
             divisao_id=divisao_id,
             data=request.GET
         ),
-        'material_tipo': material_tipo,
+        'material_tipo': None,  # ou o que for adequado
     }
 
     return render(request, 'include/criar_saida_filtro.html', context)
@@ -450,11 +514,9 @@ def filtro_view(request, id):
 class jsFiltroJson(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, _request):
         unidades = Unidade.objects.all()
-
         departamentos = Departamento.objects.prefetch_related('unidade')
-
         divisoes = Divisao.objects.all()
 
         unidades_serialized = UnidadeSerializer(unidades, 
@@ -505,8 +567,68 @@ def dados_items(request):
     return JsonResponse(items_info, safe=False)
 
 def materiais_info(request):
-    data = 'Envio funcionando!'
+    data = receber_dados_divisao(request)
     return JsonResponse(data, safe=False)
 
+# Novo filtro JS sendo criado aqui abaixo
+@login_required
+def new_filtro_view(request):
+    template_name = 'account/filtro_ref.html'
+    return render(request, template_name)
+
+class jsNewFiltro(APIView):
+    #Usuario deve esrtar autenticado para funcionar
+    #Deve ser garantido na view que renderiza a pagina
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        unidades = Unidade.objects.all()
+        departamentos = Departamento.objects.prefetch_related('unidade')
+        divisoes = Divisao.objects.all()
+
+        unidades_serialized = UnidadeSerializer(unidades, 
+                                                many=True).data
+        
+        departamentos_serialized = DepartamentoSerializer(departamentos, 
+                                                          many=True).data
+        
+        divisoes_serialized = DivisaoSerializer(divisoes, 
+                                                many=True).data
+
+        return Response({
+            'unidades': unidades_serialized,
+            'departamentos': departamentos_serialized,
+            'divisoes': divisoes_serialized,
+        })
+    
+@csrf_exempt
+@login_required
+def salvarSaidaObj(request):
+    unidade = Unidade.objects.all()
+    departamento = Departamento.objects.all()
+    divisao = Divisao.objects.all()
+
+    if request.method == 'POST':
+        try:
+            dados = json.loads(request.body.decode('utf-8'))
+            print(dados)
+
+            unidade_id = dados.get('unidade');
+            departamento_id = dados.get('departamento')
+            divisao_id = dados.get('divisao')
+            n_processo = dados.get('n_process')
+
+            # Exemplo de resposta de sucesso:
+            return JsonResponse({'status': 'success', 'message': 'Dados recebidos com sucesso!'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Método não permitido'}, status=405)
+
+
+    
+    
+
+        
 
 

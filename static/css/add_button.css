@@ -1,6 +1,6 @@
 .button {
     position: relative;
-    width: 157px;
+    width: 155px;
     height: 38px;
     cursor: pointer;
     display: flex;
@@ -23,7 +23,7 @@
     position: absolute;
     transform: translateX(112px);
     height: 100%;
-    width: 39px;
+    width: 37px;
     background-color: #34974d;
     display: flex;
     align-items: center;

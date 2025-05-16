@@ -231,12 +231,15 @@ class FiltroForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     divisao = forms.ModelChoiceField(
-        queryset=Divisao.objects.none(),  # Inicialmente vazio
+        queryset=Divisao.objects.none(),
         label="Divisão",
+        required=False,  # Permite nulo
+        empty_label="---------",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     n_processo = forms.IntegerField(
         label="Número do Processo",
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Digite o número do processo sei...'
@@ -260,7 +263,22 @@ class FiltroForm(forms.Form):
             self.fields['divisao'].queryset = Divisao.objects.filter(departamento_id=departamento_id)
         else:
             self.fields['divisao'].queryset = Divisao.objects.none()
-            
+
+        # Permite divisao ser nulo (None)
+        self.fields['divisao'].required = False
+        self.fields['divisao'].empty_label = "---------"
+
+class ProcessoForm(forms.Form):
+    class Meta:
+        model = 'MaterialSaida'
+        fields = 'n_processo'
+
+    def __init__(self, *args, **kwargs):
+        super(ProcessoForm, self).__init__(*args, **kwargs)
+        for i in self.fields:
+            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+
 
 
 

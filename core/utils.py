@@ -1,9 +1,8 @@
 from . models import *
 from collections import Counter
-
 from collections import defaultdict
 
-def receber_dados(request):
+def receber_dados_divisao(request):
     # Dicionário para agrupar os itens por divisão
     agrupados_por_divisao = defaultdict(list)
 
@@ -25,10 +24,30 @@ def receber_dados(request):
             "itens": itens
         })
     
-    for i in resultado:
-        print(i)
-    
+    return resultado
 
+def receber_dados_departamento(request):
+    # Dicionário para agrupar os itens por divisão
+    agrupados_por_divisao = defaultdict(list)
+
+    # Obter todos os objetos de MaterialTipo
+    material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
+
+    for item in material_tipos:
+        # Obter a divisão associada ao item
+        departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
+
+        # Adicionar o item ao grupo correspondente à divisão
+        agrupados_por_divisao[departamento].append(item.get_complete_object())
+
+    # Organizar os resultados em uma lista
+    resultado = []
+    for departamento, itens in agrupados_por_divisao.items():
+        resultado.append({
+            "Departamento": departamento,
+            "itens": itens
+        })
+    
     return resultado
 
 def items_dados(request):
@@ -94,14 +113,3 @@ def get_estatisticas_departmentos(request):
 
     return dados_departamentos
 
-# def contar_items(request):
-#     marca_modelo = Counter()
-
-#     objs = []
-
-#     for obj in objs:
-#         for obj_inside in obj.tipo_obj.all():
-#             if obj_inside.marca and obj_inside.modelo:
-#                 marca_modelo[( f"( Marca: {obj_inside.marca} ) ( Modelo: {obj_inside.modelo} ) ")] += 1
-
-#     return marca_modelo

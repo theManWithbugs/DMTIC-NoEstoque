@@ -15,7 +15,7 @@ function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken');
 
-fetch('/filtro_json/')
+fetch('/new_filtro/')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -83,7 +83,6 @@ fetch('/filtro_json/')
                 }
             });
         });
-
         const selectDivisao = document.getElementById('select_divi');
         selectDivisao.addEventListener('change', function () {
             divisaoSelecionadaValor = selectDivisao.value;
@@ -92,10 +91,15 @@ fetch('/filtro_json/')
         // Adiciona evento ao botão para enviar os dados
         const enviarButton = document.getElementById('enviar');
         enviarButton.addEventListener('click', function () {
+            //Pega os valores atuais dos selects, mesmo que o usuário não tenha alterado
+            // unidadeSelecionadaValor = selectUnidade.value || "";
+            // departamentoSelecionadoValor = selectDepartamento.value || "";
+            // divisaoSelecionadaValor = selectDivisao.value || "";
+
             const dados = {
                 unidadeSelecionadaValor,
                 departamentoSelecionadoValor,
-                divisaoSelecionadaValor
+                divisaoSelecionadaValor,
             };
 
             fetch('/filtrojs/', {

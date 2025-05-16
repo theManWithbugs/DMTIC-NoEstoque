@@ -3,25 +3,35 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add_btn_esta.css' %}">
 {% endblock css %}
 
 {% block content %}
 
 {% include 'include/alert_error_message.html' %}
 
-<div class="bg-white rounded container mb-4">
+<div class="bg-secondary rounded container mb-4">
     <div class="p-3 row gap-2">
-        <div class="col-auto border border-1 p-2">
-            <a href="#"  onclick="reg_unidade()"> Add Unidade
-            </a>
+        <div class="col-auto p-2">
+            <button class="button_esta">
+                <a href="#"  onclick="reg_unidade()" 
+                style="text-decoration: none; color: black;">
+                    Add unidade</a>
+            </button>
         </div>
-        <div class="col-auto border border-1 p-2">
-            <a href="#" onclick="reg_departmento()"> Add Departmento
-            </a>
+        <div class="col-auto p-2">
+            <button class="button_esta">
+                <a href="#" onclick="reg_departmento()" 
+                style="text-decoration: none; color: black;">
+                    Add Departmento</a>
+            </button>
         </div>
-        <div class="col-auto border border-1 p-2">
-            <a href="#" onclick="reg_divisao()"> Add Divisão
-            </a>
+        <div class="col-auto p-2">
+            <button class="button_esta">
+                <a href="#" onclick="reg_divisao()"
+                style="text-decoration: none; color: black;"">
+                    Add Divisão</a>
+            </button>
         </div>
     </div>
 </div>

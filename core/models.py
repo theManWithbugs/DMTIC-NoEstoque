@@ -38,8 +38,15 @@ class MaterialTipo(models.Model):
 class MaterialSaida(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_unidade', verbose_name='Unidade')
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, null=False, blank=False, related_name='materiais_departamento', verbose_name='Departamento')
-    divisao_field = models.ForeignKey('Divisao', on_delete=models.CASCADE, blank=False, null=False, related_name='materiais_divisao', verbose_name='Divisão')
-    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', unique=True, blank=True, null=True)
+    divisao_field = models.ForeignKey(
+        'Divisao',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name='materiais_divisao',
+        verbose_name='Divisão',
+    )
+    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', unique=True, blank=False, null=False)
     data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -65,7 +72,7 @@ class Departamento(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
 
     def __str__(self):
-        return f"{self.nome}"
+        return f"{self.nome} ({self.unidade})"
 
 class Divisao(models.Model):
     nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão')
