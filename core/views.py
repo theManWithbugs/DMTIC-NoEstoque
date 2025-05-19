@@ -404,13 +404,13 @@ def filtro_view(request, id):
     if form.is_valid():
         unidade = form.cleaned_data['unidade']
         departamento = form.cleaned_data['departamento']
-        divisao = form.cleaned_data['divisao']
+        divisao = form.cleaned_data.get('divisao')  # Pode ser None
         n_processo = form.cleaned_data['n_processo']
 
         saida = MaterialSaida.objects.create(
             unidade=unidade,
             departamento=departamento,
-            divisao_field=divisao,
+            divisao_field=divisao if divisao else None,  # Definindo None caso esteja vazio
             n_processo=n_processo
         )
         messages.success(request, "MaterialSaida criado com sucesso!")

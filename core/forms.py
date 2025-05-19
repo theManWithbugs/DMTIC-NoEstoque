@@ -233,13 +233,12 @@ class FiltroForm(forms.Form):
     divisao = forms.ModelChoiceField(
         queryset=Divisao.objects.none(),
         label="Divisão",
-        required=True,
+        required=False,  
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     n_processo = forms.CharField(
         max_length=40,
         label="Número do Processo",
-        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
