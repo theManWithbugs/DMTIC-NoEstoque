@@ -226,47 +226,39 @@ class FiltroForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     departamento = forms.ModelChoiceField(
-        queryset=Departamento.objects.none(),  # Inicialmente vazio
+        queryset=Departamento.objects.none(),
         label="Departamento",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     divisao = forms.ModelChoiceField(
         queryset=Divisao.objects.none(),
         label="Divisão",
-        required=False,  # Permite nulo
-        empty_label="---------",
+        required=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    n_processo = forms.IntegerField(
+    n_processo = forms.CharField(
+        max_length=40,
         label="Número do Processo",
         required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Digite o número do processo sei...'
-        })
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     def __init__(self, *args, **kwargs):
-        unidade_id = kwargs.pop('unidade_id', None)
-        departamento_id = kwargs.pop('departamento_id', None)
-        divisao_id = kwargs.pop('divisao_id', None)
         super().__init__(*args, **kwargs)
 
-        # Filtra os departamentos com base na unidade selecionada
+        unidade_id = self.data.get('unidade')
+        departamento_id = self.data.get('departamento')
+
         if unidade_id:
             self.fields['departamento'].queryset = Departamento.objects.filter(unidade_id=unidade_id)
-        else:
-            self.fields['departamento'].queryset = Departamento.objects.none()
-
-        # Filtra as divisões com base no departamento selecionado
         if departamento_id:
             self.fields['divisao'].queryset = Divisao.objects.filter(departamento_id=departamento_id)
-        else:
-            self.fields['divisao'].queryset = Divisao.objects.none()
 
-        # Permite divisao ser nulo (None)
-        self.fields['divisao'].required = False
-        self.fields['divisao'].empty_label = "---------"
+    def clean_n_processo(self):
+        n_processo = self.cleaned_data.get('n_processo')
+        if not n_processo:
+            raise forms.ValidationError("O número do processo é obrigatório.")
+        return n_processo
 
 class ProcessoForm(forms.Form):
     class Meta:

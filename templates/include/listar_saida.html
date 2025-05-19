@@ -14,8 +14,8 @@
 
 <div class="container rounded mt-4 bg-white">
     <div class="p-2">
-        <u class="fs-5 d-flex justify-content-center mb-2">
-            ITEMS COM SAIDA EFETUADA</u>
+        <p class="fs-5 d-flex justify-content-center mb-2">
+            ITEMS COM SAIDA EFETUADA</p>
         <table class="table table-bordered border-primary">
             <thead>
                 <tr>
@@ -25,8 +25,7 @@
                     <td>Marca</td>
                     <td>Modelo</td>
                     <td>Data saida</td>
-                    <td>Saida</td>
-                   
+                    <!-- <td>Saida</td> -->
                 </tr>
             </thead>
             <tbody>
@@ -40,11 +39,11 @@
                         <td>{{ material.marca }}</td>
                         <td>{{ material.modelo }}</td>
                         <td>{{ material.saida_obj.data_saida|date:"d/m/Y" }}</td>
-                        <td>
+                        <!-- <td>
                             <a href="{% url 'saida_item' material.id %}">
                                 Saida
                             </a>
-                        </td>
+                        </td> -->
                        
                 </tr>
                     {% endfor %}

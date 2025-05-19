@@ -35,11 +35,5 @@ urlpatterns = [
     path('home/async_view_two/', views.teste_async_two, name='teste_async_two'),
     path('home/async_items/', views.dados_items, name='items_dados'),
     path('home/async_mater/', views.materiais_info, name='materiais_info'),
-
-    #novo filtro sendo feito aqui abaixo
-    path('new_filtro/', views.new_filtro_view, name='filtro_novo'),
-    path('new_filtro_json/', jsNewFiltro.as_view(), name='new_fil_resp'),
-    
-    path('salvar_saida/', views.salvarSaidaObj, name='response_data'),
 ]
 

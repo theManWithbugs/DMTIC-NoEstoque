@@ -113,3 +113,4 @@ def get_estatisticas_departmentos(request):
 
     return dados_departamentos
 
+

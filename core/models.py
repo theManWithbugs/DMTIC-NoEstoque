@@ -46,7 +46,7 @@ class MaterialSaida(models.Model):
         related_name='materiais_divisao',
         verbose_name='Divisão',
     )
-    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', unique=True, blank=False, null=False)
+    n_processo = models.CharField(max_length=40, verbose_name='Número do processo', unique=True, blank=True, null=True)
     data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):
