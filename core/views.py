@@ -132,7 +132,7 @@ def itemAddView(request):
                     nome_user = request.user.first_name,
                     acao_realizada = 'Entrada de item'
                 )
-                messages.success(request, "Itens salvos com sucesso!")
+                messages.success(request, msgSucesso)
                 return redirect('listar_items')
             else:
                 messages.error(request, "Erro ao salvar os itens do formset.")
@@ -154,9 +154,9 @@ def listarItemsView(request):
 
     objs = []
 
-    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
+    objs_tipo = MaterialTipo.objects.prefetch_related('material_obj').order_by('id')
 
-    paginator = Paginator(objs_tipo, 5)
+    paginator = Paginator(objs_tipo, 13)
     page = request.GET.get('page')
 
     try:    
@@ -169,10 +169,10 @@ def listarItemsView(request):
     if objs.object_list.exists():
         pass
 
-    for obj in objs:
-        for obj_inside in obj.tipo_obj.all():
-            if obj_inside.marca and obj_inside.modelo:
-                marca_modelo[( f"( Marca: {obj_inside.marca} ) ( Modelo: {obj_inside.modelo} ) ")] += 1
+    # for obj in objs:
+    #     for obj_inside in obj.tipo_obj.all():
+    #         if obj_inside.marca and obj_inside.modelo:
+    #             marca_modelo[( f"( Marca: {obj_inside.marca} ) ( Modelo: {obj_inside.modelo} ) ")] += 1
 
     context = {
         'objs': objs,
@@ -185,13 +185,9 @@ def listarItemsView(request):
 def itemSaidaViewLista(request):
     template_name = 'include/listar_saida.html' 
 
-    unidade = None
-    departmento = None
-    divisao = None
-
     objs = []
 
-    objs_tipo = MaterialSaida.objects.prefetch_related('saida_obj')  
+    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=False).prefetch_related('material_obj').order_by('id') 
 
     paginator = Paginator(objs_tipo, 15)
     page = request.GET.get('page')
@@ -206,16 +202,8 @@ def itemSaidaViewLista(request):
     if objs.object_list.exists():
         pass
 
-    for obj in objs:
-        unidade = str(obj.unidade).split(" ")[0]
-        departmento = str(obj.departamento).split(" ")[0]
-        divisao = str(obj.divisao_field).split(" ")[0]
-
     context = {
         'objs': objs,
-        'unidade': unidade,
-        'departamento': departmento,
-        'divisao': divisao,
     }
 
     return render(request, template_name, context)
@@ -226,9 +214,9 @@ def noExitItemsView(request):
     
     objs = []
 
-    objs_tipo = MaterialObj.objects.prefetch_related('tipo_obj')
+    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=True).prefetch_related('material_obj').order_by('id')
 
-    paginator = Paginator(objs_tipo, 14)
+    paginator = Paginator(objs_tipo, 13)
     page = request.GET.get('page')
 
     try:    
@@ -371,13 +359,11 @@ def create_material_saida(request, material_tipo_id):
 def histUsuarioView(request):
     template_name = 'include/hist_usuario.html'
 
-    user = HistoricoUser.objects.all()
-
     objs = []
 
-    objs_tipo = HistoricoUser.objects.all()
+    objs_tipo = HistoricoUser.objects.all().order_by('id')
 
-    paginator = Paginator(objs_tipo, 10)
+    paginator = Paginator(objs_tipo, 15)
     page = request.GET.get('page')
 
     try:    
@@ -391,7 +377,6 @@ def histUsuarioView(request):
         pass
 
     context = {
-        'user': user,
         'objs': objs,
     }
 
@@ -413,7 +398,7 @@ def filtro_view(request, id):
             divisao_field=divisao if divisao else None,  # Definindo None caso esteja vazio
             n_processo=n_processo
         )
-        messages.success(request, "MaterialSaida criado com sucesso!")
+        messages.success(request, "Saida de material realizada com sucesso!")
 
         try:
             material_tipo = get_object_or_404(MaterialTipo, id=id)

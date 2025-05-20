@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<title>{% block title %}HOME | UNIDADE{% endblock %}</title>
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
     <link rel="stylesheet" href="{% static 'css/add_btn_esta.css' %}">
 {% endblock css %}
 
 {% block content %}
-
-{% include 'include/alert_error_message.html' %}
 
 <div class="bg-secondary rounded container mb-4">
     <div class="p-3 row gap-2">

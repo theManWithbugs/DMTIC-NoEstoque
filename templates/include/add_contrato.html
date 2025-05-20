@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<title>{% block title %}HOME | CONTRATO{% endblock %}</title>
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/fundo_form.css' %}">
 {% endblock css %}
     
-
 {% block content %}
-
-{% include 'include/alert_error_message.html' %}
 
 <div class="container box_inserItem fundo_papel" id="fundo_adjust">
     <form action="{% url 'add_contr' %}" method="post" >

@@ -23,15 +23,13 @@ async function items_info(btn_items) {
             const item = document.createElement('li');
             item.style = 'font-size: 16px; margin-top: 5px;';
             item.textContent = `${key}: ${value}`;
-            caixa.classList.add('animate__animated', 'animate__fadeInLeft');
+            caixa.classList.add('animate__animated', 'animate__fadeInLeft', 'animate__delay-1s');
             lista.appendChild(item);
         });
 
         Object.entries(items).forEach(([key, value]) => {
             const divisionMatch = key.match(/Divisão: ([^\]]+)/);
             const division = divisionMatch ? divisionMatch[1]: "Divisão não encontrada";
-
-            console.log(`Divisão: ${division}, Valor: ${value}`);
         });
 
         caixa.innerHTML = "";
@@ -57,18 +55,16 @@ async function materiais_info(btn_mate) {
         caixa.innerText = "";
 
         data.forEach(divisaoObj => {
-            console.log("Divisão:", divisaoObj.divisao);
             const divis_nome = document.createElement('h5');
             caixa.appendChild(divis_nome);
             divis_nome.innerText = divisaoObj.divisao
             divisaoObj.itens.forEach(item => {
-                console.log("Item:", item);
                 const p = document.createElement('p');
                 p.textContent = `Item: ${item.modelo} Localidade: ${item.saida_obj}`;
                 caixa.appendChild(p);
             });
         });
-        caixa.classList.add('animate__animated', 'animate__fadeInLeft');
+        caixa.classList.add('animate__animated', 'animate__fadeInLeft', 'animate__delay-1s');
 
     } catch (error) {
         console.log('There was an error fetching materiais_info:', error);
