@@ -238,7 +238,7 @@ class FiltroForm(forms.Form):
     )
     n_processo = forms.CharField(
         max_length=40,
-        label="Número do Processo",
+        label="Número do processo(SEI)",
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 

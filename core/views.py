@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from collections import Counter
 from django.db import IntegrityError
+from django.db.models import Count
+from collections import defaultdict
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -40,6 +42,7 @@ def loginView(request):
 def baseView(request):
     template_name = 'base.html'
     return render(request, template_name)
+
 
 @login_required
 def homeView(request):
@@ -466,7 +469,21 @@ def testeJsFiltroView(request):
 
 def EstatisticasView(request):
     template_name = 'include/estatisticas.html'
-    return render(request, template_name)
+    # Busca todos os MaterialTipo com saída associada
+    materialtipos = MaterialTipo.objects.filter(saida_obj__isnull=False).select_related('saida_obj__departamento', 'saida_obj__unidade')
+
+    # Agrupa por (unidade, departamento)
+    itens_por_unidade_departamento = defaultdict(list)
+    for item in materialtipos:
+        unidade_nome = item.saida_obj.unidade.unidade  
+        departamento_nome = item.saida_obj.departamento.nome
+        chave = ("Unidade: " + unidade_nome, "Departamento: " + departamento_nome)
+        itens_por_unidade_departamento[chave].append(item)
+
+    context = {
+        'itens_por_unidade_departamento': dict(itens_por_unidade_departamento)
+    }
+    return render(request, template_name, context)
 
 def teste_async(request):
     dados_unidade = get_estatisticas_unidades(request)

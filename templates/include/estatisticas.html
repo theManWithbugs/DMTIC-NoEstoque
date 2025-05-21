@@ -16,23 +16,39 @@
     <div class="col-md-auto">
       <button id="btn_items"
       onclick="items_info()" class="button_esta">
-        Items 
+        Todos os items
       </button>
     </div>
 
-      <div class="col-md-auto">
-        <button id="btn_mate" 
-        onclick="materiais_info()" class="button_esta">
-          Quantidade Items
-        </button>
-      </div>
+    <div class="col-md-auto">
+      <button id="btn_mate" 
+      onclick="materiais_info()" class="button_esta">
+        Agrupados por divisão
+      </button>
+    </div>
 
     <div class="col-md-auto">
       <button class="button_esta">
         Exibir Gráficos
       </button>
     </div>
+    
   </div>
+</div>
+
+<br>
+
+<div class="bg-white p-4 rounded" style="border: solid 3px lightblue;">
+    {% for chave, itens in itens_por_unidade_departamento.items %}
+        {% with unidade=chave.0 departamento=chave.1 %}
+            <h3>{{ unidade }} - {{ departamento }}</h3>
+        {% endwith %}
+        <ul>
+            {% for item in itens %}
+                <li>{{ item.marca }} - {{ item.modelo }} - {{ item.n_serie }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
 </div>
 
 <br>

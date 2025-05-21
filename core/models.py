@@ -72,7 +72,7 @@ class Departamento(models.Model):
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
 
     def __str__(self):
-        return f"{self.nome} Unidade: {self.unidade}"
+        return f"{self.nome} ({self.unidade})"
 
 class Divisao(models.Model):
     nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão', unique=True, error_messages={'unique': "Error: Já existe uma divisão com esse nome."})
