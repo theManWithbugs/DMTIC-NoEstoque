@@ -54,14 +54,14 @@
             <div class="road"></div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-sm">
+    <nav class="navbar navbar-expand-sm bg-dark navbar_main">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'img/icon_estoque_DRSI.png' %}" class="rounded-pill" width="50px">
                 <span class="text-white">DRSI-NoEstoque</span>
             </a>
         </div>
-        <div class="container-fluid position-relative" id="user_cont2" style="margin-left: 77%;">
+        <div class="container-fluid position-relative" id="user_cont2" style="margin-left: 60%;">
             <a href="{% url 'logout' %}">
                 <button class="Btn_logout bg-danger">
                     <div class="sign">
@@ -78,6 +78,7 @@
             </a>
         </div>
     </nav>
+    <br>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -85,10 +86,10 @@
     {% for message in messages %}
         <script>
                 Swal.fire({
+                    position: "top",
                     title: "Mensagem!",
                     icon: "{{ message.tags|default:'info' }}",
                     text: "{{ message|escapejs }}",
-                    icon: "success",
                     draggable: true
                 });
         </script>
@@ -98,8 +99,13 @@
         <div class="container">
             {% block content %}
             {% endblock content %}
+            <br><br>
         </div>
     </div>
+
+    <footer class="bg-dark fixed-bottom">
+        <span class="text-white">DDMS-Divisão de desenvolvimento e manutenção de sistemas</span>
+    </footer>
     
     <script>
         const MIN_LOADER_TIME = 300;

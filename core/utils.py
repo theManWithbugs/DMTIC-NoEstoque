@@ -76,7 +76,7 @@ def item_agrupados(request):
     for obj in material_tipo:
         for obj_saida in material_tipo_saida:
             if obj.id == obj_saida.id and obj_saida.unidade:
-                items_iguais[f"[Marca: {obj.marca} Modelo: {obj.modelo} Unidade: {obj_saida.unidade} Departmento: {obj_saida.departamento} Divisão: {obj_saida.divisao_field}]"] += 1
+                items_iguais[f"[Marca: {obj.marca} Modelo: {obj.modelo} Unidade: {obj_saida.unidade} Departamento: {obj_saida.departamento} Divisão: {obj_saida.divisao_field}]"] += 1
 
     return items_iguais
 

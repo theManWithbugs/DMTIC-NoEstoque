@@ -14,6 +14,7 @@ from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSeria
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from collections import Counter
+from django.db import IntegrityError
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -55,23 +56,35 @@ def addUnidadeView(request):
     form = AddUnidadeForm(request.POST or None)
     form_dep = AddDepartForm(request.POST or None)
     form_divis = AddDivisãoForm(request.POST or None)
-        
+  
     if request.method == 'POST':
 
         if 'unidade_submit' in request.POST and form.is_valid():
-            form.save()
-            messages.success(request, msgSucesso)
-            return redirect('add_unidade')
+            try:
+                form.save()
+                messages.success(request, msgSucesso)
+                return redirect('add_unidade')
+            except IntegrityError:
+                messages.error(request, msgIntegridade)
+                return redirect('add_unidade')
 
         elif form_dep.is_valid():
-            form_dep.save()
-            messages.success(request, msgSucesso)
-            return redirect('add_unidade')
+            try:
+                form_dep.save()
+                messages.success(request, msgError)
+                return redirect('add_unidade')
+            except IntegrityError:
+                messages.error(request, msgIntegridade)
+                return redirect('add_unidade')
 
         elif form_divis.is_valid():
-            form_divis.save()
-            messages.success(request, msgSucesso)
-            return redirect('add_unidade')
+            try:
+                form_divis.save()
+                messages.success(request, msgSucesso)
+                return redirect('add_unidade')
+            except:
+                messages.error(request, msgIntegridade)
+                return redirect('add_unidade')
         
     context = {
         'form': form,

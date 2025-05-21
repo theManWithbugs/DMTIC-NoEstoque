@@ -9,13 +9,15 @@ async function items_info(btn_items) {
         }
         const items = await response.json();
 
+        console.log(items);
+
         const caixa = document.getElementById('caixa');
-        caixa.style = 'border: solid 1px; padding: 10px; border-radius: 5px; background-color: white;';
+        caixa.style = 'border: solid 3px lightblue; padding: 10px; border-radius: 5px; background-color: white;';
 
         // Adding a title before the list
         const title = document.createElement('h4');
-        title.textContent = 'Todos os items';
-        title.style = 'margin-bottom: 10px;';
+        title.textContent = 'Todos os items (items iguais agrupados)';
+        title.style = 'margin-bottom: 10px; text-align: center; padding: 10px;';
 
         const lista = document.createElement('ul');
 
@@ -29,6 +31,7 @@ async function items_info(btn_items) {
 
         Object.entries(items).forEach(([key, value]) => {
             const divisionMatch = key.match(/Divisão: ([^\]]+)/);
+            const departamentoMatch = key.match(/Departamento: ([^\]]+)/);
             const division = divisionMatch ? divisionMatch[1]: "Divisão não encontrada";
         });
 
@@ -50,10 +53,14 @@ async function materiais_info(btn_mate) {
         const data = await response.json();
         
         const caixa = document.getElementById('caixa_two')
-        caixa.style = 'border: solid 1px; padding: 10px; border-radius: 5px; background-color: white;';
+        caixa.style = 'border: solid 3px lightblue; padding: 40px; border-radius: 5px; background-color: white;';
+        const title = document.createElement('h4');
+        title.textContent = 'Agrupados por divisão';
+        title.style = 'margin-bottom: 10px; text-align: center; padding: 10px;';
 
         caixa.innerText = "";
 
+        caixa.appendChild(title);
         data.forEach(divisaoObj => {
             const divis_nome = document.createElement('h5');
             caixa.appendChild(divis_nome);

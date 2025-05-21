@@ -24,6 +24,7 @@
                     <td>Unidade</td>
                     <td>Departamento</td>
                     <td>Divisão</td>
+                    <td>Editar(saida)</td>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,12 @@
                     <td>{{ obj.saida_obj.unidade }}</td>
                     <td>{{ obj.saida_obj.departamento }}</td>
                     <td>{{ obj.saida_obj.divisao_field }}</td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'saida_item' obj.id %}">
+                            Saida
+                            <i class="bi bi-arrow-right-square"></i>
+                        </a>
+                    </td>
                 </tr>  
             {% endfor %}
             </tbody>

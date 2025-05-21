@@ -62,24 +62,24 @@ class Contrato(models.Model):
         return f"-{self.nome_contrato}- ( {self.num_contrato} )"
 
 class Unidade(models.Model):
-    unidade = models.CharField(max_length=30, verbose_name='Nova Unidade')
+    unidade = models.CharField(max_length=30, verbose_name='Nova Unidade', unique=True, error_messages={'unique': "Error: Já existe uma unidade com esse nome."},)
 
     def __str__(self):
         return self.unidade
 
 class Departamento(models.Model):
-    nome = models.CharField(max_length=30, verbose_name='Adicionar Departamento')
+    nome = models.CharField(max_length=30, verbose_name='Adicionar Departamento', unique=True, error_messages={'unique': "Error: Já existe um departamento com esse nome."})
     unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
 
     def __str__(self):
-        return f"{self.nome} ({self.unidade})"
+        return f"{self.nome} Unidade: {self.unidade}"
 
 class Divisao(models.Model):
-    nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão')
+    nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão', unique=True, error_messages={'unique': "Error: Já existe uma divisão com esse nome."})
     departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, related_name='divisoes', verbose_name='A qual departamento pertence?')
     
     def __str__(self):
-        return f"{self.nome}"
+        return f"{self.nome} {self.departamento}"
     
 class HistoricoUser(models.Model):
     nome_user = models.CharField(max_length=30, blank=True, null=True)
