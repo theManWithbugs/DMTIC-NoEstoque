@@ -17,13 +17,14 @@ async function items_info(btn_items) {
         // Adding a title before the list
         const title = document.createElement('h4');
         title.textContent = 'Todos os items (items iguais agrupados)';
-        title.style = 'margin-bottom: 10px; text-align: center; padding: 10px;';
+        const hr = document.createElement('hr');
+        title.style = 'text-align: center; margin-top: 10px;';
 
         const lista = document.createElement('ul');
 
         Object.entries(items).forEach(([key, value]) => {
             const item = document.createElement('li');
-            item.style = 'font-size: 16px; margin-top: 5px;';
+            item.style = 'margin-top: 14px;';
             item.textContent = `${key}: ${value}`;
             caixa.classList.add('animate__animated', 'animate__fadeInLeft', 'animate__delay-1s');
             lista.appendChild(item);
@@ -37,6 +38,7 @@ async function items_info(btn_items) {
 
         caixa.innerHTML = "";
         caixa.appendChild(title);
+        caixa.appendChild(hr)
         caixa.appendChild(lista);
 
     } catch (error) {
@@ -55,18 +57,21 @@ async function materiais_info(btn_mate) {
         const caixa = document.getElementById('caixa_two')
         caixa.style = 'border: solid 3px lightblue; padding: 40px; border-radius: 5px; background-color: white;';
         const title = document.createElement('h4');
+        const hr = document.createElement('hr');
         title.textContent = 'Agrupados por divisão';
-        title.style = 'margin-bottom: 10px; text-align: center; padding: 10px;';
 
         caixa.innerText = "";
 
         caixa.appendChild(title);
+        caixa.appendChild(hr);
         data.forEach(divisaoObj => {
-            const divis_nome = document.createElement('h5');
+            const divis_nome = document.createElement('h4');
+            const hr = document.createElement('hr');
+            caixa.appendChild(hr);
             caixa.appendChild(divis_nome);
             divis_nome.innerText = divisaoObj.divisao
             divisaoObj.itens.forEach(item => {
-                const p = document.createElement('p');
+                const p = document.createElement('li');
                 p.textContent = `Item: ${item.modelo} Localidade: ${item.saida_obj}`;
                 caixa.appendChild(p);
             });

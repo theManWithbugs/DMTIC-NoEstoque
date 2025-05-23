@@ -9,17 +9,12 @@ class AddMaterialForm(forms.ModelForm):
         widgets = {
             'contrato': forms.Select(attrs={
                 'class': 'form-control form-control-sm',
-                'style': 'width: 400px;',
+                'style': 'max-width: 30rem;'
             }),
             'descricao': forms.Textarea(attrs={
                 'class': 'form-control form-control-sm',
                 'rows': 3,
                 'placeholder': 'Descrição do material...',
-                'style': 'width: 570px;',
-            }),
-            'data': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-control form-control-sm',
             }),
         }
 
@@ -35,7 +30,6 @@ class TipoMaterForm(forms.ModelForm):
         widgets = {
             'material_obj': forms.Select(attrs={
                 'class': 'form-control form-control-sm',
-                'style': 'width: 300px;',
             }),
             'marca': forms.TextInput(attrs={
                 'class': 'form-control form-control-sm',

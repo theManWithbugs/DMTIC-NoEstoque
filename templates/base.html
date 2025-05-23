@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{% static 'css/loader.css' %}">
     <link rel="stylesheet" href="{% static 'css/btn_logout.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
     {% block css %}
     {% endblock css %}
 </head>
@@ -57,11 +59,11 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar_main">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'img/icon_estoque_DRSI.png' %}" class="rounded-pill" width="50px">
+                <img src="{% static 'img/icon_estoque_DRSI.png' %}" class="rounded-pill" width="45px">
                 <span class="text-white">DRSI-NoEstoque</span>
             </a>
         </div>
-        <div class="container-fluid position-relative" id="user_cont2" style="margin-left: 60%;">
+        <div class="container-fluid" id="user_cont2">
             <a href="{% url 'logout' %}">
                 <button class="Btn_logout bg-danger">
                     <div class="sign">
@@ -104,7 +106,9 @@
     </div>
 
     <footer class="bg-dark fixed-bottom">
-        <span class="text-white">DDMS-Divisão de desenvolvimento e manutenção de sistemas</span>
+        <span>DDMS-Divisão de desenvolvimento e manutenção de sistemas
+            <img src="{% static 'img/IAPEN_full_box_icon_1024.ico' %}" class="ms-1">
+        </span>
     </footer>
     
     <script>
@@ -123,8 +127,11 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'js/chart.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-cartesian-3d.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     {% block js %}
     {% endblock js %}
 </body>

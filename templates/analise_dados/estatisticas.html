@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title>{% block title %}HOME |  ESTATISTICAS{% endblock %}</title>
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/estatisticas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add_btn_esta.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="rounded bg-secondary p-4">
+    <div class="row rounded d-flex justify-content-center">
+      
+      <div class="col-md-auto">
+        <button id="btn_items"
+        onclick="items_info()" class="button_esta">
+          Todos os items
+        </button>
+      </div>
+
+            <div class="col-md-auto">
+              <button id="btn_mate" 
+              onclick="materiais_info()" class="button_esta">
+                Agrupados por divisão
+              </button>
+            </div>
+
+                  <div class="col-md-auto">
+                    <button class="button_esta">
+                      <a href="{% url 'charts_page' %}" style="text-decoration: none; inherits: initial; color: black;">
+                        Exibir Gráficos
+                      </a>
+                    </button>
+                  </div>
+      
+    </div>
+</div>
+
+<br>
+
+<div class="bg-white p-4 rounded animate__animated animate__fadeInLeft animate__delay-1s" 
+style="border: solid 3px lightblue;">
+    {% for chave, itens in itens_por_unidade_departamento.items %}
+        {% with unidade=chave.0 departamento=chave.1 %}
+            <h4 class="d-flex justify-content-center">{{ unidade }} - {{ departamento }}</h4>
+            <hr>
+        {% endwith %}
+        <ul>
+            {% for item in itens %}
+                <table class="table table-bordered border-primary">
+                  <tbody>
+                      <tr>
+                        <td>Marca: {{ item.marca }} - 
+                          Modelo: {{ item.modelo }} - 
+                          Número de serie: {{ item.n_serie }}</td>
+                      </tr>
+                  </tbody>
+                </table>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</div>
+
+      <br>
+
+<div>
+  <div id="caixa"></div>
+</div>
+
+            <br>
+
+      <div>
+        <div id="caixa_two"></div>
+      </div>
+
+<br>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/async_response.js' %}"></script>
+{% endblock js %}

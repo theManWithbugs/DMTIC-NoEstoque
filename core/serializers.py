@@ -15,3 +15,7 @@ class DivisaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Divisao
         fields = '__all__'
+
+class DepartamentoCountSerializer(serializers.Serializer):
+    departamento__nome = serializers.CharField()
+    total = serializers.IntegerField()

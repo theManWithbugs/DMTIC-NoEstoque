@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div id="container" style="height: 350px;">
+            </div>
+        </div>
+            <div class="col-md-6">
+                <div id="container_two" style="height: 350px;">
+                </div>
+            </div>
+    </div>
+<br>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    fetch('/response_dep/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            window.responseData = data;
+            responseData = data;
+
+            const departamentos = data.contagem_departamentos;
+    
+            list_dep = [];
+            departamentos.forEach(departamento => {
+                list_dep.push({ Nome: departamento.departamento__nome, Items: departamento.total });
+            });
+
+            anychart.onDocumentReady(function () {
+            // create data set on our data
+            var chartData = {
+                title: 'Items em cada departamento',
+                header: ['Departamento', 'Items'],
+                rows: list_dep.slice(0, 5).map(dep => [dep.Nome, dep.Items])
+            };
+
+            // create column chart
+            var chart = anychart.column3d();
+
+            // Set custom colors for each column
+            var colors = ['#ADD8E6'];
+            chart.palette(colors);
+
+            // set chart data
+            chart.data(chartData);
+
+            // turn on chart animation
+            chart.animation(true);
+
+            // set axes settings
+            chart.yAxis().title('Alinhados por departamento');
+            chart.yAxis().labels().format('{%Value}{groupsSeparator: }');
+
+            // set labels settings
+            chart
+                .labels()
+                .enabled(true)
+                .fontColor('#60727b')
+                .position('center-top')
+                .anchor('center-bottom')
+                .format('N: {%Value}{groupsSeparator: }');
+            chart.hovered().labels(false);
+
+            chart.background().fill('rgb(255, 255, 255)');
+
+            // turn on legend
+            chart.legend().enabled(true).fontSize(13).padding([0, 0, 20, 0]);
+
+            // set interactivity settings
+            chart.interactivity().hoverMode('single');
+
+            // set tooltip settings
+            chart
+                .tooltip()
+                .positionMode('point')
+                .position('center-top')
+                .anchor('center-bottom')
+                .offsetX(0)
+                .offsetY(5)
+                .format('{%SeriesName}: {%Value}{groupsSeparator: }');
+
+            // set container id for the chart
+            chart.container('container');
+
+            // initiate chart drawing
+            chart.draw();
+            });
+
+            anychart.onDocumentReady(function () {
+            // create pie chart with passed data
+            var chart = anychart.pie3d([
+                ['Oil shales', 11],
+                ['Heavy oil', 3],
+                ['Tar sands', 2],
+                ['Proven reserves', 8],
+                ['Future additions', 11],
+                ['Unrecoverable', 22]
+            ]);
+
+            // set chart title text settings
+            chart
+                .title('Sources of energy (in ZJ)')
+                // set chart radius
+                .radius('65%')
+                // create empty area in pie chart
+                .innerRadius('20%');
+
+            // set container id for the chart
+            chart.container('container_two');
+            // initiate chart drawing
+            chart.draw();
+            });
+
+        })
+        .catch(error => console.error('Erro:', error));
+</script>
+
+{% endblock content %}

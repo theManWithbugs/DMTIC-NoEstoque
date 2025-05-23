@@ -27,12 +27,19 @@ urlpatterns = [
     path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
 
     path('home/filtrojs/', views.testeJsFiltroView, name='filtrojs'),
+
+    #API views here
     path('filtro_json/', jsFiltroJson.as_view(), name='response_filtro'),
+    path('response_dep/', ChartDepResponse.as_view(), name='departamentos_resp'),
 
+    # Estatisticas view
     path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
+    path('home/estatisticas/charts/', views.ChartsView, name='charts_page'),
 
+    # Async views here
     path('home/async_view_teste/', views.teste_async, name='teste_async'),
     path('home/async_view_two/', views.teste_async_two, name='teste_async_two'),
+
     path('home/async_items/', views.dados_items, name='items_dados'),
     path('home/async_mater/', views.materiais_info, name='materiais_info'),
 ]

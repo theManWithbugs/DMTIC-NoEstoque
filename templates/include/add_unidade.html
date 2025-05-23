@@ -10,31 +10,34 @@
 
 {% block content %}
 
-<div class="bg-secondary rounded container mb-4">
+<div class="container mb-4 bg-secondary rounded">
+
     <div class="p-3 row gap-2 d-flex justify-content-center">
         <div class="col-auto p-2">
-            <button class="button_esta">
+            <button class="btn_link">
                 <a href="#"  onclick="reg_unidade()" 
                 style="text-decoration: none; color: black;">
                     Add unidade</a>
             </button>
         </div>
         <div class="col-auto p-2">
-            <button class="button_esta">
+            <button class="btn_link">
                 <a href="#" onclick="reg_departmento()" 
                 style="text-decoration: none; color: black;">
                     Add Departmento</a>
             </button>
         </div>
         <div class="col-auto p-2">
-            <button class="button_esta">
+            <button class="btn_link">
                 <a href="#" onclick="reg_divisao()"
                 style="text-decoration: none; color: black;">
                     Add Divisão</a>
             </button>
         </div>
     </div>
+
 </div>
+
 
 <div class="container" id="add_unidade">
     <form action="{% url 'add_unidade' %}" method="post">

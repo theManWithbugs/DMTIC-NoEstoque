@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer
+from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer, DepartamentoCountSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from collections import Counter
@@ -47,7 +47,21 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
-    return render(request, template_name)
+
+    dados = MaterialSaida.objects.all()
+
+    contagem_departamentos = (
+        MaterialSaida.objects.values('departamento__nome')
+        .annotate(total=Count('departamento'))
+        .order_by('departamento__nome')
+    )
+
+    context = {
+        'dados': dados,
+        'contagem_departamentos': contagem_departamentos,
+    }
+
+    return render(request, template_name, context)
 
 def logoutView(request):
     auth_logout(request)
@@ -373,7 +387,7 @@ def create_material_saida(request, material_tipo_id):
     return render(request, template_name, context)
 
 def histUsuarioView(request):
-    template_name = 'include/hist_usuario.html'
+    template_name = 'account/hist_usuario.html'
 
     objs = []
 
@@ -427,7 +441,6 @@ def filtro_view(request, id):
     context = {'form': form, 'material_tipo': None}
     return render(request, 'include/criar_saida_filtro.html', context)
 
-
 class jsFiltroJson(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -450,6 +463,20 @@ class jsFiltroJson(APIView):
             'departamentos': departamentos_serialized,
             'divisoes': divisoes_serialized,
         })
+    
+class ChartDepResponse(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _request):
+
+        contagem_departamentos = (
+            MaterialSaida.objects.values('departamento__nome', 'unidade__unidade')
+            .annotate(total=Count('departamento'))
+            .order_by('departamento__nome', 'unidade__unidade')
+        )
+        serializer = DepartamentoCountSerializer(contagem_departamentos, many=True)
+
+        return Response({'contagem_departamentos': serializer.data})
 
 @login_required
 def testeJsFiltroView(request):
@@ -468,11 +495,10 @@ def testeJsFiltroView(request):
     return render(request, template_name, context)
 
 def EstatisticasView(request):
-    template_name = 'include/estatisticas.html'
-    # Busca todos os MaterialTipo com saída associada
+    template_name = 'analise_dados/estatisticas.html'
+    
     materialtipos = MaterialTipo.objects.filter(saida_obj__isnull=False).select_related('saida_obj__departamento', 'saida_obj__unidade')
 
-    # Agrupa por (unidade, departamento)
     itens_por_unidade_departamento = defaultdict(list)
     for item in materialtipos:
         unidade_nome = item.saida_obj.unidade.unidade  
@@ -484,6 +510,10 @@ def EstatisticasView(request):
         'itens_por_unidade_departamento': dict(itens_por_unidade_departamento)
     }
     return render(request, template_name, context)
+
+def ChartsView(request):
+    template_name = 'analise_dados/graficos.html'
+    return render(request, template_name)
 
 def teste_async(request):
     dados_unidade = get_estatisticas_unidades(request)

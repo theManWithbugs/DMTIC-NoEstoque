@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import date
 from django.utils import timezone
 
 class MaterialObj(models.Model): 
@@ -62,22 +61,51 @@ class Contrato(models.Model):
         return f"-{self.nome_contrato}- ( {self.num_contrato} )"
 
 class Unidade(models.Model):
-    unidade = models.CharField(max_length=30, verbose_name='Nova Unidade', unique=True, error_messages={'unique': "Error: Já existe uma unidade com esse nome."},)
+    unidade = models.CharField(
+        max_length=30,
+        verbose_name='Nova Unidade',
+        unique=True,
+        error_messages={'unique': "Error: Já existe uma unidade com esse nome."},
+    )
 
     def __str__(self):
         return self.unidade
 
 class Departamento(models.Model):
-    nome = models.CharField(max_length=30, verbose_name='Adicionar Departamento', unique=True, error_messages={'unique': "Error: Já existe um departamento com esse nome."})
-    unidade = models.ForeignKey('Unidade', on_delete=models.CASCADE, related_name='departamentos', verbose_name='A qual unidade pertence?')
+    nome = models.CharField(
+        max_length=30,
+        verbose_name='Adicionar Departamento',
+        error_messages={'unique': "Error: Já existe um departamento com esse nome."}
+    )
+    unidade = models.ForeignKey(
+        'Unidade',
+        on_delete=models.CASCADE,
+        related_name='departamentos',
+        verbose_name='A qual unidade pertence?'
+    )
+
+    class Meta:
+        unique_together = ('nome', 'unidade')
 
     def __str__(self):
         return f"{self.nome} ({self.unidade})"
 
 class Divisao(models.Model):
-    nome = models.CharField(max_length=80, verbose_name='Adicionar Divisão', unique=True, error_messages={'unique': "Error: Já existe uma divisão com esse nome."})
-    departamento = models.ForeignKey('Departamento', on_delete=models.CASCADE, related_name='divisoes', verbose_name='A qual departamento pertence?')
-    
+    nome = models.CharField(
+        max_length=80,
+        verbose_name='Adicionar Divisão',
+        error_messages={'unique': "Error: Já existe uma divisão com esse nome."}
+    )
+    departamento = models.ForeignKey(
+        'Departamento',
+        on_delete=models.CASCADE,
+        related_name='divisoes',
+        verbose_name='A qual departamento pertence?'
+    )
+
+    class Meta:
+        unique_together = ('nome', 'departamento')
+
     def __str__(self):
         return f"{self.nome} {self.departamento}"
     

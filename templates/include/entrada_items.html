@@ -10,20 +10,61 @@
 {% endblock css %}
 
 {% block content %}
-<div class="container p-4 rounded fundo_papel" id="fundo_adjust">
+<div class="container-fluid p-4 rounded fundo_papel" id="fundo_adjust">
     <form action="{% url 'entrada_material' %}" method="post">
 
-        {% csrf_token %}
-        {{ form.as_p }}
+        <div class="d-flex justify-content-center">
+                <p class="border border-2 w-50 
+                d-flex justify-content-center 
+                rounded bg-white p-2 fs-5">
+                    (<span class="text-danger me-1 ms-1">*</span>)
+                    campos obrigatorios
+                </p>
+        </div>
+
+            <div class="ms-5">
+                {% csrf_token %}
+                <!-- {{ form.as_p }} -->
+
+                {{ form.contrato.label_tag }}
+                {{ form.contrato }}
+
+                {{ form.descricao.label_tag }}
+                {{ form.descricao }}
+
+            </div>
         <hr>
     
         <div class="col-md-auto">
-            <div class="row">
+
+            <div class="row d-flex justify-content-center container">
                 {{ formset.management_form }}
                 {% for form in formset %}
-                    <div class="col-md-auto inline_form ms-5" 
+                    <div class="col-md-auto inline_form text-center me-5" 
                     id="inline_formset">
-                        {{ form.as_p }}
+                        <!-- {{ form.as_p }} -->
+                        {{ form.material_obj }}
+
+                        {{ form.marca.label_tag }}
+                        {{ form.marca }}
+
+                        {{ form.modelo.label_tag }}
+                        {{ form.modelo }}
+
+                        {{ form.n_serie.label_tag }}
+                        {{ form.n_serie }}
+
+                        {{ form.patrimonio.label_tag }}
+                        {{ form.patrimonio }}
+
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        
+                        {{ form.observacao.label_tag }}
+                        {{ form.observacao }}
+
+                        {{ form.garantia.label_tag }}
+                        {{ form.garantia }}
                         <hr>
                     </div>
                 {% endfor %}
@@ -35,6 +76,7 @@
                     </button>
                 </div>
             </div>
+            
         </div>
     </form>
 </div>
@@ -57,7 +99,8 @@
                     'padding': '10px',
                     'margin-bottom': '10px',
                     'border-radius': '5px',
-                    'background-color': '#FFFFFF'
+                    'background-color': '#FFFFFF',
+                    'row-gap': '10px',
                 });
             }
         });
