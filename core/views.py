@@ -199,11 +199,6 @@ def listarItemsView(request):
     if objs.object_list.exists():
         pass
 
-    # for obj in objs:
-    #     for obj_inside in obj.tipo_obj.all():
-    #         if obj_inside.marca and obj_inside.modelo:
-    #             marca_modelo[( f"( Marca: {obj_inside.marca} ) ( Modelo: {obj_inside.modelo} ) ")] += 1
-
     context = {
         'objs': objs,
         'marca_modelo': marca_modelo,
@@ -530,6 +525,38 @@ def dados_items(request):
 def materiais_info(request):
     data = receber_dados_divisao(request)
     return JsonResponse(data, safe=False)
+
+def BuscarView(request):
+    template_name = 'include/buscar.html'
+    form = BuscarItemForm(request.POST or None)
+
+    items_queryset = MaterialTipo.objects.all()
+    item_nome = request.POST.get('item', '')
+
+    if form.is_valid():
+        item = form.cleaned_data['item']
+        if item:
+            items_queryset = items_queryset.filter(modelo__icontains=item)
+            if not items_queryset.exists():
+                messages.error(request, 'Não consta nenhum dado com esse caracter!')
+
+    paginator = Paginator(items_queryset, 10)
+    page = request.GET.get('page')
+
+    try:
+        lista_items = paginator.page(page)
+    except PageNotAnInteger:
+        lista_items = paginator.page(1)
+    except EmptyPage:
+        lista_items = paginator.page(paginator.num_pages)
+
+    context = {
+        'form': form,
+        'items': lista_items,
+    }
+
+    return render(request, template_name, context)
+
 
 
 

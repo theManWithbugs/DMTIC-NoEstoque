@@ -31,37 +31,35 @@
 
                 {{ form.descricao.label_tag }}
                 {{ form.descricao }}
-
             </div>
         <hr>
     
         <div class="col-md-auto">
 
-            <div class="row d-flex justify-content-center container">
+            <div class="row container" style="margin-left: 5%;">
                 {{ formset.management_form }}
                 {% for form in formset %}
-                    <div class="col-md-auto inline_form text-center me-5" 
+                    <div class="col-md-auto inline_form text-center me-3" 
                     id="inline_formset">
-                        <!-- {{ form.as_p }} -->
                         {{ form.material_obj }}
 
-                        {{ form.marca.label_tag }}
-                        {{ form.marca }}
+                            {{ form.marca.label_tag }}
+                            {{ form.marca }}
 
-                        {{ form.modelo.label_tag }}
-                        {{ form.modelo }}
+                                {{ form.modelo.label_tag }}
+                                {{ form.modelo }}
 
-                        {{ form.n_serie.label_tag }}
-                        {{ form.n_serie }}
+                                    {{ form.n_serie.label_tag }}
+                                    {{ form.n_serie }}
 
-                        {{ form.patrimonio.label_tag }}
-                        {{ form.patrimonio }}
+                                    {{ form.patrimonio.label_tag }}
+                                    {{ form.patrimonio }}
 
-                        {{ form.quantidade.label_tag }}
-                        {{ form.quantidade }}
+                                {{ form.quantidade.label_tag }}
+                                {{ form.quantidade }}
                         
-                        {{ form.observacao.label_tag }}
-                        {{ form.observacao }}
+                            {{ form.observacao.label_tag }}
+                            {{ form.observacao }}
 
                         {{ form.garantia.label_tag }}
                         {{ form.garantia }}

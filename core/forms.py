@@ -263,6 +263,9 @@ class ProcessoForm(forms.Form):
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
+class BuscarItemForm(forms.Form):
+    item = forms.CharField(max_length=80, required=True)
+
 
 
 

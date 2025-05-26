@@ -42,5 +42,7 @@ urlpatterns = [
 
     path('home/async_items/', views.dados_items, name='items_dados'),
     path('home/async_mater/', views.materiais_info, name='materiais_info'),
+
+    path('home/buscar/', views.BuscarView, name='buscar_dados'),
 ]
 
