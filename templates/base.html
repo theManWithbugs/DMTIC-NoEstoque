@@ -57,7 +57,7 @@
             <div class="road"></div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-sm navbar_main" id="navbar">
+    <nav class="navbar navbar-expand-sm navbar_main bg-dark" id="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'img/icon_estoque_DRSI.png' %}" class="rounded-pill" width="45px">
@@ -67,7 +67,7 @@
 
             <div>
                 <label class="switch" for="switch">
-                    <input id="switch" type="checkbox" class="circle" onclick="tema_claro(), tema_claro()"/>
+                    <input id="switch" type="checkbox" class="circle"/>
                     <svg
                     viewBox="0 0 384 512"
                     xmlns="http://www.w3.org/2000/svg"
@@ -127,8 +127,8 @@
         </div>
     </div>
 
-    <footer class="fixed-bottom" id="footer_ele">
-        <span id="footer_text">DDMS-Divisão de desenvolvimento e manutenção de sistemas
+    <footer class="fixed-bottom bg-dark" id="footer_ele">
+        <span id="footer_text">&copy; DDMS-Divisão de desenvolvimento e manutenção de sistemas
             <img src="{% static 'img/IAPEN_full_box_icon_1024.ico' %}" class="ms-1">
         </span>
     </footer>

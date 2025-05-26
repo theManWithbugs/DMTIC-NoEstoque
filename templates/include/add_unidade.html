@@ -10,9 +10,9 @@
 
 {% block content %}
 
-<div class="container mb-4 bg-secondary rounded">
+<div class="container mb-4 bg-secondary rounded w-50 d-flex justify-content-center">
 
-    <div class="p-3 row gap-2 d-flex justify-content-center">
+    <div class="p-3 row gap-2">
         <div class="col-auto p-2">
             <button class="btn_link">
                 <a href="#"  onclick="reg_unidade()" 
@@ -39,7 +39,7 @@
 </div>
 
 
-<div class="container" id="add_unidade">
+<div class="container w-50" id="add_unidade">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form.unidade.label_tag }}
@@ -55,7 +55,7 @@
     </form>
 </div>
 
-<div class="container" id="add_departamento">
+<div class="container w-50" id="add_departamento">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form_dep.nome.label_tag }}
@@ -73,7 +73,7 @@
     </form>
 </div>
 
-<div class="container" id="add_divisao">
+<div class="container w-50" id="add_divisao">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form_divis.nome.label_tag }}

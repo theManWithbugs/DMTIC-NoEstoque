@@ -6,35 +6,36 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/estatisticas.css' %}">
     <link rel="stylesheet" href="{% static 'css/add_btn_esta.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
 
 {% block content %}
 
-<div class="rounded bg-secondary p-4">
-    <div class="row rounded d-flex justify-content-center">
+<div class="container mb-4 bg-secondary rounded w-50 d-flex justify-content-center">
+    
+  <div class="p-3 row gap-2">
       
-      <div class="col-md-auto">
-        <button id="btn_items"
-        onclick="items_info()" class="button_esta">
+      <div class="col-md-auto p-2">
+        <button onclick="items_info()" class="btn_link">
           Todos os items
         </button>
       </div>
 
-            <div class="col-md-auto">
-              <button id="btn_mate" 
-              onclick="materiais_info()" class="button_esta">
-                Agrupados por divisão
+            <div class="col-md-auto p-2">
+              <button onclick="materiais_info()" class="btn_link">
+                Divisão
               </button>
             </div>
 
-                  <div class="col-md-auto">
-                    <button class="button_esta">
-                      <a href="{% url 'charts_page' %}" style="text-decoration: none; inherits: initial; color: black;">
+                  <div class="col-md-auto p-2">
+                    <button class="btn_link">
+                      <a href="{% url 'charts_page' %}" 
+                      style="text-decoration: none; inherits: 
+                      initial; color: black;">
                         Exibir Gráficos
                       </a>
                     </button>
                   </div>
-      
     </div>
 </div>
 

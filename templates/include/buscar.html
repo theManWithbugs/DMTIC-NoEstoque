@@ -16,7 +16,9 @@
         <ul class="list-group mb-3">
             {% for item in items %}
                 <li class="list-group-item">
-                    <strong>{{ item.marca }}</strong> - {{ item.modelo }} - {{ item.n_serie }}
+                    <strong>Marca: </strong>{{ item.marca }} - 
+                    <strong>Modelo: </strong> {{ item.modelo }} - 
+                    <strong>N-série:</strong> {{ item.n_serie }}
                 </li>
             {% endfor %}
         </ul>
