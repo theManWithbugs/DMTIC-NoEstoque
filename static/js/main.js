@@ -39,31 +39,31 @@ document.addEventListener('DOMContentLoaded', function() {
     function tema_claro() {
         navbar.classList.remove('bg-dark');
         navbar.classList.add('bg-white');
-
-            title.classList.remove('text-white');
-            title.classList.add('text-dark');
-
-            footer.classList.remove('bg-dark');
-            footer.classList.add('bg-white');
-
+        title.classList.remove('text-white');
+        title.classList.add('text-dark');
+        footer.classList.remove('bg-dark');
+        footer.classList.add('bg-white');
         footer_text.classList.remove('text-white');
         footer_text.classList.add('text-dark');
+
+        document.querySelector('.moon').style.opacity = '0';
+        document.querySelector('.sun').style.opacity = '1';
     }
 
     function tema_escuro() {
         navbar.classList.remove('bg-white');
         navbar.classList.add('bg-dark');
-
-            title.classList.remove('text-dark')
-            title.classList.add('text-white')
-
-            footer.classList.remove('bg-white');
-            footer.classList.add('bg-dark');
-
+        title.classList.remove('text-dark');
+        title.classList.add('text-white');
+        footer.classList.remove('bg-white');
+        footer.classList.add('bg-dark');
         footer_text.classList.remove('text-dark');
         footer_text.classList.add('text-white');
+
+        document.querySelector('.moon').style.opacity = '1';
+        document.querySelector('.sun').style.opacity = '0';
     }
-    
+
     // Atualiza o tema e salva a preferência
     switchInput.addEventListener('change', function() {
         if (this.checked) {
@@ -80,6 +80,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function aplicarTemaSalvo() {
+        document.body.classList.add('no-transition');
+        // Remove transição dos SVGs explicitamente
+        document.querySelector('.moon').style.transition = 'none';
+        document.querySelector('.sun').style.transition = 'none';
+
         const temaSalvo = localStorage.getItem('tema');
         if (temaSalvo === 'claro') {
             switchInput.checked = true;
@@ -88,8 +93,19 @@ document.addEventListener('DOMContentLoaded', function() {
             switchInput.checked = false;
             tema_escuro();
         }
+
+        setTimeout(function() {
+            document.body.classList.remove('no-transition');
+            // Restaura a transição padrão dos SVGs
+            document.querySelector('.moon').style.transition = '';
+            document.querySelector('.sun').style.transition = '';
+        }, 50);
     }
 
     aplicarTemaSalvo();
 });
+
+
+
+
 

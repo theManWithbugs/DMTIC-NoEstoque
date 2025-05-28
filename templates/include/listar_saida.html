@@ -4,8 +4,8 @@
 <title>{% block title %}HOME | ESTOQUE{% endblock %}</title>
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/add_button.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estoque_btn.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons/add_button.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons/estoque_btn.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -16,9 +16,9 @@
     <div class="p-2">
         <p class="fs-5 d-flex justify-content-center mb-2">
             ITEMS COM SAIDA EFETUADA</p>
-        <table class="table table-bordered border-primary">
+        <table class="table table-bordered border-dark">
             <thead>
-                <tr>
+                <tr class="text-primary text-center">
                     <td>Marca</td>
                     <td>Modelo</td>
                     <td>Unidade</td>

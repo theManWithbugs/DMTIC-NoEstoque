@@ -5,20 +5,20 @@
 {% block content %}
 <div class="bg-white p-4 rounded">
     <form method="get" id="filtro-form">
-        <div class="form-group">
+        <div class="form-group mb-2">
             <label for="id_unidade">Unidade</label>
             {{ form.unidade }}
         </div>
-        <div class="form-group">
+        <div class="form-group mb-2">
             <label for="id_departamento">Departamento</label>
             {{ form.departamento }}
         </div>
-        <div class="form-group">
+        <div class="form-group mb-2">
             <label for="id_divisao">Divisão (opcional)</label>
             {{ form.divisao }}
         </div>
-        <div class="form-group">
-            <label for="id_n_processo">Número do Processo</label>
+        <div class="form-group mb-2">
+            <label for="id_n_processo">Número do processo(SEI)</label>
             {{ form.n_processo }}
         </div>
         <br>

@@ -1,6 +1,63 @@
 from . models import *
 from collections import Counter
 from collections import defaultdict
+import pandas as pd
+from django.http import HttpResponse
+import io
+
+def criar_pdf():
+    agrupados_por_departamento= defaultdict(list)
+
+    material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
+
+    for item in material_tipos:
+
+        departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
+
+        agrupados_por_departamento[departamento].append(item.get_complete_object())
+
+    resultado = []
+
+    for departamento, itens in agrupados_por_departamento.items():
+        resultado.append({
+            "Departamento": departamento,
+            "itens": itens
+            })
+        
+    linhas = []
+    for dep in resultado:
+        departamento = dep["Departamento"]
+        for item in dep["itens"]:
+            saida = item["Saida"]
+            unidade = saida.split('-')[1] if saida else ""
+            linhas.append({
+                "Departamento": departamento,
+                "Unidade": unidade,
+                "Marca": item["Marca"],
+                "Modelo": item["Modelo"],
+                "Número de série": item["Número de série"],
+                "Patrimonio": item["Patrimonio"],
+                "Observação": item["Observação"],
+                "Garantia": item["Garantia"],
+            })
+
+        df = pd.DataFrame(linhas)
+
+        # Cria um buffer em memória
+        buffer = io.BytesIO()
+        with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name='Itens')
+
+        buffer.seek(0)
+
+        response = HttpResponse(
+            buffer,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+        return response
+
+    return print("Sucesso!")
 
 def receber_dados_divisao(request):
     # Dicionário para agrupar os itens por divisão
@@ -34,7 +91,7 @@ def receber_dados_departamento(request):
     material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
 
     for item in material_tipos:
-        # Obter a divisão associada ao item
+        # Obter o departamento associado ao item
         departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
 
         # Adicionar o item ao grupo correspondente à divisão
@@ -49,6 +106,7 @@ def receber_dados_departamento(request):
         })
     
     return resultado
+
 
 def items_dados(request):
     material_tipo_saida = MaterialSaida.objects.all()

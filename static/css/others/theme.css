@@ -118,3 +118,9 @@
 .switch:has(.circle:checked) > .moon {
   opacity: 0;
 }
+
+.no-transition, .no-transition *, .no-transition *::before, .no-transition *::after {
+  transition: none !important;
+}
+
+

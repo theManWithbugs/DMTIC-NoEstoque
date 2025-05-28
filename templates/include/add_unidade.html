@@ -4,39 +4,44 @@
 <title>{% block title %}HOME | UNIDADE{% endblock %}</title>
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
-    <link rel="stylesheet" href="{% static 'css/add_btn_esta.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons/btn_link_menu.css' %}">
 {% endblock css %}
 
 {% block content %}
 
-<div class="container mb-4 bg-secondary rounded w-50 d-flex justify-content-center">
+<div class="container mb-4 bg-secondary rounded 
+w-50 d-flex justify-content-center">
 
     <div class="p-3 row gap-2">
-        <div class="col-auto p-2">
-            <button class="btn_link">
-                <a href="#"  onclick="reg_unidade()" 
-                style="text-decoration: none; color: black;">
-                    Add unidade</a>
+        
+        <div class="col-md-auto">
+            <button  onclick="reg_unidade()" >
+                <span class="box">
+                    Unidade
+                </span>
             </button>
         </div>
-        <div class="col-auto p-2">
-            <button class="btn_link">
-                <a href="#" onclick="reg_departmento()" 
-                style="text-decoration: none; color: black;">
-                    Add Departmento</a>
-            </button>
-        </div>
-        <div class="col-auto p-2">
-            <button class="btn_link">
-                <a href="#" onclick="reg_divisao()"
-                style="text-decoration: none; color: black;">
-                    Add Divisão</a>
-            </button>
-        </div>
+
+            <div class="col-md-auto">
+                <button  onclick="reg_departmento()" >
+                    <span class="box">
+                        Departmento
+                    </span>
+                </button>
+            </div>
+
+                <div class="col-md-auto">
+                    <button onclick="reg_divisao()" >
+                        <span class="box">
+                            Divisão
+                        </span>
+                    </button>
+                </div>
+
     </div>
 
 </div>
+
 
 
 <div class="container w-50" id="add_unidade">

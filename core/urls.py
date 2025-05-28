@@ -7,7 +7,7 @@ urlpatterns = [
     path('base/', views.baseView, name='base_page'),
     path('logout/', views.logoutView, name='logout'),
     path('home/', views.homeView, name='home'),
-    path('inse_item/', views.inserirItem, name='new_item'),
+
     path('home/entrada_material/', views.itemAddView, name='entrada_material'),
     path('home/listar_items/editar/<int:id>/', views.editarItemsView, name='editar_items'),
 
@@ -26,14 +26,13 @@ urlpatterns = [
     path('home/filtro/<int:id>/', views.filtro_view, name='filtro_view'),  
     path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
 
-    path('home/filtrojs/', views.testeJsFiltroView, name='filtrojs'),
-
     #API views here
     path('filtro_json/', jsFiltroJson.as_view(), name='response_filtro'),
     path('response_dep/', ChartDepResponse.as_view(), name='departamentos_resp'),
 
     # Estatisticas view
     path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
+    path('home/metricas/', views.MetricasView, name='metricas_page'),
     path('home/estatisticas/charts/', views.ChartsView, name='charts_page'),
 
     # Async views here

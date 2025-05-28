@@ -3,9 +3,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
-from . forms import *
-from . models import *
-from . utils import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
 from rest_framework.response import Response
@@ -17,6 +14,9 @@ from collections import Counter
 from django.db import IntegrityError
 from django.db.models import Count
 from collections import defaultdict
+from . forms import *
+from . models import *
+from . utils import *
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -43,10 +43,63 @@ def baseView(request):
     template_name = 'base.html'
     return render(request, template_name)
 
-
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
+
+    active = False;
+
+    if active == True:
+        agrupados_por_departamento= defaultdict(list)
+
+        material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
+
+        for item in material_tipos:
+
+            departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
+
+            agrupados_por_departamento[departamento].append(item.get_complete_object())
+
+        resultado = []
+
+        for departamento, itens in agrupados_por_departamento.items():
+            resultado.append({
+                "Departamento": departamento,
+                "itens": itens
+                })
+            
+        linhas = []
+        for dep in resultado:
+            departamento = dep["Departamento"]
+            for item in dep["itens"]:
+                saida = item["Saida"]
+                unidade = saida.split('-')[1] if saida else ""
+                linhas.append({
+                    "Departamento": departamento,
+                    "Unidade": unidade,
+                    "Marca": item["Marca"],
+                    "Modelo": item["Modelo"],
+                    "Número de série": item["Número de série"],
+                    "Patrimonio": item["Patrimonio"],
+                    "Observação": item["Observação"],
+                    "Garantia": item["Garantia"],
+                })
+
+            df = pd.DataFrame(linhas)
+
+            # Cria um buffer em memória
+            buffer = io.BytesIO()
+            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                df.to_excel(writer, index=False, sheet_name='Itens')
+
+            buffer.seek(0)
+
+        response = HttpResponse(
+            buffer,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+        return response
 
     dados = MaterialSaida.objects.all()
 
@@ -55,6 +108,8 @@ def homeView(request):
         .annotate(total=Count('departamento'))
         .order_by('departamento__nome')
     )
+
+    result = receber_dados_departamento(request)
 
     context = {
         'dados': dados,
@@ -110,20 +165,6 @@ def addUnidadeView(request):
     }
 
     return render(request, template_name, context)
-
-@login_required
-def inserirItem(request): 
-    template_name = 'include/inse_item.html'
-    form = AddMaterialForm(request.POST or None)
-
-    if request.method == 'POST':
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, msgSucesso)
-            return redirect('new_item')
-
-    return render(request, template_name, {'form': form})
 
 @login_required
 def save_formset(formset):
@@ -465,29 +506,13 @@ class ChartDepResponse(APIView):
     def get(self, _request):
 
         contagem_departamentos = (
-            MaterialSaida.objects.values('departamento__nome', 'unidade__unidade')
+            MaterialSaida.objects.values('departamento__nome')
             .annotate(total=Count('departamento'))
-            .order_by('departamento__nome', 'unidade__unidade')
+            .order_by('departamento__nome')
         )
         serializer = DepartamentoCountSerializer(contagem_departamentos, many=True)
 
         return Response({'contagem_departamentos': serializer.data})
-
-@login_required
-def testeJsFiltroView(request):
-    template_name = 'include/teste_filtrojs.html'
-
-    unidades = Unidade.objects.all()
-    departamentos = Departamento.objects.all()
-    divisoes = Divisao.objects.all()
-
-    context = {
-        'unidades': unidades,
-        'departamentos': departamentos,
-        'divisoes': divisoes,
-    }
-
-    return render(request, template_name, context)
 
 def EstatisticasView(request):
     template_name = 'analise_dados/estatisticas.html'
@@ -505,6 +530,10 @@ def EstatisticasView(request):
         'itens_por_unidade_departamento': dict(itens_por_unidade_departamento)
     }
     return render(request, template_name, context)
+
+def MetricasView(request):
+    template_name = 'analise_dados/metricas.html'
+    return render(request, template_name)
 
 def ChartsView(request):
     template_name = 'analise_dados/graficos.html'
@@ -540,7 +569,7 @@ def BuscarView(request):
             if not items_queryset.exists():
                 messages.error(request, 'Não consta nenhum dado com esse caracter!')
 
-    paginator = Paginator(items_queryset, 10)
+    paginator = Paginator(items_queryset, 15)
     page = request.GET.get('page')
 
     try:

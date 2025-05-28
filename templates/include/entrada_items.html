@@ -4,9 +4,9 @@
 <title>{% block title %}HOME | ADD-ITEM{% endblock %}</title>
 
 {% block css %} 
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
-    <link rel="stylesheet" href="{% static 'css/add_form_btn.css' %}">
-    <link rel="stylesheet" href="{% static 'css/fundo_form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css_pages/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons/add_form_btn.css' %}">
+    <link rel="stylesheet" href="{% static 'css/others/fundo_form.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -24,7 +24,6 @@
 
             <div class="ms-5">
                 {% csrf_token %}
-                <!-- {{ form.as_p }} -->
 
                 {{ form.contrato.label_tag }}
                 {{ form.contrato }}
@@ -43,26 +42,41 @@
                     id="inline_formset">
                         {{ form.material_obj }}
 
-                            {{ form.marca.label_tag }}
-                            {{ form.marca }}
+            <span>
+                {{ form.marca.label_tag }}
+                {{ form.marca }}
+            </span>
 
-                                {{ form.modelo.label_tag }}
-                                {{ form.modelo }}
+                    <span>
+                        {{ form.modelo.label_tag }}
+                        {{ form.modelo }}
+                    </span>
 
-                                    {{ form.n_serie.label_tag }}
-                                    {{ form.n_serie }}
+                            <span>
+                                {{ form.n_serie.label_tag }}
+                                {{ form.n_serie }}
+                            </span>
 
-                                    {{ form.patrimonio.label_tag }}
-                                    {{ form.patrimonio }}
+                            <span>
+                                {{ form.patrimonio.label_tag }}
+                                {{ form.patrimonio }}
+                            </span>
 
-                                {{ form.quantidade.label_tag }}
-                                {{ form.quantidade }}
-                        
-                            {{ form.observacao.label_tag }}
-                            {{ form.observacao }}
+                    <span>
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                    </span>
+            
+                <span>
+                    {{ form.observacao.label_tag }}
+                    {{ form.observacao }}
+                </span>
 
-                        {{ form.garantia.label_tag }}
-                        {{ form.garantia }}
+            <span>
+                {{ form.garantia.label_tag }}
+                {{ form.garantia }}
+            </span>
+
                         <hr>
                     </div>
                 {% endfor %}

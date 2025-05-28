@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/buttons/btn_link_menu.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="container mb-4 rounded w-50 
+d-flex justify-content-center bg-secondary">
+        <div class="p-3 row gap-3">
+
+            <div class="col-md-auto">
+                <button>
+                    <a href="{% url 'charts_page' %}" 
+                    style="color: black; text-decoration: none;">
+                        <span class="box">
+                            Gráficos
+                        </span>
+                    </a>
+                </button>
+            </div>
+
+                <div class="col-md-auto">
+                    <button>
+                        <a href="#" 
+                        style="color: black; text-decoration: none;">
+                            <span class="box">
+                                Relatorio
+                            </span>
+                        </a>
+                    </button>
+                </div>
+
+        </div>
+</div>
+
+<br>
+
+{% endblock content %}

@@ -24,14 +24,14 @@ class MaterialTipo(models.Model):
 
     def get_complete_object(self):
         return {
-            "material_obj": str(self.material_obj),
-            "saida_obj": str(self.saida_obj) if self.saida_obj else None,
-            "marca": self.marca,
-            "modelo": self.modelo,
-            "n_serie": self.n_serie,
-            "patrimonio": self.patrimonio,
-            "observacao": self.observacao,
-            "garantia": self.garantia,
+            "Material": str(self.material_obj),
+            "Saida": str(self.saida_obj) if self.saida_obj else None,
+            "Marca": self.marca,
+            "Modelo": self.modelo,
+            "Número de série": self.n_serie,
+            "Patrimonio": self.patrimonio,
+            "Observação": self.observacao,
+            "Garantia": self.garantia,
         }
 
 class MaterialSaida(models.Model):
