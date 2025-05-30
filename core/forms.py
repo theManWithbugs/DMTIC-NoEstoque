@@ -266,6 +266,8 @@ class ProcessoForm(forms.Form):
 class BuscarItemForm(forms.Form):
     item = forms.CharField(max_length=80, required=True)
 
+class getRelatorioForm(forms.Form):
+    get_data = forms.CharField(max_length=80, required=True)
 
 
 

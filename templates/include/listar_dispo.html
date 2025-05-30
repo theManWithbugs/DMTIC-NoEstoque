@@ -15,14 +15,14 @@
 
 <div class="container rounded mt-4 bg-white">
     <div class="p-2">
-        <p class="fs-5 d-flex justify-content-center mb-2">
+        <p class="fs-5 mb-2">
             ITEMS NO ESTOQUE</p>
-        <table class="table table-bordered border-dark text-center">
+        <table class="table table-striped table-hover">
             <thead>
-                <tr class="text-primary text-center">
+                <tr class="text-primary">
                     <td>Marca</td>
                     <td>Modelo</td>
-                    <td>Excluir</td>
+                    <td class="text-center">Excluir</td>
                     <td>Saida</td>
                 </tr>
             </thead>
@@ -31,9 +31,8 @@
                 <tr>
                     <td>{{ obj.marca }}</td>
                     <td class="text-start">{{ obj.modelo }}</td>
-                    <!-- href="{% url 'excluir_item' obj.id %}" -->
                     <td>
-                        <a href="#" onclick="msgExcluir()">
+                        <a href="{% url 'excluir_item' obj.id %}" onclick="return confirm('Tem certeza que deseja excluir este item?');">
                             <button class="bin-button">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -84,9 +83,9 @@
                             </button>
                         </a>
                     </td>
-                    <td style="text-align: center;">
-                        <a href="{% url 'filtro_view' obj.id %}">
-                            <i class="fa-solid fa-arrow-right fa-2xl"></i>
+                    <td>
+                        <a href="{% url 'filtro_view' obj.id %}" class="ms-1">
+                            <i class="fa-solid fa-arrow-right fa-2xl text-secondary"></i>
                         </a>
                     </td>
                 </tr>
@@ -102,18 +101,3 @@
 <br>
 
 {% endblock content %}
-
-{% block js %}
-    <script>
-        function msgExcluir() {
-            Swal.fire({
-            position: "top",
-            title: "Mensagem!",
-            icon: "question",
-            text: "Tem certeza que deseja excluir?",
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            draggable: true});
-        }
-    </script>
-{% endblock js %}

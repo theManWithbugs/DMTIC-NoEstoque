@@ -7,13 +7,17 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.forms import inlineformset_factory
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UnidadeSerializer, DepartamentoSerializer, DivisaoSerializer, DepartamentoCountSerializer
+from .serializers import *
 from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from collections import Counter
 from django.db import IntegrityError
 from django.db.models import Count
 from collections import defaultdict
+from django.views.decorators.csrf import csrf_exempt
+import json
+import pandas as pd
+import io
 from . forms import *
 from . models import *
 from . utils import *
@@ -46,8 +50,19 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
+ 
+    # objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
 
-    active = False;
+    # objs = MaterialSaida.objects.values('unidade__unidade', 'departamento__nome').annotate(total=Count('*')).order_by('total')
+
+    # items_ajust = []
+
+    # for i in objs:
+    #     items_ajust.append({ "Unidade": i['unidade__unidade'], "Departamento": i['departamento__nome'], "Total": i['total'] })
+        
+    # print(items_ajust)
+    
+    active = False
 
     if active == True:
         agrupados_por_departamento= defaultdict(list)
@@ -143,7 +158,7 @@ def addUnidadeView(request):
         elif form_dep.is_valid():
             try:
                 form_dep.save()
-                messages.success(request, msgError)
+                messages.success(request, msgSucesso)
                 return redirect('add_unidade')
             except IntegrityError:
                 messages.error(request, msgIntegridade)
@@ -245,6 +260,21 @@ def listarItemsView(request):
         'marca_modelo': marca_modelo,
     }
 
+    return render(request, template_name, context)
+
+def listarAllItemsView(request):
+    template_name = 'include/all_items_disp.html'
+
+    items = []
+
+    objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
+
+    for i in objs:
+        items.append({'label': i['modelo'], 'total': i['total']})
+
+    context = {
+        'objs': objs
+    }
     return render(request, template_name, context)
 
 @login_required
@@ -505,19 +535,50 @@ class ChartDepResponse(APIView):
 
     def get(self, _request):
 
-        contagem_departamentos = (
-            MaterialSaida.objects.values('departamento__nome')
-            .annotate(total=Count('departamento'))
-            .order_by('departamento__nome')
-        )
-        serializer = DepartamentoCountSerializer(contagem_departamentos, many=True)
+        # items = []
 
-        return Response({'contagem_departamentos': serializer.data})
+        # #Recebido os valores de modelo e feito a adição da quantidade em cada modelo
+        # #ordenado da maior quantidade para a menor quantidade de items
+        # objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
 
+        # for i in objs:
+        #     items.append({'label': i['modelo'], 'total': i['total']})
+
+        objs = MaterialSaida.objects.values('unidade__unidade', 'departamento__nome').annotate(total=Count('*')).order_by('-total')
+        objs = objs[:8]
+
+        items_ajust = []
+
+        for i in objs:
+            items_ajust.append({ "Unidade": i['unidade__unidade'], "Departamento": i['departamento__nome'], "Total": i['total'] })
+            
+        serializer_saida = MaterialSaidaSerializer(items_ajust, many=True)
+        # serializer_objs = MaterialTipoSerializer(items, many=True)
+
+        return Response({'items_saida': serializer_saida.data})
+    
+@csrf_exempt
+def relatorioResponse(request):
+
+    if request.method == 'POST':
+        try: 
+            data = json.loads(request.body)
+            mensagem = data.get('mensagem', '')
+
+            return JsonResponse({'status': 'ok', 'mensagem_recebida': mensagem})
+        except Exception as e:
+            return JsonResponse({'status': 'erro', 'erro': str(e)}, status=400)
+    else:
+        return JsonResponse({'status': 'erro', 'mensagem': 'Método não permitido'}, status=405)
+    
 def EstatisticasView(request):
     template_name = 'analise_dados/estatisticas.html'
-    
+    form_relatorio = getRelatorioForm(request.POST or None)
+
     materialtipos = MaterialTipo.objects.filter(saida_obj__isnull=False).select_related('saida_obj__departamento', 'saida_obj__unidade')
+
+    if request.method == 'POST':
+        status = request.POST.get('response')
 
     itens_por_unidade_departamento = defaultdict(list)
     for item in materialtipos:
@@ -533,6 +594,7 @@ def EstatisticasView(request):
 
 def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
+
     return render(request, template_name)
 
 def ChartsView(request):
@@ -585,6 +647,37 @@ def BuscarView(request):
     }
 
     return render(request, template_name, context)
+
+#Em alteração !
+def UnidadeAddView(request):
+    template_name = 'include/unidade_add.html'
+    form = AddUnidadeForm(request.POST or None)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, template_name, context)
+
+def DepartamentoAddView(request):
+    template_name = 'include/depar_add.html'
+    form = AddDepartForm(request.POST or None)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, template_name, context)
+
+def DivisaoAddView(request):
+    templaete_name = 'include/divisao_add.html'
+    form = AddDivisãoForm(request.POST or None)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, templaete_name, context)
 
 
 

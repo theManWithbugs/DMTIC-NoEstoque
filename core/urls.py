@@ -13,6 +13,7 @@ urlpatterns = [
 
     path('home/add_contrato/', views.addContratoView, name='add_contr'),
     path('home/listar_items/', views.listarItemsView, name='listar_items'),
+    path('home/list_all/', views.listarAllItemsView, name='listar_all'),
     path('home/addUnidade/', views.addUnidadeView, name='add_unidade'),
 
     path('home/listar_items/excluir/<int:id>/', views.excluirItems, name='excluir_item'),
@@ -38,10 +39,13 @@ urlpatterns = [
     # Async views here
     path('home/async_view_teste/', views.teste_async, name='teste_async'),
     path('home/async_view_two/', views.teste_async_two, name='teste_async_two'),
+    path('relatorio_resp/', views.relatorioResponse, name='relatorio_resp'),
 
     path('home/async_items/', views.dados_items, name='items_dados'),
     path('home/async_mater/', views.materiais_info, name='materiais_info'),
 
     path('home/buscar/', views.BuscarView, name='buscar_dados'),
+
+    path('home/unidade/', views.UnidadeAddView, name='unidade_add'),
 ]
 

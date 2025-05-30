@@ -15,7 +15,7 @@ w-50 d-flex justify-content-center">
     <div class="p-3 row gap-2">
         
         <div class="col-md-auto">
-            <button  onclick="reg_unidade()" >
+            <button>
                 <span class="box">
                     Unidade
                 </span>
@@ -23,28 +23,26 @@ w-50 d-flex justify-content-center">
         </div>
 
             <div class="col-md-auto">
-                <button  onclick="reg_departmento()" >
+                <button>
                     <span class="box">
                         Departmento
                     </span>
                 </button>
             </div>
 
-                <div class="col-md-auto">
-                    <button onclick="reg_divisao()" >
-                        <span class="box">
-                            Divisão
-                        </span>
-                    </button>
-                </div>
+        <div class="col-md-auto">
+            <button>
+                <span class="box">
+                    Divisão
+                </span>
+            </button>
+        </div>
 
     </div>
-
 </div>
 
 
-
-<div class="container w-50" id="add_unidade">
+<!-- <div class="container w-50" id="add_unidade">
     <form action="{% url 'add_unidade' %}" method="post">
         {% csrf_token %}
         {{ form.unidade.label_tag }}
@@ -94,7 +92,7 @@ w-50 d-flex justify-content-center">
         <button type="submit" class="btn btn-success mt-2" 
         name="divisao_submit" id="btn_divisao">
             Salvar</button>
-    </form>
+    </form> -->
 </div>
 
 <br>

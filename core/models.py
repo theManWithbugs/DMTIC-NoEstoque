@@ -5,7 +5,7 @@ class MaterialObj(models.Model):
     contrato = models.ForeignKey('Contrato', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Contrato')
     descricao = models.CharField(max_length=400, blank=True, null=True, verbose_name='Descrição ')
     data = models.DateField(default=timezone.now)
-
+    
     def __str__(self):
         return f"{self.contrato}"
     
@@ -52,7 +52,7 @@ class MaterialSaida(models.Model):
         return f"-{self.unidade}- ({self.departamento} ({self.divisao_field}))"
 
 class Contrato(models.Model):
-    nome_contrato = models.CharField(max_length=60, blank=True, null=True, verbose_name='Nome do contrato ')
+    nome_contrato = models.CharField(max_length=60, blank=False, null=False, verbose_name='Nome do contrato ')
     descricao_contr = models.CharField(max_length=400, blank=False, null=False, default='', verbose_name='Descrição do contrato ')
     num_contrato = models.CharField(blank=False, null=False, max_length=80, verbose_name='Número do contrato ')
     data_abert = models.DateField(default=timezone.now)

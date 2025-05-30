@@ -28,8 +28,8 @@
                 {{ form.contrato.label_tag }}
                 {{ form.contrato }}
 
-                {{ form.descricao.label_tag }}
-                {{ form.descricao }}
+                    {{ form.descricao.label_tag }}
+                    {{ form.descricao }}
             </div>
         <hr>
     
@@ -40,42 +40,34 @@
                 {% for form in formset %}
                     <div class="col-md-auto inline_form text-center me-3" 
                     id="inline_formset">
+
                         {{ form.material_obj }}
+                      
+                        {{ form.marca.label_tag }}
+                        <span class="text-danger">*</span>
+                        {{ form.marca }}
 
-            <span>
-                {{ form.marca.label_tag }}
-                {{ form.marca }}
-            </span>
+                            {{ form.modelo.label_tag }}
+                            <span class="text-danger">*</span>
+                            {{ form.modelo }}
+                
+                                    {{ form.n_serie.label_tag }}
+                                    <span class="text-danger">*</span>
+                                    {{ form.n_serie }}
 
-                    <span>
-                        {{ form.modelo.label_tag }}
-                        {{ form.modelo }}
-                    </span>
-
-                            <span>
-                                {{ form.n_serie.label_tag }}
-                                {{ form.n_serie }}
-                            </span>
-
-                            <span>
+                                
                                 {{ form.patrimonio.label_tag }}
+                                <span class="text-danger">*</span>
                                 {{ form.patrimonio }}
-                            </span>
-
-                    <span>
-                        {{ form.quantidade.label_tag }}
-                        {{ form.quantidade }}
-                    </span>
-            
-                <span>
-                    {{ form.observacao.label_tag }}
-                    {{ form.observacao }}
-                </span>
-
-            <span>
-                {{ form.garantia.label_tag }}
-                {{ form.garantia }}
-            </span>
+                
+                        
+                            {{ form.observacao.label_tag }}
+                            {{ form.observacao }}
+        
+                        
+                        {{ form.garantia.label_tag }}
+                        <span class="text-danger">*</span>
+                        {{ form.garantia }}
 
                         <hr>
                     </div>
