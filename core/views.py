@@ -380,15 +380,6 @@ class ChartDepResponse(APIView):
 
     def get(self, _request):
 
-        # items = []
-
-        # #Recebido os valores de modelo e feito a adição da quantidade em cada modelo
-        # #ordenado da maior quantidade para a menor quantidade de items
-        # objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
-
-        # for i in objs:
-        #     items.append({'label': i['modelo'], 'total': i['total']})
-
         objs = MaterialSaida.objects.values('unidade__unidade', 'departamento__nome').annotate(total=Count('*')).order_by('-total')
         objs = objs[:8]
 
