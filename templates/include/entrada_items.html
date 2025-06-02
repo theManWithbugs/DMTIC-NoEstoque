@@ -35,7 +35,7 @@
     
         <div class="col-md-auto">
 
-            <div class="row container" style="margin-left: 5%;">
+            <div class="row container" style="justify-content: center;">
                 {{ formset.management_form }}
                 {% for form in formset %}
                     <div class="col-md-auto inline_form text-center me-3" 
@@ -54,16 +54,13 @@
                                     {{ form.n_serie.label_tag }}
                                     <span class="text-danger">*</span>
                                     {{ form.n_serie }}
-
                                 
                                 {{ form.patrimonio.label_tag }}
                                 <span class="text-danger">*</span>
                                 {{ form.patrimonio }}
-                
                         
                             {{ form.observacao.label_tag }}
                             {{ form.observacao }}
-        
                         
                         {{ form.garantia.label_tag }}
                         <span class="text-danger">*</span>

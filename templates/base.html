@@ -107,17 +107,23 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    {% for message in messages %}
-        <script>
+    <!-- Se a mensagem for de sucesso (success), mostra um SweetAlert verde com ícone de sucesso.
+    Se for erro (error), mostra um SweetAlert vermelho.
+    Para outros tipos, mostra um alerta informativo. -->
+    {% if messages %}
+        {% for message in messages %}
+            <script>
                 Swal.fire({
                     position: "top",
-                    title: "Mensagem!",
-                    icon: "{{ message.tags|default:'info' }}",
+                    title: "{% if 'success' in message.tags %}Sucesso!{% else %}Mensagem!{% endif %}",
+                    icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}",
                     text: "{{ message|escapejs }}",
-                    draggable: true
+                    timer: 2500,
+                    showConfirmButton: false
                 });
-        </script>
-    {% endfor %}
+            </script>
+        {% endfor %}
+    {% endif %}
 
     <div id="content" style="display: none;">
         <div class="container">

@@ -12,9 +12,7 @@ urlpatterns = [
     path('home/listar_items/editar/<int:id>/', views.editarItemsView, name='editar_items'),
 
     path('home/add_contrato/', views.addContratoView, name='add_contr'),
-    path('home/listar_items/', views.listarItemsView, name='listar_items'),
     path('home/list_all/', views.listarAllItemsView, name='listar_all'),
-    path('home/addUnidade/', views.addUnidadeView, name='add_unidade'),
 
     path('home/listar_items/excluir/<int:id>/', views.excluirItems, name='excluir_item'),
 
@@ -47,5 +45,7 @@ urlpatterns = [
     path('home/buscar/', views.BuscarView, name='buscar_dados'),
 
     path('home/unidade/', views.UnidadeAddView, name='unidade_add'),
+    path('home/departamento/', views.DepartamentoAddView, name='depart_add'),
+    path('home/divisao/', views.DivisaoAddView, name='divisao_add')
 ]
 

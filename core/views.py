@@ -50,136 +50,11 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
- 
-    # objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
-
-    # objs = MaterialSaida.objects.values('unidade__unidade', 'departamento__nome').annotate(total=Count('*')).order_by('total')
-
-    # items_ajust = []
-
-    # for i in objs:
-    #     items_ajust.append({ "Unidade": i['unidade__unidade'], "Departamento": i['departamento__nome'], "Total": i['total'] })
-        
-    # print(items_ajust)
-    
-    active = False
-
-    if active == True:
-        agrupados_por_departamento= defaultdict(list)
-
-        material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
-
-        for item in material_tipos:
-
-            departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
-
-            agrupados_por_departamento[departamento].append(item.get_complete_object())
-
-        resultado = []
-
-        for departamento, itens in agrupados_por_departamento.items():
-            resultado.append({
-                "Departamento": departamento,
-                "itens": itens
-                })
-            
-        linhas = []
-        for dep in resultado:
-            departamento = dep["Departamento"]
-            for item in dep["itens"]:
-                saida = item["Saida"]
-                unidade = saida.split('-')[1] if saida else ""
-                linhas.append({
-                    "Departamento": departamento,
-                    "Unidade": unidade,
-                    "Marca": item["Marca"],
-                    "Modelo": item["Modelo"],
-                    "Número de série": item["Número de série"],
-                    "Patrimonio": item["Patrimonio"],
-                    "Observação": item["Observação"],
-                    "Garantia": item["Garantia"],
-                })
-
-            df = pd.DataFrame(linhas)
-
-            # Cria um buffer em memória
-            buffer = io.BytesIO()
-            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                df.to_excel(writer, index=False, sheet_name='Itens')
-
-            buffer.seek(0)
-
-        response = HttpResponse(
-            buffer,
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-        response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
-        return response
-
-    dados = MaterialSaida.objects.all()
-
-    contagem_departamentos = (
-        MaterialSaida.objects.values('departamento__nome')
-        .annotate(total=Count('departamento'))
-        .order_by('departamento__nome')
-    )
-
-    result = receber_dados_departamento(request)
-
-    context = {
-        'dados': dados,
-        'contagem_departamentos': contagem_departamentos,
-    }
-
-    return render(request, template_name, context)
+    return render(request, template_name)
 
 def logoutView(request):
     auth_logout(request)
     return redirect('login_page')
-
-@login_required
-def addUnidadeView(request):
-    template_name = 'include/add_unidade.html'
-    form = AddUnidadeForm(request.POST or None)
-    form_dep = AddDepartForm(request.POST or None)
-    form_divis = AddDivisãoForm(request.POST or None)
-  
-    if request.method == 'POST':
-
-        if 'unidade_submit' in request.POST and form.is_valid():
-            try:
-                form.save()
-                messages.success(request, msgSucesso)
-                return redirect('add_unidade')
-            except IntegrityError:
-                messages.error(request, msgIntegridade)
-                return redirect('add_unidade')
-
-        elif form_dep.is_valid():
-            try:
-                form_dep.save()
-                messages.success(request, msgSucesso)
-                return redirect('add_unidade')
-            except IntegrityError:
-                messages.error(request, msgIntegridade)
-                return redirect('add_unidade')
-
-        elif form_divis.is_valid():
-            try:
-                form_divis.save()
-                messages.success(request, msgSucesso)
-                return redirect('add_unidade')
-            except:
-                messages.error(request, msgIntegridade)
-                return redirect('add_unidade')
-        
-    context = {
-        'form': form,
-        'form_dep': form_dep,
-        'form_divis': form_divis,
-    }
-
-    return render(request, template_name, context)
 
 @login_required
 def save_formset(formset):
@@ -219,7 +94,7 @@ def itemAddView(request):
                     acao_realizada = 'Entrada de item'
                 )
                 messages.success(request, msgSucesso)
-                return redirect('listar_items')
+                return redirect('listar_all')
             else:
                 messages.error(request, "Erro ao salvar os itens do formset.")
         else:
@@ -231,43 +106,13 @@ def itemAddView(request):
             'formset': formset,
         }
         return render(request, template_name, context)
-        
-@login_required
-def listarItemsView(request):
-    template_name = 'include/listar.html'
-
-    marca_modelo = Counter()
-
-    objs = []
-
-    objs_tipo = MaterialTipo.objects.prefetch_related('material_obj').order_by('id')
-
-    paginator = Paginator(objs_tipo, 13)
-    page = request.GET.get('page')
-
-    try:    
-        objs = paginator.page(page)
-    except PageNotAnInteger:
-        objs = paginator.page(1)
-    except EmptyPage:
-        objs = paginator.page(paginator.num_pages)
-
-    if objs.object_list.exists():
-        pass
-
-    context = {
-        'objs': objs,
-        'marca_modelo': marca_modelo,
-    }
-
-    return render(request, template_name, context)
 
 def listarAllItemsView(request):
     template_name = 'include/all_items_disp.html'
 
     items = []
 
-    objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('total')
+    objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('-total')
 
     for i in objs:
         items.append({'label': i['modelo'], 'total': i['total']})
@@ -595,6 +440,62 @@ def EstatisticasView(request):
 def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
 
+    if request.method == 'POST':
+        try:
+            agrupados_por_departamento= defaultdict(list)
+
+            material_tipos = MaterialTipo.objects.select_related('saida_obj__departamento').all()
+
+            for item in material_tipos:
+
+                departamento = item.saida_obj.departamento.nome if item.saida_obj and item.saida_obj.departamento else "Sem Departamento"
+
+                agrupados_por_departamento[departamento].append(item.get_complete_object())
+
+            resultado = []
+
+            for departamento, itens in agrupados_por_departamento.items():
+                resultado.append({
+                    "Departamento": departamento,
+                    "itens": itens
+                    })
+                
+            linhas = []
+            for dep in resultado:
+                departamento = dep["Departamento"]
+                for item in dep["itens"]:
+                    saida = item["Saida"]
+                    unidade = saida.split('-')[1] if saida else ""
+                    linhas.append({
+                        "Departamento": departamento,
+                        "Unidade": unidade,
+                        "Marca": item["Marca"],
+                        "Modelo": item["Modelo"],
+                        "Número de série": item["Número de série"],
+                        "Patrimonio": item["Patrimonio"],
+                        "Observação": item["Observação"],
+                        "Garantia": item["Garantia"],
+                    })
+
+                df = pd.DataFrame(linhas)
+
+                # Cria um buffer em memória
+                buffer = io.BytesIO()
+                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                    df.to_excel(writer, index=False, sheet_name='Itens')
+
+                buffer.seek(0)
+
+            response = HttpResponse(
+                buffer,
+                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+            response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+            return response
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro: {e}")
+            return redirect('metricas_page')
+
     return render(request, template_name)
 
 def ChartsView(request):
@@ -653,6 +554,19 @@ def UnidadeAddView(request):
     template_name = 'include/unidade_add.html'
     form = AddUnidadeForm(request.POST or None)
 
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, msgSucesso)
+                return redirect('unidade_add')
+            except IntegrityError:
+                messages.error(request, msgIntegridade)
+                return redirect('unidade_add')
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro: {e}")
+                return redirect('unidade_add')
+
     context = {
         'form': form
     }
@@ -663,6 +577,19 @@ def DepartamentoAddView(request):
     template_name = 'include/depar_add.html'
     form = AddDepartForm(request.POST or None)
 
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, msgSucesso)
+                return redirect('depart_add')
+            except IntegrityError:
+                messages.error(request, msgIntegridade)
+                return redirect('depart_add')  
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro: {e}")
+                return redirect('unidade_add')       
+
     context = {
         'form': form
     }
@@ -672,6 +599,17 @@ def DepartamentoAddView(request):
 def DivisaoAddView(request):
     templaete_name = 'include/divisao_add.html'
     form = AddDivisãoForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                return messages.success(request, msgSucesso)
+            except IntegrityError:
+                return messages.error(request, msgIntegridade)
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro: {e}")
+                return redirect('unidade_add')
 
     context = {
         'form': form

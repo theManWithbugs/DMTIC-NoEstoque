@@ -14,31 +14,82 @@ w-50 d-flex justify-content-center">
     <div class="p-3 row gap-2">
         
         <div class="col-md-auto">
-            <button>
-                <span class="box">
-                    Unidade
-                </span>
-            </button>
+            <a href="{% url 'unidade_add' %}" style="text-decoration: none; color: black;">
+                <button>
+                    <span class="box">
+                        Unidade
+                    </span>
+                </button>
+            </a>
         </div>
 
             <div class="col-md-auto">
-                <button>
-                    <span class="box">
-                        Departmento
-                    </span>
-                </button>
+                <a href="{% url 'depart_add' %}" style="text-decoration: none; color: black;">
+                    <button>
+                        <span class="box">
+                            Departmento
+                        </span>
+                    </button>
+                </a>
             </div>
 
         <div class="col-md-auto">
-            <button>
-                <span class="box">
-                    Divisão
-                </span>
-            </button>
+            <a href="{% url 'divisao_add' %}" style="text-decoration: none; color: black;">
+                <button>
+                    <span class="box">
+                        Divisão
+                    </span>
+                </button>
+            </a>
         </div>
 
     </div>
 </div>
 
+<div class="p-4 bg-white container w-50 rounded">
+    <form action="{% url 'divisao_add' %}" method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error">
+                {% for error in form.non_field_errors %}
+                    <script>
+                        Swal.fire({
+                            position: "top",
+                            title: "Mensagem!",
+                            icon: "{{ error.tags|default:'error' }}",
+                            text: "{{ error|escapejs }}",
+                            draggable: true
+                        });
+                    </script>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="error">
+                    {% for error in field.errors %}
+                         <script>
+                            Swal.fire({
+                                position: "top",
+                                title: "Mensagem!",
+                                icon: "{{ error.tags|default:'error' }}",
+                                text: "{{ error|escapejs }}",
+                                draggable: true
+                            });
+                        </script>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {{ form.nome.label_tag }}
+        {{ form.nome }}
+        {{ form.departamento.label_tag }}
+        {{ form.departamento }}
+        <button class="btn btn-success mt-3">Enviar</button>
+    </form>
+</div>
 
 {% endblock content %}

@@ -30,6 +30,11 @@ footer span img {
     height: 20px;
 }
 
+.dell_efect_a {
+    text-decoration: none;
+    color: #000000;
+}
+
 .box_home {
     background-color: white;
     border: solid 3px black;
