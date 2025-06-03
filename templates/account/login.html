@@ -15,34 +15,34 @@
 {% block content %}
 
 <div class="rounded" id="login_box">
-    <div class="container">
-        <div class="d-flex justify-content-center mb-4 ms-3">
-          <img src="{% static 'img/icon_estoque_DRSI.png' %}" id="icon_drsi_login">
-        </div>
-        <form action="{% url 'login_page' %}" method="post">
-          {% csrf_token %}
-          <div class="form__group field" id="box_input1">
-            <input type="input" class="form__field" placeholder="Name" required="" autocomplete="off" name="username" id="username">
-            <label for="name" class="form__label">Usuario</label>
+      <div class="container">
+          <div class="d-flex justify-content-center mb-4 ms-3">
+            <img src="{% static 'img/icon_estoque_DRSI.png' %}" id="icon_drsi_login">
           </div>
-          <div class="form__group field" id="box_input2">
-            <input type="password" class="form__field" placeholder="senha" required="" autocomplete="off" name="password" id="senha">
-            <label for="senha" class="form__label">Senha</label>
-          </div>
-            <button class="animated-button mt-4" style="margin-left: 40%;" type="submit">
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-              <span class="text">E N T R A R</span>
-              <span class="circle"></span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-            </button>
+          <form action="{% url 'login_page' %}" method="post">
+            {% csrf_token %}
+            <div class="form__group field" id="box_input1">
+              <input type="input" class="form__field" placeholder="Name" required="" autocomplete="off" name="username" id="username">
+              <label for="name" class="form__label">Usuario</label>
+            </div>
+            <div class="form__group field" id="box_input2">
+              <input type="password" class="form__field" placeholder="senha" required="" autocomplete="off" name="password" id="senha">
+              <label for="senha" class="form__label">Senha</label>
+            </div>
+              <button class="animated-button mt-5" style="margin-left: 40%;" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+                  <path
+                    d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                  ></path>
+                </svg>
+                <span class="text">L O G I N</span>
+                <span class="circle"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+                  <path
+                    d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                  ></path>
+                </svg>
+              </button>
           </div>
         </form>
     </div>

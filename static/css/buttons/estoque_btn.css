@@ -12,7 +12,7 @@ th {
     background: red;
     border: none;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-    background: #e62222;
+    background: red;
    }
    
    .saida_item_btn, .saida_item_btn span {
@@ -27,13 +27,14 @@ th {
    
    .saida_item_btn .icon {
     position: absolute;
-    border-left: 1px solid #c41b1b;
+    border-left: 1px solid #d81e1e;
     transform: translateX(110px);
     height: 37px;
     width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #d81e1e;
    }
    
    .saida_item_btn svg {
@@ -42,11 +43,15 @@ th {
    }
    
    .saida_item_btn:hover {
-    background: #ff3636;
+    background: #d81e1e;
    }
    
    .saida_item_btn:hover .texto {
     color: transparent;
+   }
+
+   .saida_item_btn:active {
+    background-color: #d81e1e;
    }
    
    .saida_item_btn:hover .icon {
@@ -73,7 +78,7 @@ th {
     background: rgb(0, 30, 255);
     border: none;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-    background: rgb(51, 74, 251);
+    background: rgb(0, 30, 255);
    }
    
    .estoque_btn, .estoque_btn span {
@@ -88,13 +93,14 @@ th {
    
    .estoque_btn .icon {
     position: absolute;
-    border-left: 1px solid rgb(37, 55, 185);
+    border-left: 1px solid rgb(17, 17, 215);
     transform: translateX(110px);
     height: 37px;
     width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgb(17, 17, 215);
    }
    
    .estoque_btn svg {
@@ -103,7 +109,7 @@ th {
    }
    
    .estoque_btn:hover {
-    background: rgb(51, 74, 251);
+    background: rgb(17, 17, 215);
    }
    
    .estoque_btn:hover .texto {
@@ -120,6 +126,10 @@ th {
     outline: none;
    }
    
+   .estoque_btn:active {
+    background-color: rgb(17, 17, 215);
+   }
+
    .estoque_btn:active .icon svg {
     transform: scale(0.8);
    }
@@ -135,7 +145,7 @@ th {
     background: rgb(219, 208, 4);
     border: none;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-    background: rgb(218, 209, 41);
+    background: rgb(219, 208, 4);
    }
    
    .todos_itens_btn, .todos_itens_btn span {
@@ -150,13 +160,14 @@ th {
    
    .todos_itens_btn .icon {
     position: absolute;
-    border-left: 1px solid rgb(148, 142, 29);
+    border-left: 1px solid rgb(194, 186, 39);
     transform: translateX(110px);
     height: 37px;
     width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgb(194, 186, 39);
    }
    
    .todos_itens_btn svg {
@@ -165,7 +176,7 @@ th {
    }
    
    .todos_itens_btn:hover {
-    background: rgb(225, 216, 42);
+    background: rgb(194, 186, 39);
    }
    
    .todos_itens_btn:hover .texto {
@@ -185,3 +196,63 @@ th {
    .todos_itens_btn:active .icon svg {
     transform: scale(0.8);
    }
+
+
+   /* ------------------------------ */
+   .button_search {
+    position: relative;
+    width: 155px;
+    height: 38px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgb(139, 139, 139);
+    background-color: rgb(139, 139, 139);
+  }
+  
+  .button_search, .button_search__icon, .button_search__text {
+    transition: all 0.3s;
+  }
+  
+  .button_search .button_search__text {
+    transform: translateX(30px);
+    color: #fff;
+    font-weight: 600;
+  }
+  
+  .button_search .button_search__icon {
+    position: absolute;
+    transform: translateX(112px);
+    height: 100%;
+    width: 37px;
+    background-color: silver;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button_search .svg {
+    width: 30px;
+    stroke: #fff;
+  }
+  
+  .button_search:hover {
+    background: silver;
+  }
+  
+  .button_search:hover .button_search__text {
+    color: transparent;
+  }
+  
+  .button_search:hover .button_search__icon {
+    width: 148px;
+    transform: translateX(0);
+  }
+  
+  .button_search:active .button_search__icon {
+    background-color: silver;
+  }
+  
+  .button_search:active {
+    border: 1px solid silver;
+  }

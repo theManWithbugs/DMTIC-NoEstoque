@@ -7,27 +7,31 @@
 
 {% block content %}
 
-<div class="container mb-4 rounded w-50 
+<h5 class="text-white">Relatórios excell
+    <i class="fa-regular fa-file-excel ms-1"></i>
+</h5>
+<div class="container mb-4 rounded
 d-flex justify-content-center bg-secondary">
-        <div class="p-3 row gap-3">
 
-            <div class="col-md-auto">
-                <button>
-                    <a href="{% url 'charts_page' %}" 
-                    style="color: black; text-decoration: none;">
-                        <span class="box">
-                            Gráficos
-                        </span>
-                    </a>
-                </button>
-            </div>
+        <div class="p-3 row">
 
             <div class="col-md-auto">
                 <form action="{% url 'metricas_page' %}" method="post">
                     {% csrf_token %}
                     <button id="enviarBtn" type="submit">
                         <span class="box">
-                            Relatorio
+                            Individual
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-md-auto">
+                <form action="{% url 'retornar_excell' %}" method="post">
+                    {% csrf_token %}
+                    <button id="enviarBtn" type="submit">
+                        <span class="box">
+                            Agrupado
                         </span>
                     </button>
                 </form>
@@ -36,10 +40,17 @@ d-flex justify-content-center bg-secondary">
         </div>
 </div>
 
+<h5 class="text-white">Gráfico de barras</h5>
+    <div>
+        <div id="container" style="height: 350px;">
+        </div>
+    </div>
 <br>
+
 
 {% endblock content %}
 
 {% block js %}
     <script src="{% static 'js/relatorio.js' %}"></script>
+    <script src="{% static 'js/bar_chart.js' %}"></script>
 {% endblock js %}

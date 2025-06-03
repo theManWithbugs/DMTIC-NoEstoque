@@ -32,6 +32,7 @@ function reg_divisao() {
 document.addEventListener('DOMContentLoaded', function() {
     const switchInput = document.getElementById('switch');
     const navbar = document.getElementById('navbar');
+    const img_icon = document.getElementById('img_icon');
     const title = document.getElementById('title_nav');
     const footer = document.getElementById('footer_ele');
     const footer_text = document.getElementById('footer_text');
@@ -39,6 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function tema_claro() {
         navbar.classList.remove('bg-dark');
         navbar.classList.add('bg-white');
+        img_icon.classList.remove('bg-white');
+        img_icon.classList.add('bg-dark');
         title.classList.remove('text-white');
         title.classList.add('text-dark');
         footer.classList.remove('bg-dark');
@@ -53,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function tema_escuro() {
         navbar.classList.remove('bg-white');
         navbar.classList.add('bg-dark');
+        img_icon.classList.remove('bg-dark');
+        img_icon.classList.add('bg-white');
         title.classList.remove('text-dark');
         title.classList.add('text-white');
         footer.classList.remove('bg-white');

@@ -1,5 +1,5 @@
 body {
-    background-image: url('../img/4882066.jpg');
+    background-image: url('../img/estoque_img_2\ \(2\).png');
     background-position: center;
     background-size: cover;
     background-repeat: repeat;
@@ -11,7 +11,7 @@ body {
     width: 500px;
     height: 545px;
     padding: 10px;
-    background: black;
+    background: rgba(0, 0, 0, 0.639);
     margin-left: 35%;
 }
 

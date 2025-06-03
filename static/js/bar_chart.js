@@ -20,7 +20,7 @@
             chart.animation(true);
 
             // set chart title text settings
-            chart.title('Items por divisão');
+            chart.title('Items por departamento');
 
             const colors = [
                 "#4a90e2", "#e94e77", "#f9d423", "#6ac174", "#f38630",

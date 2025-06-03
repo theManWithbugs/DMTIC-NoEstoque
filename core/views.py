@@ -130,7 +130,7 @@ def itemSaidaViewLista(request):
 
     objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=False).prefetch_related('material_obj').order_by('id') 
 
-    paginator = Paginator(objs_tipo, 15)
+    paginator = Paginator(objs_tipo, 20)
     page = request.GET.get('page')
 
     try:    
@@ -157,7 +157,7 @@ def noExitItemsView(request):
 
     objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=True).prefetch_related('material_obj').order_by('id')
 
-    paginator = Paginator(objs_tipo, 13)
+    paginator = Paginator(objs_tipo, 20)
     page = request.GET.get('page')
 
     try:    
@@ -304,7 +304,7 @@ def histUsuarioView(request):
 
     objs_tipo = HistoricoUser.objects.all().order_by('id')
 
-    paginator = Paginator(objs_tipo, 15)
+    paginator = Paginator(objs_tipo, 30)
     page = request.GET.get('page')
 
     try:    
@@ -456,7 +456,7 @@ def MetricasView(request):
                 departamento = dep["Departamento"]
                 for item in dep["itens"]:
                     saida = item["Saida"]
-                    unidade = saida.split('-')[1] if saida else ""
+                    unidade = saida.split('-')[1] if saida else "Não atrelado"
                     linhas.append({
                         "Departamento": departamento,
                         "Unidade": unidade,
@@ -464,7 +464,6 @@ def MetricasView(request):
                         "Modelo": item["Modelo"],
                         "Número de série": item["Número de série"],
                         "Patrimonio": item["Patrimonio"],
-                        "Observação": item["Observação"],
                         "Garantia": item["Garantia"],
                     })
 
@@ -489,9 +488,50 @@ def MetricasView(request):
 
     return render(request, template_name)
 
-def ChartsView(request):
-    template_name = 'analise_dados/graficos.html'
-    return render(request, template_name)
+def RetornarExcell(request):
+        
+    if request.method == 'POST':
+        try:
+            objs = MaterialTipo.objects.values(
+                'marca',
+                'modelo',
+                'saida_obj__departamento__nome',
+                'saida_obj__unidade__unidade'
+            ).annotate(total=Count('*')).exclude(saida_obj=None)
+
+            items = []
+            for i in objs:
+                items.append({
+                    "Marca": i['marca'],
+                    "Modelo": i['modelo'],
+                    "Departamento": i['saida_obj__departamento__nome'],
+                    "Unidade": i['saida_obj__unidade__unidade'],
+                    "Total": i['total']
+                })
+
+            df = pd.DataFrame(items)
+
+            df_grouped = df.groupby(
+                ['Departamento', 'Unidade', 'Marca', 'Modelo'],
+                as_index=False
+            ).agg({'Total': 'sum'})
+
+            df_grouped = df_grouped.sort_values(['Departamento', 'Unidade', 'Marca', 'Modelo'])
+
+            buffer = io.BytesIO()
+            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                df_grouped.to_excel(writer, index=False, sheet_name='Itens')
+
+            buffer.seek(0)
+            response = HttpResponse(
+                buffer,
+                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+            response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+            return response
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro: {e}")
+            return redirect('metricas_page')
 
 def teste_async(request):
     dados_unidade = get_estatisticas_unidades(request)
@@ -523,7 +563,7 @@ def BuscarView(request):
             if not items_queryset.exists():
                 messages.error(request, 'Não consta nenhum dado com esse caracter!')
 
-    paginator = Paginator(items_queryset, 15)
+    paginator = Paginator(items_queryset, 20)
     page = request.GET.get('page')
 
     try:

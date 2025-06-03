@@ -6,12 +6,11 @@
 {% block content %}
 
 <div class="container rounded mt-3 bg-white p-4">
-    <table class="table table-bordered bg-white">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <td>Usuario</td>
                 <td>Ação Realizada</td>
-                <td>Modelo do item</td>
                 <td>Data</td>
             </tr>
         </thead>
@@ -21,11 +20,6 @@
                 <tr>
                     <td>{{ obj.nome_user }}</td>
                     <td>{{ obj.acao_realizada }}</td>
-                    {% if obj.modelo_item %}
-                        <td>{{ obj.modelo_item }}</td>
-                    {% else %}
-                        <td>Não capturado</td>
-                    {% endif %}
                     <td>{{ obj.data }}</td>
                 </tr>
             {% endfor %}
@@ -35,5 +29,6 @@
         {% include 'include/pagination.html' %}
     </div>
 </div>
+<br>
 
 {% endblock content %}

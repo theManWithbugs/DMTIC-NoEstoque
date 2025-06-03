@@ -32,7 +32,6 @@ urlpatterns = [
     # Estatisticas view
     path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
     path('home/metricas/', views.MetricasView, name='metricas_page'),
-    path('home/estatisticas/charts/', views.ChartsView, name='charts_page'),
 
     # Async views here
     path('home/async_view_teste/', views.teste_async, name='teste_async'),
@@ -46,6 +45,8 @@ urlpatterns = [
 
     path('home/unidade/', views.UnidadeAddView, name='unidade_add'),
     path('home/departamento/', views.DepartamentoAddView, name='depart_add'),
-    path('home/divisao/', views.DivisaoAddView, name='divisao_add')
+    path('home/divisao/', views.DivisaoAddView, name='divisao_add'),
+
+    path('retornar_excell/', views.RetornarExcell, name='retornar_excell')
 ]
 
