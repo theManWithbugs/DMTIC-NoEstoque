@@ -13,23 +13,28 @@
 <div class="container-fluid p-4 rounded fundo_papel" id="fundo_adjust">
     <form action="{% url 'entrada_material' %}" method="post">
 
-        <div class="d-flex justify-content-center">
-                <p class="border border-2 w-50 
-                d-flex justify-content-center 
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <p class="border border-2 d-flex justify-content-center
                 rounded bg-white p-2 fs-5">
                     (<span class="text-danger me-1 ms-1">*</span>)
                     campos obrigatorios
                 </p>
+            </div>
         </div>
 
-            <div class="ms-5">
+            <div class="row ms-4">
                 {% csrf_token %}
+            
+                <div class="col-md-6">
+                    {{ form.contrato.label_tag }}
+                    {{ form.contrato }}
+                </div>
 
-                {{ form.contrato.label_tag }}
-                {{ form.contrato }}
-
-                    {{ form.descricao.label_tag }}
-                    {{ form.descricao }}
+                    <div class="col-md-8">
+                        {{ form.descricao.label_tag }}
+                        {{ form.descricao }}
+                    </div>
             </div>
         <hr>
     
@@ -70,14 +75,13 @@
                     </div>
                 {% endfor %}
                 <br>
-                <div class="col-12 text-center mt-5">
+            </div>
+                 <div class="text-center mt-5">
                     <button type="submit" style="width: 110px;" 
                     class="btn btn-success">
                         Salvar
                     </button>
                 </div>
-            </div>
-            
         </div>
     </form>
 </div>

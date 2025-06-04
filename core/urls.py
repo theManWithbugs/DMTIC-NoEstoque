@@ -30,7 +30,6 @@ urlpatterns = [
     path('response_dep/', ChartDepResponse.as_view(), name='departamentos_resp'),
 
     # Estatisticas view
-    path('home/estatisticas/', views.EstatisticasView, name='estatisticas_page'),
     path('home/metricas/', views.MetricasView, name='metricas_page'),
 
     # Async views here

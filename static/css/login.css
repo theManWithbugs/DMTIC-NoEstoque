@@ -1,5 +1,5 @@
 body {
-    background-image: url('../img/estoque_img_2\ \(2\).png');
+    background-image: url('../img/estoque_img_.png');
     background-position: center;
     background-size: cover;
     background-repeat: repeat;
@@ -12,7 +12,8 @@ body {
     height: 545px;
     padding: 10px;
     background: rgba(0, 0, 0, 0.639);
-    margin-left: 35%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #ddms_msg {

@@ -23,6 +23,27 @@
                             <strong>Marca: </strong>{{ item.marca }} 
                             <strong>Modelo: </strong> {{ item.modelo }} 
                             <strong>N-série:</strong> {{ item.n_serie }}
+
+                            {% if item.saida_obj and item.saida_obj.unidade %}
+                                <strong>Unidade: </strong> 
+                                {{ item.saida_obj.unidade.unidade }}
+                            {% else%}
+                                <strong>Unidade: </strong>Não atrelado
+                            {% endif %}
+
+                            {% if item.saida_obj and item.saida_obj.departamento %}
+                                <strong>Departamento: </strong> 
+                                {{ item.saida_obj.departamento.nome }}
+                            {% else%}
+                                <strong>Departamento: </strong>Não atrelado
+                            {% endif %}
+
+                            {% if item.saida_obj and item.saida_obj.divisao_field %}
+                                <strong>Divisão: </strong> 
+                                {{ item.saida_obj.divisao_field.nome }}
+                            {% else%}
+                                <strong>Divisão: </strong>Não atrelado
+                            {% endif %}
                         </td> 
                     </tr>
                 </tbody>

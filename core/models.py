@@ -14,8 +14,8 @@ class MaterialTipo(models.Model):
     saida_obj = models.ForeignKey('MaterialSaida', on_delete=models.CASCADE, related_name='saida_obj', blank=True, null=True, verbose_name='Saida')
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
     modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
-    n_serie = models.CharField(blank=False, null=False, verbose_name='Número de série', max_length=30)
-    patrimonio = models.CharField(blank=True, null=True, max_length=40, verbose_name='Patrimonio')
+    n_serie = models.CharField(blank=False, null=False, verbose_name='Número de série', max_length=30, unique=True)
+    patrimonio = models.CharField(blank=True, null=True, max_length=40, verbose_name='Patrimonio', unique=True)
     observacao = models.CharField(max_length=450, blank=True, null=True, verbose_name='Observações')
     garantia = models.CharField(max_length=20, blank=False, null=False, verbose_name='Garantia')
 

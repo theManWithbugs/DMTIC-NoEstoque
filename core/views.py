@@ -107,6 +107,7 @@ def itemAddView(request):
         }
         return render(request, template_name, context)
 
+@login_required
 def listarAllItemsView(request):
     template_name = 'include/all_items_disp.html'
 
@@ -189,7 +190,7 @@ def editarItemsView(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, msgSucesso)
-            return redirect('listar_items')
+            return redirect('listar_all')
         else:
             messages.error(request, msgError)
 
@@ -211,6 +212,10 @@ def addContratoView(request):
 
         if form.is_valid():
             form.save()
+            HistoricoUser.objects.create(
+                nome_user = request.user.first_name,
+                acao_realizada = 'Adição de contrato'
+            )
             messages.success(request, 'Operação realizada com sucesso!')
             return redirect('add_contr')
         else:
@@ -252,10 +257,9 @@ def saida_ItemView(request, id):
             HistoricoUser.objects.create(
                 nome_user = request.user.first_name,
                 acao_realizada = 'Atualização de saida',
-                modelo_item = material_tipo.modelo
             )
             messages.success(request, "Atualizado com sucesso!")
-            return redirect('listar_items')  
+            return redirect('listar_all')  
         else:
             messages.error(request, msgError)
     else:
@@ -286,7 +290,7 @@ def create_material_saida(request, material_tipo_id):
                 modelo_item = material_tipo.modelo
             )
             messages.success(request, msgSucesso)
-            return redirect('listar_items')
+            return redirect('listar_all')
     else:
         form = SaidaMaterialForm()
 
@@ -345,7 +349,7 @@ def filtro_view(request, id):
             material_tipo = get_object_or_404(MaterialTipo, id=id)
             material_tipo.saida_obj = saida
             material_tipo.save()
-            return redirect('listar_items')
+            return redirect('listar_all')
         except MaterialTipo.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'MaterialTipo não encontrado'}, status=404)
 
@@ -406,27 +410,6 @@ def relatorioResponse(request):
             return JsonResponse({'status': 'erro', 'erro': str(e)}, status=400)
     else:
         return JsonResponse({'status': 'erro', 'mensagem': 'Método não permitido'}, status=405)
-    
-def EstatisticasView(request):
-    template_name = 'analise_dados/estatisticas.html'
-    form_relatorio = getRelatorioForm(request.POST or None)
-
-    materialtipos = MaterialTipo.objects.filter(saida_obj__isnull=False).select_related('saida_obj__departamento', 'saida_obj__unidade')
-
-    if request.method == 'POST':
-        status = request.POST.get('response')
-
-    itens_por_unidade_departamento = defaultdict(list)
-    for item in materialtipos:
-        unidade_nome = item.saida_obj.unidade.unidade  
-        departamento_nome = item.saida_obj.departamento.nome
-        chave = ("Unidade: " + unidade_nome, "Departamento: " + departamento_nome)
-        itens_por_unidade_departamento[chave].append(item)
-
-    context = {
-        'itens_por_unidade_departamento': dict(itens_por_unidade_departamento)
-    }
-    return render(request, template_name, context)
 
 def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
@@ -480,7 +463,7 @@ def MetricasView(request):
                 buffer,
                 content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
-            response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+            response['Content-Disposition'] = 'attachment; filename="itens_individuais.xlsx"'
             return response
         except Exception as e:
             messages.error(request, f"Ocorreu um erro: {e}")
@@ -527,7 +510,7 @@ def RetornarExcell(request):
                 buffer,
                 content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
-            response['Content-Disposition'] = 'attachment; filename="itens_departamentos.xlsx"'
+            response['Content-Disposition'] = 'attachment; filename="itens_agrupados.xlsx"'
             return response
         except Exception as e:
             messages.error(request, f"Ocorreu um erro: {e}")

@@ -9,7 +9,6 @@ class AddMaterialForm(forms.ModelForm):
         widgets = {
             'contrato': forms.Select(attrs={
                 'class': 'form-control form-control-sm',
-                'style': 'max-width: 30rem;'
             }),
             'descricao': forms.Textarea(attrs={
                 'class': 'form-control form-control-sm',
@@ -84,27 +83,11 @@ class AddContratoForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['data_abert']
         widgets = {
-            'nome_contrato': forms.TextInput(attrs={
-                'style': 'width: 600px',
-            }),
             'descricao_contr': forms.Textarea(attrs={
                 'rows': 4,
-                'style': 'width: 600px',
             }),
             'data_abert': forms.DateInput(attrs={
                 'type': 'date',
-                'style': 'width: 300px;',
-            }),
-            'num_contrato': forms.TextInput(attrs={
-                'style': 'width: 600px',
-            }),
-            'data_renov': forms.DateInput(attrs={
-                'type': 'date',
-                'style': 'width: 300px',
-            }),
-             'data_fim': forms.DateInput(attrs={
-                'type': 'date',
-                'style': 'width: 300px',
             }),
         }
 
@@ -194,23 +177,26 @@ class SaidaMaterialForm(forms.ModelForm):
         super(SaidaMaterialForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+        self.fields['unidade'].widget.attrs.update({'class': 'form-control form-control-sm form-select'})
+        self.fields['departamento'].widget.attrs.update({'class': 'form-control form-control-sm form-select'})
+        self.fields['divisao_field'].widget.attrs.update({'class': 'form-control form-control-sm form-select'})
 
 class FiltroForm(forms.Form):
     unidade = forms.ModelChoiceField(
         queryset=Unidade.objects.all(),
         label="Unidade",
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     departamento = forms.ModelChoiceField(
         queryset=Departamento.objects.none(),
         label="Departamento",
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     divisao = forms.ModelChoiceField(
         queryset=Divisao.objects.none(),
         label="Divisão",
         required=False,  
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     n_processo = forms.CharField(
         max_length=40,

@@ -15,6 +15,7 @@
     <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
     <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/others/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/others/fonts.min.css' %}">
     {% block css %}
     {% endblock css %}
 </head>
@@ -60,8 +61,8 @@
     <nav class="navbar navbar-expand-sm navbar_main bg-dark" id="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'img/icon_estoque_DRSI.png' %}" class="rounded-pill bg-white" width="45px" id="img_icon">
-                <span class="text-white" id="title_nav">DRSI-NoEstoque</span>
+                <img src="{% static 'img/estoque_icon_n.png' %}" class="rounded-pill" width="45px" id="img_icon">
+                <span class="text-white" id="title_nav" style="font-family: 'Roboto', sans-serif;">DMTIC-ESTOQUE</span>
             </a>
         </div>
 

@@ -28,7 +28,7 @@ th {
    .saida_item_btn .icon {
     position: absolute;
     border-left: 1px solid #d81e1e;
-    transform: translateX(110px);
+    transform: translateX(114px);
     height: 37px;
     width: 40px;
     display: flex;
@@ -94,7 +94,7 @@ th {
    .estoque_btn .icon {
     position: absolute;
     border-left: 1px solid rgb(17, 17, 215);
-    transform: translateX(110px);
+    transform: translateX(114px);
     height: 37px;
     width: 40px;
     display: flex;
@@ -161,7 +161,7 @@ th {
    .todos_itens_btn .icon {
     position: absolute;
     border-left: 1px solid rgb(194, 186, 39);
-    transform: translateX(110px);
+    transform: translateX(114px);
     height: 37px;
     width: 40px;
     display: flex;
@@ -222,7 +222,7 @@ th {
   
   .button_search .button_search__icon {
     position: absolute;
-    transform: translateX(112px);
+    transform: translateX(116px);
     height: 100%;
     width: 37px;
     background-color: silver;
