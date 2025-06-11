@@ -29,6 +29,20 @@
     align-items: center;
     justify-content: center;
   }
+
+  /* Chrome only */
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    .button .icon {
+    transform: translateX(112px); 
+    }
+  }
+
+  /* Firefox only */
+  @-moz-document url-prefix() {
+    .button .icon {
+    transform: translateX(110px); 
+    }
+  }
   
   .button .svg {
     width: 30px;

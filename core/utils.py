@@ -1,6 +1,7 @@
 from . models import *
 from collections import Counter
 from collections import defaultdict
+import pandas as pd
 
 def receber_dados_divisao(request):
     # Dicionário para agrupar os itens por divisão

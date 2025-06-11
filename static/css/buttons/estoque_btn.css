@@ -25,17 +25,32 @@ th {
     color: white;
    }
    
-   .saida_item_btn .icon {
+  .saida_item_btn .icon {
     position: absolute;
     border-left: 1px solid #d81e1e;
-    transform: translateX(114px);
+    /* Default transform */
+    transform: translateX(112px);
     height: 37px;
     width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #d81e1e;
-   }
+  }
+
+  /* Chrome only */
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    .saida_item_btn .icon {
+    transform: translateX(110px); 
+    }
+  }
+
+  /* Firefox only */
+  @-moz-document url-prefix() {
+    .saida_item_btn .icon {
+    transform: translateX(111px); 
+    }
+  }
    
    .saida_item_btn svg {
     width: 23px;
@@ -102,6 +117,20 @@ th {
     justify-content: center;
     background-color: rgb(17, 17, 215);
    }
+
+  /* Chrome only */
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    .estoque_btn .icon {
+    transform: translateX(110px); 
+    }
+  }
+
+  /* Firefox only */
+  @-moz-document url-prefix() {
+    .estoque_btn .icon {
+    transform: translateX(111px); 
+    }
+  }
    
    .estoque_btn svg {
     width: 23px;
@@ -169,6 +198,20 @@ th {
     justify-content: center;
     background-color: rgb(194, 186, 39);
    }
+
+    /* Chrome only */
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+      .todos_itens_btn .icon {
+      transform: translateX(110px); 
+      }
+    }
+
+    /* Firefox only */
+    @-moz-document url-prefix() {
+      .todos_itens_btn .icon {
+      transform: translateX(111px); 
+      }
+    }
    
    .todos_itens_btn svg {
     width: 23px;
@@ -229,6 +272,20 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* Chrome only */
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    .button_search .icon {
+    transform: translateX(110px); 
+    }
+  }
+
+  /* Firefox only */
+  @-moz-document url-prefix() {
+    .button_search .icon {
+    transform: translateX(112px); 
+    }
   }
   
   .button_search .svg {

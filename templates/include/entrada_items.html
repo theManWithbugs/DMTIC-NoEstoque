@@ -43,11 +43,11 @@
             <div class="row container" id="box_formset">
                 {{ formset.management_form }}
                 {% for form in formset %}
-                    <div class="col-md-auto inline_form me-5" 
+                    <div class="col-md-auto inline_form me-4" 
                     id="inline_formset">
 
                         {{ form.material_obj }}
-                      
+
                         {{ form.marca.label_tag }}
                         <span class="text-danger">*</span>
                         {{ form.marca }}
@@ -55,11 +55,11 @@
                             {{ form.modelo.label_tag }}
                             <span class="text-danger">*</span>
                             {{ form.modelo }}
-                
+
                                     {{ form.n_serie.label_tag }}
                                     <span class="text-danger">*</span>
                                     {{ form.n_serie }}
-                                
+                    
                                 {{ form.patrimonio.label_tag }}
                                 <span class="text-danger">*</span>
                                 {{ form.patrimonio }}

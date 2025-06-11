@@ -129,7 +129,8 @@ def itemSaidaViewLista(request):
 
     objs = []
 
-    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=False).prefetch_related('material_obj').order_by('id') 
+    # Ordena do mais recente para o mais antigo (id decrescente)
+    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=False).prefetch_related('material_obj').order_by('-id') 
 
     paginator = Paginator(objs_tipo, 20)
     page = request.GET.get('page')
@@ -602,7 +603,7 @@ def DepartamentoAddView(request):
                 return redirect('depart_add')  
             except Exception as e:
                 messages.error(request, f"Ocorreu um erro: {e}")
-                return redirect('unidade_add')       
+                return redirect('depart_add')       
 
     context = {
         'form': form
@@ -618,12 +619,14 @@ def DivisaoAddView(request):
         if form.is_valid():
             try:
                 form.save()
-                return messages.success(request, msgSucesso)
+                messages.success(request, msgSucesso)
+                return redirect('divisao_add')
             except IntegrityError:
-                return messages.error(request, msgIntegridade)
+                messages.error(request, msgIntegridade)
+                return redirect('divisao_add')
             except Exception as e:
                 messages.error(request, f"Ocorreu um erro: {e}")
-                return redirect('unidade_add')
+                return redirect('divisao_add')
 
     context = {
         'form': form

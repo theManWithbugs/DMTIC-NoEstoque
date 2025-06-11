@@ -12,7 +12,8 @@
 <div class="container box_inserItem fundo_papel" id="fundo_adjust">
     <form action="{% url 'add_contr' %}" method="post" >
 
-        <p class="border border-2 d-flex justify-content-center rounded bg-white p-2 fs-5">
+        <p class="border border-2 d-flex justify-content-center 
+        rounded bg-white p-2 fs-5">
             (<span class="text-danger me-1 ms-1">*</span>)
             campos obrigatorios
         </p>
@@ -43,8 +44,10 @@
 
             </div>
 
-        <button type="submit" class="btn btn-success mt-4 btn_center_form">
-            Enviar</button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success mt-4">
+                Enviar</button>
+        </div>
     </form>
 </div>
 <br>

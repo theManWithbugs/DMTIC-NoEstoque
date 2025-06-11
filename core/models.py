@@ -18,6 +18,7 @@ class MaterialTipo(models.Model):
     patrimonio = models.CharField(blank=True, null=True, max_length=40, verbose_name='Patrimonio', unique=True)
     observacao = models.CharField(max_length=450, blank=True, null=True, verbose_name='Observações')
     garantia = models.CharField(max_length=20, blank=False, null=False, verbose_name='Garantia')
+    data_cria = models.DateField(auto_now_add=True, verbose_name='Data de criação')
 
     def __str__(self):
         return f"-{self.marca}- ( {self.modelo} )"
