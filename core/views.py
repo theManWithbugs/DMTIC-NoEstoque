@@ -123,6 +123,30 @@ def listarAllItemsView(request):
     }
     return render(request, template_name, context)
 
+def viewAllItens(request, item):
+    template_name = 'include/view_itens.html'
+
+    itens = MaterialTipo.objects.filter(modelo=item)
+
+    objs = []
+
+    paginator = Paginator(itens, 30)
+    page = request.GET.get('page')
+
+    try:
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    context = {
+        'itens': itens,
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
 @login_required
 def itemSaidaViewLista(request):
     template_name = 'include/listar_saida.html' 
@@ -416,6 +440,7 @@ def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
 
     dados = get_estat_divisoes(request)
+    print(dados)
 
     if request.method == 'POST':
         try:
@@ -640,6 +665,49 @@ def DivisaoAddView(request):
 
     return render(request, templaete_name, context)
 
+def BuscarNserieView(request):
+    template_name = 'include/buscar_serie.html'
+
+    obj = None
+    n_serie = None
+
+    if request.method == 'POST':
+        n_serie = request.POST.get('n_serie')
+
+        try:
+            obj = MaterialTipo.objects.filter(n_serie=n_serie)
+        except MaterialTipo.DoesNotExist:
+            messages.error(request, msgIntegridade)
+            return render('buscar_nserie')
+
+    context = {
+        'obj': obj,
+        'n_serie': n_serie,
+    }
+
+    return render(request, template_name, context)
+
+def BuscarPatrimonioView(request):
+    template_name = 'include/buscar_patrim.html'
+
+    obj = None
+    patrimonio = None
+
+    if request.method == 'POST':
+        patrimonio = request.POST.get('patrimonio')
+
+        try:
+            obj = MaterialTipo.objects.filter(patrimonio=patrimonio)
+        except MaterialTipo.DoesNotExist:
+            messages.error(request, msgIntegridade)
+            return render('buscar_nserie')
+
+    context = {
+        'obj': obj,
+        'patrimonio': patrimonio,
+    }
+
+    return render(request, template_name, context)
 
 
 

@@ -53,9 +53,10 @@ d-flex justify-content-center bg-secondary">
     <table class="table table-sm">
         {% for i in dados %}
             <tr>
-                <td>Departamento: {{ i.Departamento }}</td>
-                <td>Divisão: {{ i.Divisao }}</td>
-                <td>Total: {{ i.Total }}</td>
+                <td>Departamento: {{ i.departamento }}</td>
+                <td>Divisão: {{ i.divisao }}</td>
+                <td>Modelo: {{ i.modelo }}</td>
+                <td>Total: {{ i.total }}</td>
             </tr>
         {% endfor %}
     </table>

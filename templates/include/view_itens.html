@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container rounded mt-2 bg-white">
+    <div class="p-2">
+        <table class="table table-striped table-hover">
+            <thead class="text-primary">
+                <tr>
+                    <td>Marca</td>
+                    <td>Modelo</td>
+                    <td>Serie</td>
+                    <td>Patrimonio</td>
+                    <td>Unidade</td>
+                    <td>Departamento</td>
+                    <td>Divisão</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in objs %}
+                    <tr>
+                        <td>{{ item.marca }}</td>
+                        <td>{{ item.modelo }}</td>
+                        <td>
+                            {% if item.n_serie %}
+                                {{ item.n_serie }}
+                            {% else %}
+                                Não atribuido
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.patrimonio %}
+                                {{ item.patrimonio }}
+                            {% else %}
+                                Não atribuido
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.saida_obj and item.saida_obj.unidade %}
+                                {{ item.saida_obj.unidade.unidade }}
+                            {% else %}
+                                Não atribuido
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.saida_obj and item.saida_obj.departamento %}
+                                {{ item.saida_obj.departamento.nome }}
+                            {% else %}
+                                Não atribuido
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.saida_obj and item.saida_obj.divisao_field %}
+                                {{ item.saida_obj.divisao_field.nome }}
+                            {% else %}
+                                Não atribuido
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            {% include 'include/pagination.html' %}
+        </div>
+    </div>
+</div>
+<br>
+
+{% endblock content %}

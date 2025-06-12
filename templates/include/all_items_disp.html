@@ -13,6 +13,7 @@
             <thead>
                 <tr class="text-primary text-center">
                     <td>Modelo</td>
+                    <td>Visualizar</td>
                     <td>Total</td>
                 </tr>
             </thead>
@@ -21,6 +22,11 @@
                 {% for i in objs %}
                 <tr>
                     <td>{{ i.modelo }}</td>
+                    <td class="d-flex justify-content-center">
+                        <a href="{% url 'info_itens' i.modelo %}">
+                            <i class="fa-solid fa-eye fs-5"></i>
+                        </a>
+                    </td>
                     <td class="text-center">{{ i.total }}</td>
                 </tr>
                 {% endfor %}
