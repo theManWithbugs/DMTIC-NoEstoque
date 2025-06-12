@@ -1,6 +1,7 @@
 from . models import *
 from collections import Counter
 from collections import defaultdict
+from django.db.models import Count
 import pandas as pd
 
 def receber_dados_divisao(request):
@@ -113,5 +114,16 @@ def get_estatisticas_departmentos(request):
     dados_departamentos = list(dict.fromkeys(dados_departamentos))
 
     return dados_departamentos
+
+def get_estat_divisoes(request):
+
+    items = MaterialSaida.objects.values('departamento__nome', 'divisao_field__nome').annotate(total=Count('*')).order_by('-total')
+
+    dados = []
+
+    for i in items:
+        dados.append({ "Departamento": i['departamento__nome'], "Divisao": i['divisao_field__nome'], "Total": i['total'] })
+
+    return dados[0:5]
 
 

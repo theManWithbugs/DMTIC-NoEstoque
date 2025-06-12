@@ -49,6 +49,17 @@ d-flex justify-content-center bg-secondary">
     </div>
 <br>
 
+<div class="container bg-white rounded">
+    <table class="table table-sm">
+        {% for i in dados %}
+            <tr>
+                <td>Departamento: {{ i.Departamento }}</td>
+                <td>Divisão: {{ i.Divisao }}</td>
+                <td>Total: {{ i.Total }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 
 {% endblock content %}
 

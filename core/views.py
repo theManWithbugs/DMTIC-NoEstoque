@@ -415,6 +415,8 @@ def relatorioResponse(request):
 def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
 
+    dados = get_estat_divisoes(request)
+
     if request.method == 'POST':
         try:
             agrupados_por_departamento= defaultdict(list)
@@ -469,8 +471,12 @@ def MetricasView(request):
         except Exception as e:
             messages.error(request, f"Ocorreu um erro: {e}")
             return redirect('metricas_page')
+        
+    context = {
+        'dados': dados,
+    }
 
-    return render(request, template_name)
+    return render(request, template_name, context)
 
 def RetornarExcell(request):
         

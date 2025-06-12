@@ -17,7 +17,8 @@ urlpatterns = [
     path('home/listar_items/excluir/<int:id>/', views.excluirItems, name='excluir_item'),
 
     path('home/listar_items/saida_item/<int:id>/', views.saida_ItemView, name='saida_item'),
-    path('create_material_saida/<int:material_tipo_id>/', views.create_material_saida, name='create_material_saida'),
+    path('create_material_saida/<int:material_tipo_id>/', views.create_material_saida, 
+         name='create_material_saida'),
     
     path('home/listar_items/listar_saida/', views.itemSaidaViewLista, name='items_saida'),
     path('home/historic_entr/', views.histUsuarioView, name='hist_usuario'),
