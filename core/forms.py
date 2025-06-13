@@ -116,15 +116,26 @@ class AddDepartForm(forms.ModelForm):
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
 
-class AddDivisãoForm(forms.ModelForm):
+class AddDivisaoForm(forms.ModelForm):
     class Meta:
         model = Divisao
         fields = '__all__'
+        widgets = {
+            'departamento': forms.Select(attrs={
+                'class': 'form-select form-select-sm',
+                'style': 'max-height: 200px; overflow-y: auto; size: 5;',
+            })
+        }
 
     def __init__(self, *args, **kwargs):
-        super(AddDivisãoForm, self).__init__(*args, **kwargs)
-        for i in self.fields:
-            self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            # If it's a select, keep 'form-select' and add 'form-control-sm'
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs['class'] = 'form-select form-control-sm'
+                field.widget.attrs['style'] = 'max-height: 200px; overflow-y: auto;'
+            else:
+                field.widget.attrs['class'] = 'form-control form-control-sm'
 
 class EditarMaterialForm(forms.ModelForm):
     class Meta:

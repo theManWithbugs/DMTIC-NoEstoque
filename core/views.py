@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse, HttpResponse
-from collections import Counter
 from django.db import IntegrityError
 from django.db.models import Count
 from collections import defaultdict
@@ -111,17 +110,9 @@ def itemAddView(request):
 def listarAllItemsView(request):
     template_name = 'include/all_items_disp.html'
 
-    items = []
-
     objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('-total')
 
-    for i in objs:
-        items.append({'label': i['modelo'], 'total': i['total']})
-
-    context = {
-        'objs': objs
-    }
-    return render(request, template_name, context)
+    return render(request, template_name, {'objs': objs})
 
 def viewAllItens(request, item):
     template_name = 'include/view_itens.html'
@@ -142,61 +133,6 @@ def viewAllItens(request, item):
 
     context = {
         'itens': itens,
-        'objs': objs,
-    }
-
-    return render(request, template_name, context)
-
-@login_required
-def itemSaidaViewLista(request):
-    template_name = 'include/listar_saida.html' 
-
-    objs = []
-
-    # Ordena do mais recente para o mais antigo (id decrescente)
-    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=False).prefetch_related('material_obj').order_by('-id') 
-
-    paginator = Paginator(objs_tipo, 20)
-    page = request.GET.get('page')
-
-    try:    
-        objs = paginator.page(page)
-    except PageNotAnInteger:
-        objs = paginator.page(1)
-    except EmptyPage:
-        objs = paginator.page(paginator.num_pages)
-
-    if objs.object_list.exists():
-        pass
-
-    context = {
-        'objs': objs,
-    }
-
-    return render(request, template_name, context)
-
-@login_required
-def noExitItemsView(request):
-    template_name = 'include/listar_dispo.html'
-    
-    objs = []
-
-    objs_tipo = MaterialTipo.objects.filter(saida_obj__isnull=True).prefetch_related('material_obj').order_by('id')
-
-    paginator = Paginator(objs_tipo, 20)
-    page = request.GET.get('page')
-
-    try:    
-        objs = paginator.page(page)
-    except PageNotAnInteger:
-        objs = paginator.page(1)
-    except EmptyPage:
-        objs = paginator.page(paginator.num_pages)
-
-    if objs.object_list.exists():
-        pass
-
-    context = {
         'objs': objs,
     }
 
@@ -260,7 +196,7 @@ def excluirItems(request, id):
                 acao_realizada = 'Exclusão de item'
             )
         messages.success(request, msgSucesso)
-        return redirect('itens_disponiveis')
+        return redirect('all_disponiveis')
 
     return request
 
@@ -374,7 +310,7 @@ def filtro_view(request, id):
             material_tipo = get_object_or_404(MaterialTipo, id=id)
             material_tipo.saida_obj = saida
             material_tipo.save()
-            return redirect('listar_all')
+            return redirect('all_disponiveis')
         except MaterialTipo.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'MaterialTipo não encontrado'}, status=404)
 
@@ -644,7 +580,7 @@ def DepartamentoAddView(request):
 
 def DivisaoAddView(request):
     templaete_name = 'include/divisao_add.html'
-    form = AddDivisãoForm(request.POST or None)
+    form = AddDivisaoForm(request.POST or None)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -709,5 +645,68 @@ def BuscarPatrimonioView(request):
 
     return render(request, template_name, context)
 
+def all_disponiveis(request):
+    template_name = 'include/all_no_exit.html'
+
+    objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).filter(saida_obj__isnull=True)
+
+    return render(request, template_name, {'objs': objs})
+
+def all_disponiveisView(request, item):
+    template_name = 'include/no_exit_view.html'
+
+    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=True)
+
+    objs = []
+
+    paginator = Paginator(itens, 30)
+    page = request.GET.get('page')
+
+    try:
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    context = {
+        'itens': itens,
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
+
+def all_ItensExit(request):
+    template_name = 'include/all_exit_itens.html'
+
+    objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).filter(saida_obj__isnull=False)
+
+    return render(request, template_name, {'objs': objs})
+
+def all_saidaExitView(request, item):
+    template_name = 'include/exit_view.html'
+
+    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False)
+    
+    objs = []
+
+    print('aqui')
+
+    paginator = Paginator(itens, 30)
+    page = request.GET.get('page')
+
+    try:
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    context = {
+        'itens': itens,
+        'objs': objs,
+    }
+
+    return render(request, template_name, context)
 
 

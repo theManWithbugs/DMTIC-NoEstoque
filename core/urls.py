@@ -21,11 +21,9 @@ urlpatterns = [
     path('create_material_saida/<int:material_tipo_id>/', views.create_material_saida, 
          name='create_material_saida'),
     
-    path('home/listar_items/listar_saida/', views.itemSaidaViewLista, name='items_saida'),
     path('home/historic_entr/', views.histUsuarioView, name='hist_usuario'),
 
     path('home/filtro/<int:id>/', views.filtro_view, name='filtro_view'),  
-    path('home/itens_dispo/', views.noExitItemsView, name='itens_disponiveis'),
 
     #API views here
     path('filtro_json/', jsFiltroJson.as_view(), name='response_filtro'),
@@ -52,5 +50,11 @@ urlpatterns = [
 
     path('home/buscar_nserie/', views.BuscarNserieView, name='buscar_nserie'),
     path('home/buscar_patri/', views.BuscarPatrimonioView, name='buscar_patri'),
+
+    path('home/all_sem_saida/', views.all_disponiveis, name='all_disponiveis'),
+    path('home/all_sem_saida/saida_view/<str:item>/', views.all_disponiveisView, name='view_sem_saida'),
+
+    path('home/itensc_saida/', views.all_ItensExit, name='itens_csaida'),
+    path('home/itensc_saida/csaida_view/<str:item>/', views.all_saidaExitView, name='itens_csaida_view'),
 ]
 

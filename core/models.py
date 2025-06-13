@@ -13,7 +13,7 @@ class MaterialTipo(models.Model):
     material_obj = models.ForeignKey('MaterialObj', on_delete=models.CASCADE, related_name='tipo_obj', verbose_name='Contrato')
     saida_obj = models.ForeignKey('MaterialSaida', on_delete=models.CASCADE, related_name='saida_obj', blank=True, null=True, verbose_name='Saida')
     marca = models.CharField(max_length=20, blank=False, null=False, default='', verbose_name='Marca ')
-    modelo = models.CharField(max_length=80, blank=False, null=False, verbose_name='Modelo ')
+    modelo = models.CharField(max_length=60, blank=False, null=False, verbose_name='Modelo ')
     n_serie = models.CharField(blank=False, null=False, verbose_name='Número de série', max_length=30, unique=True)
     patrimonio = models.CharField(blank=True, null=True, max_length=40, verbose_name='Patrimonio', unique=True)
     observacao = models.CharField(max_length=450, blank=True, null=True, verbose_name='Observações')
@@ -46,7 +46,7 @@ class MaterialSaida(models.Model):
         related_name='materiais_divisao',
         verbose_name='Divisão',
     )
-    n_processo = models.CharField(max_length=40, verbose_name='Número do processo(SEI)', unique=True, blank=True, null=True)
+    n_processo = models.CharField(max_length=40, verbose_name='Número do processo(SEI)', blank=True, null=True)
     data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):
