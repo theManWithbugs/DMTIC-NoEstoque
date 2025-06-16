@@ -37,13 +37,21 @@
                     </div>
             </div>
         <hr>
+        {% if formset.non_form_errors %}
+            <div class="alert alert-danger mt-2">
+            {{ formset.non_form_errors }}
+            </div>
+        {% endif %}
     
         <div class="col-md-auto">
 
             <div class="row container" id="box_formset">
                 {{ formset.management_form }}
+
+                {{ form.non_field_errors }}
+
                 {% for form in formset %}
-                    <div class="col-md-auto inline_form me-4" 
+                    <div class="col-md-auto me-4 inline_form" 
                     id="inline_formset">
 
                         {{ form.material_obj }}
@@ -93,10 +101,10 @@
     <script src="{% static 'js/jquery.formset.js' %}"></script>
     <script type="text/javascript">
         $(function() {
-        $('.inline_form').formset({
-            prefix: 'tipo_obj',
+        $('#box_formset .inline_form').formset({
+            prefix: '{{ formset.prefix }}',
             deleteText: '',
-            addText: '<button class="cssbuttons-io-button"><svg height="24"width="24"viewBox="0 0 24 24"xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" fill="currentColor"></path></svg><span></span></button>',
+            addText: '<button class="cssbuttons-io-button"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" fill="currentColor"></path></svg><span></span></button>',
             added: function(row) {
                 $(row).css({
                     'border': '1px solid #ddd',

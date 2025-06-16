@@ -14,6 +14,7 @@ from django.db import IntegrityError
 from django.db.models import Count
 from collections import defaultdict
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 import json
 import pandas as pd
 import io
@@ -49,6 +50,16 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
+
+    # depts = Departamento.objects.all()
+
+    # list_dep = []
+
+    # for i in depts:
+    #     list_dep.append({ "departamento": i.nome, "unidade": i.unidade, "unidade_id": i.unidade_id })
+
+    # print(list_dep)
+    
     return render(request, template_name)
 
 def logoutView(request):
@@ -95,7 +106,7 @@ def itemAddView(request):
                 messages.success(request, msgSucesso)
                 return redirect('listar_all')
             else:
-                messages.error(request, "Erro ao salvar os itens do formset.")
+                messages.error(request, "Erro ao salvar os itens")
         else:
             formset = TipoMaterFormset(request.POST)
             messages.error(request, "Erro ao salvar o formulário principal.")
@@ -549,8 +560,26 @@ def UnidadeAddView(request):
                 messages.error(request, f"Ocorreu um erro: {e}")
                 return redirect('unidade_add')
 
+    objs = []
+
+    objs_unid = Unidade.objects.all()
+
+    paginator = Paginator(objs_unid, 5)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
     context = {
-        'form': form
+        'form': form,
+        'objs': objs
     }
 
     return render(request, template_name, context)
@@ -571,9 +600,27 @@ def DepartamentoAddView(request):
             except Exception as e:
                 messages.error(request, f"Ocorreu um erro: {e}")
                 return redirect('depart_add')       
+            
+    objs = []
+    # Use select_related to fetch related Unidade objects in the same query
+    objs_dep = Departamento.objects.select_related('unidade').all()
+
+    paginator = Paginator(objs_dep, 5)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
 
     context = {
-        'form': form
+        'form': form,
+        'objs': objs,
     }
 
     return render(request, template_name, context)
@@ -595,8 +642,26 @@ def DivisaoAddView(request):
                 messages.error(request, f"Ocorreu um erro: {e}")
                 return redirect('divisao_add')
 
+    objs = []
+    # Use select_related to fetch related Unidade objects in the same query
+    objs_div = Divisao.objects.select_related('departamento').all()
+
+    paginator = Paginator(objs_div, 5)
+    page = request.GET.get('page')
+
+    try:    
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    if objs.object_list.exists():
+        pass
+
     context = {
-        'form': form
+        'form': form,
+        'objs': objs,
     }
 
     return render(request, templaete_name, context)

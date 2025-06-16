@@ -100,16 +100,9 @@ footer span img {
 }
 
 /* Add unidade, departamento, divisão */
-#add_unidade {
-    display: none;
-}
-
-#add_departamento {
-    display: none;
-}
-
-#add_divisao {
-    display: none;
+.none_efect {
+    text-decoration: none;
+    color: black;
 }
 
 .msgFormUnid {

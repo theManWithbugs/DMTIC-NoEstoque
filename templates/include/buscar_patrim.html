@@ -53,11 +53,12 @@ style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
                     <tr>
                         <td>Marca</td>
                         <td>Modelo</td>
-                        <td>Serie</td>
+                        <!-- <td>Serie</td> -->
                         <td>Patrimonio</td>
                         <td>Unidade</td>
                         <td>Departamento</td>
                         <td>Divisão</td>
+                        <td>Saida</td>
                     </tr>
                 {% endif %}
             </thead>
@@ -68,13 +69,13 @@ style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
                         <tr>
                             <td>{{ i.marca }}</td>
                             <td>{{ i.modelo }}</td>
-                            <td>
+                            <!-- <td>
                                 {% if i.n_serie %}
                                     {{ i.n_serie }}
                                 {% else %}
                                     Não atribuido
                                 {% endif %}
-                            </td>
+                            </td> -->
                             <td>
                                 {{ i.patrimonio }}
                             </td>
@@ -98,6 +99,11 @@ style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
                                 {% else %}
                                     Não atribuido
                                 {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'filtro_view' i.id %}" class="ms-1">
+                                    <i class="fa-solid fa-arrow-right fa-2xl text-secondary"></i>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
