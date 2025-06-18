@@ -451,7 +451,7 @@ def count_dep(request, dep, uni, dep_nome):
         'saida_obj__divisao_field'
         ).filter(
             saida_obj__departamento_id=dep, 
-            saida_obj__unidade_id=uni)
+            saida_obj__unidade_id=uni).order_by('-id')
 
     return render(request, template_name, {'itens': itens, 'dep_nome': dep_nome})
 
@@ -759,7 +759,7 @@ def all_ItensExit(request):
 def all_saidaExitView(request, item):
     template_name = 'include/exit_view.html'
 
-    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False)
+    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False).order_by('-saida_obj__data_saida')
     
     objs = []
 

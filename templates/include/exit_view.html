@@ -39,8 +39,12 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <div class="d-flex justify-content-center">
+                {% include 'include/pagination.html' %}
+            </div>
         </table>
     </div>
 </div>
+<br>
 
 {% endblock content %}

@@ -47,7 +47,7 @@ class MaterialSaida(models.Model):
         verbose_name='Divisão',
     )
     n_processo = models.CharField(max_length=40, verbose_name='Número do processo(SEI)', blank=True, null=True)
-    data_saida = models.DateTimeField(default=timezone.now)
+    data_saida = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f"-{self.unidade}- ({self.departamento} ({self.divisao_field}))"
