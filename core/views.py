@@ -50,15 +50,6 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
-
-    # depts = Departamento.objects.all()
-
-    # list_dep = []
-
-    # for i in depts:
-    #     list_dep.append({ "departamento": i.nome, "unidade": i.unidade, "unidade_id": i.unidade_id })
-
-    # print(list_dep)
     
     return render(request, template_name)
 
@@ -278,7 +269,7 @@ def histUsuarioView(request):
 
     objs = []
 
-    objs_tipo = HistoricoUser.objects.all().order_by('id')
+    objs_tipo = HistoricoUser.objects.all().order_by('-data')
 
     paginator = Paginator(objs_tipo, 30)
     page = request.GET.get('page')
@@ -736,6 +727,8 @@ def all_disponiveisView(request, item):
 
     itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=True)
 
+    ultimas_saidas = MaterialTipo.objects.select_related('saida_obj').order_by('-saida_obj__data_saida')[:5]
+
     objs = []
 
     paginator = Paginator(itens, 30)
@@ -751,6 +744,7 @@ def all_disponiveisView(request, item):
     context = {
         'itens': itens,
         'objs': objs,
+        'ulti_saidas': ultimas_saidas
     }
 
     return render(request, template_name, context)
