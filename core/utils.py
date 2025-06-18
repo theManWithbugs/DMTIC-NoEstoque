@@ -118,15 +118,21 @@ def get_estat_divisoes(request):
 
     items = MaterialSaida.objects.values(
         'departamento__nome',
-        'divisao_field__nome',
-        'saida_obj__modelo'
+        'unidade__unidade',
+        'unidade_id',
+        'departamento_id',
+        # 'divisao_field__nome',
+        # 'saida_obj__modelo'
     ).annotate(total=Count('*')).order_by('-total')
 
     dados = [
         {
             "departamento": i['departamento__nome'],
-            "divisao": i['divisao_field__nome'],
-            "modelo": i['saida_obj__modelo'],
+            "unidade": i['unidade__unidade'],
+            "unidade_id": i['unidade_id'],
+            "departamento_id": i['departamento_id'],
+            # "divisao": i['divisao_field__nome'],
+            # "modelo": i['saida_obj__modelo'],
             "total": i['total']
         }
         for i in items

@@ -9,9 +9,6 @@
 
 {% block content %}
 
-<h5 class="text-white">Relatórios excell
-    <i class="fa-regular fa-file-excel ms-1"></i>
-</h5>
 <div class="container mb-4 rounded
 d-flex justify-content-center bg-secondary">
 
@@ -42,7 +39,6 @@ d-flex justify-content-center bg-secondary">
         </div>
 </div>
 
-<h5 class="text-white">Gráfico de barras</h5>
     <div>
         <div id="container" style="height: 350px;">
         </div>
@@ -54,9 +50,13 @@ d-flex justify-content-center bg-secondary">
         {% for i in dados %}
             <tr>
                 <td>Departamento: {{ i.departamento }}</td>
-                <td>Divisão: {{ i.divisao }}</td>
-                <td>Modelo: {{ i.modelo }}</td>
+                 <td>Unidade: {{ i.unidade }}</td>
                 <td>Total: {{ i.total }}</td>
+                <td class="text-center align-middle">
+                    <a href="{% url 'view_dep' i.departamento_id i.unidade_id i.departamento %}">
+                        <i class="fa-solid fa-eye fs-5"></i>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     </table>

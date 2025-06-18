@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filter_tag %}
+
+{% block content %}
+
+<div class="bg-white p-2 rounded-top">
+    <h5>Departamento: {{ dep_nome }}</h5>
+</div>
+<div class="bg-white rounded-bottom p-2">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Marca</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">Serie</th>
+                <th scope="col">Patrimonio</th>
+                <th scope="col">Divisão</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in itens %}
+                <tr>
+                    <td>{{ i.marca }}</td>
+                    <td>{{ i.modelo }}</td>
+                    <td>{{ i.n_serie }}</td>
+                    <td>{{ i.patrimonio }}</td>
+                    <td>
+                        {% if i.saida_obj.divisao_field %}
+                            {{ i.saida_obj.divisao_field.nome|filter_divis }}
+                        {% else %}
+                            Não atrelado
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

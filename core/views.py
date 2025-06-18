@@ -387,7 +387,6 @@ def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
 
     dados = get_estat_divisoes(request)
-    print(dados)
 
     if request.method == 'POST':
         try:
@@ -449,6 +448,21 @@ def MetricasView(request):
     }
 
     return render(request, template_name, context)
+
+def count_dep(request, dep, uni, dep_nome):
+    template_name = 'include/count_dep.html'
+
+    #I have all of the elements in one query when i use select related
+    itens = MaterialTipo.objects.select_related(
+        'saida_obj', 
+        'saida_obj__unidade', 
+        'saida_obj__departamento', 
+        'saida_obj__divisao_field'
+        ).filter(
+            saida_obj__departamento_id=dep, 
+            saida_obj__unidade_id=uni)
+
+    return render(request, template_name, {'itens': itens, 'dep_nome': dep_nome})
 
 def RetornarExcell(request):
         
@@ -754,8 +768,6 @@ def all_saidaExitView(request, item):
     itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False)
     
     objs = []
-
-    print('aqui')
 
     paginator = Paginator(itens, 30)
     page = request.GET.get('page')
