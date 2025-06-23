@@ -22,8 +22,13 @@
                 {% for i in objs %}
                 <tr>
                     <td>{{ i.modelo }}</td>
-                    <td class="text-center align-middle">
+                    <!-- <td class="text-center align-middle">
                         <a href="{% url 'view_sem_saida' i.modelo %}">
+                            <i class="fa-solid fa-eye fs-5"></i>
+                        </a>
+                    </td> -->
+                    <td class="text-center align-middle">
+                        <a href="{% url 'saida_many' i.modelo %}">
                             <i class="fa-solid fa-eye fs-5"></i>
                         </a>
                     </td>

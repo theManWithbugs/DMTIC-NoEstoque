@@ -130,6 +130,36 @@ footer span img {
     margin-left: 5rem;
 }
 
+#saidas_btn_menu {
+    position: relative;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+#saidas_btn_menu::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: blue;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+#saidas_btn_menu:hover::after,
+#saidas_btn_menu:focus::after {
+    transform: scaleX(1);
+}
+
+#saidas_btn_menu span {
+    font-weight: 600;
+}
+
 @media screen and (max-width: 770px) {
     #box_formset {
         margin-left: 5%;

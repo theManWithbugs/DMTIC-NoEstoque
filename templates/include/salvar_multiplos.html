@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
-<title>{% block title %}HOME | SAIDA{% endblock %}</title>
-
 {% block content %}
+
 <div class="bg-white p-4 rounded">
     {% if messages %}
         {% for message in messages %}
@@ -41,4 +40,5 @@
         document.getElementById('filtro-form').submit();
     });
 </script>
+
 {% endblock content %}

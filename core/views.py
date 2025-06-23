@@ -110,14 +110,14 @@ def itemAddView(request):
 
 @login_required
 def listarAllItemsView(request):
-    template_name = 'include/all_items_disp.html'
+    template_name = 'include/estoque/all_items_disp.html'
 
     objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).order_by('-total')
 
     return render(request, template_name, {'objs': objs})
 
 def viewAllItens(request, item):
-    template_name = 'include/view_itens.html'
+    template_name = 'include/estoque/more_view/view_itens.html'
 
     itens = MaterialTipo.objects.filter(modelo=item)
 
@@ -318,6 +318,83 @@ def filtro_view(request, id):
 
     context = {'form': form, 'material_tipo': None}
     return render(request, 'include/criar_saida_filtro.html', context)
+
+def saida_many(request, item):
+    template_name = 'include/saida_many.html'
+
+    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=True)
+
+    ultimas_saidas = MaterialTipo.objects.select_related('saida_obj').order_by('-saida_obj__data_saida')[:5]
+
+    objs = []
+
+    paginator = Paginator(itens, 30)
+    page = request.GET.get('page')
+
+    try:
+        objs = paginator.page(page)
+    except PageNotAnInteger:
+        objs = paginator.page(1)
+    except EmptyPage:
+        objs = paginator.page(paginator.num_pages)
+
+    context = {
+        'itens': itens,
+        'objs': objs,
+        'ulti_saidas': ultimas_saidas
+    }
+
+    return render(request, template_name, context)
+
+from django.core.cache import cache
+
+def salvar_multiplos(request):
+    template_name = 'include/salvar_multiplos.html'
+
+    ids = request.GET.getlist('ids')
+    if ids:
+        cache.set('selected_ids', ids, timeout=600)
+
+    form = FiltroForm(data=request.GET)
+
+    if form.is_valid():
+        unidade = form.cleaned_data['unidade']
+        departamento = form.cleaned_data['departamento']
+        divisao = form.cleaned_data.get('divisao')
+        n_processo = form.cleaned_data['n_processo']
+
+        saida = MaterialSaida.objects.create(
+            unidade=unidade,
+            departamento=departamento,
+            divisao_field=divisao if divisao else None,
+            n_processo=n_processo
+        )
+
+        # Recupera os ids do cache para salvar
+        cached_ids = cache.get('selected_ids', [])
+        if not cached_ids:
+            messages.error(request, "Nenhum item selecionado para saída.")
+        else:
+            try:
+                id_list = [int(x) for x in cached_ids if str(x).isdigit()]
+                materiais = MaterialTipo.objects.filter(id__in=id_list)
+                for material_tipo in materiais:
+                    material_tipo.saida_obj = saida
+                    material_tipo.save()
+                if materiais:
+                    messages.success(request, "Saida de material realizada com sucesso!")
+                    modelo = material_tipo.modelo if material_tipo else ""
+                    return redirect('saida_many', modelo)
+                else:
+                    messages.warning(request, "Nenhum material encontrado para os IDs fornecidos.")
+            except ValueError:
+                messages.error(request, "IDs inválidos fornecidos.")
+
+    context = {
+        'form': form
+    }
+
+    return render(request, template_name, context)
 
 class jsFiltroJson(APIView):
     permission_classes = [IsAuthenticated]
@@ -716,14 +793,14 @@ def BuscarPatrimonioView(request):
     return render(request, template_name, context)
 
 def all_disponiveis(request):
-    template_name = 'include/all_no_exit.html'
+    template_name = 'include/estoque/all_no_exit.html'
 
     objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).filter(saida_obj__isnull=True)
 
     return render(request, template_name, {'objs': objs})
 
 def all_disponiveisView(request, item):
-    template_name = 'include/no_exit_view.html'
+    template_name = 'include/estoque/more_view/no_exit_view.html'
 
     itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=True)
 
@@ -750,16 +827,16 @@ def all_disponiveisView(request, item):
     return render(request, template_name, context)
 
 def all_ItensExit(request):
-    template_name = 'include/all_exit_itens.html'
+    template_name = 'include/estoque/all_exit_itens.html'
 
     objs = MaterialTipo.objects.values('modelo').annotate(total=Count('*')).filter(saida_obj__isnull=False)
 
     return render(request, template_name, {'objs': objs})
 
 def all_saidaExitView(request, item):
-    template_name = 'include/exit_view.html'
+    template_name = 'include/estoque/more_view/exit_view.html'
 
-    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False).order_by('-saida_obj__data_saida')
+    itens = MaterialTipo.objects.filter(modelo=item, saida_obj__isnull=False).order_by('-id')
     
     objs = []
 

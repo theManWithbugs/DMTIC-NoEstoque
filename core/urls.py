@@ -55,6 +55,9 @@ urlpatterns = [
     path('home/all_sem_saida/', views.all_disponiveis, name='all_disponiveis'),
     path('home/all_sem_saida/saida_view/<str:item>/', views.all_disponiveisView, name='view_sem_saida'),
 
+    path('home/all_sem_saida/saida_many/<str:item>/', views.saida_many, name='saida_many'),
+    path('home/salvar_multiplos/', views.salvar_multiplos, name='salvar_multiplos'),
+
     path('home/itensc_saida/', views.all_ItensExit, name='itens_csaida'),
     path('home/itensc_saida/csaida_view/<str:item>/', views.all_saidaExitView, name='itens_csaida_view'),
 ]

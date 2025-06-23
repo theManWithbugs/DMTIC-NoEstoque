@@ -27,7 +27,7 @@
                     <td>{{ i.patrimonio }}</td>
                     <td>
                         {% if i.saida_obj.divisao_field %}
-                            {{ i.saida_obj.divisao_field.nome|filter_divis }}
+                            {{ i.saida_obj.divisao_field.nome|filter_first }}
                         {% else %}
                             Não atrelado
                         {% endif %}

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filter_tag %}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/buttons/buscar_btn.css' %}">
@@ -88,14 +89,14 @@ style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
                             </td>
                             <td>
                                 {% if i.saida_obj.departamento %}
-                                    {{ i.saida_obj.departamento }}
+                                    {{ i.saida_obj.departamento.nome }}
                                 {% else %}
                                     Não atribuido
                                 {% endif %}
                             </td>
                             <td>
                                 {% if i.saida_obj.divisao_field %}
-                                    {{ i.saida_obj.divisao_field }}
+                                    {{ i.saida_obj.divisao_field.nome|filter_first }}
                                 {% else %}
                                     Não atribuido
                                 {% endif %}
