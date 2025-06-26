@@ -31,7 +31,7 @@ urlpatterns = [
 
     # Estatisticas view
     path('home/metricas/', views.MetricasView, name='metricas_page'),
-    path('home/metricas_view/<int:dep>/<int:uni>/<str:dep_nome>/', views.count_dep, name='view_dep'),
+    path('home/metricas_view/<str:uni>/<str:dep>/', views.count_dep, name='view_dep'),
 
     # Async views here
     path('home/async_view_teste/', views.teste_async, name='teste_async'),

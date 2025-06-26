@@ -13,7 +13,6 @@
 d-flex justify-content-center bg-secondary">
 
         <div class="p-3 row">
-
             <div class="col-md-auto">
                 <form action="{% url 'metricas_page' %}" method="post">
                     {% csrf_token %}
@@ -35,12 +34,11 @@ d-flex justify-content-center bg-secondary">
                     </button>
                 </form>
             </div>
-
         </div>
 </div>
 
     <div>
-        <div id="container" style="height: 350px;">
+        <div id="chart" style="height: 350px;">
         </div>
     </div>
 <br>
@@ -49,11 +47,12 @@ d-flex justify-content-center bg-secondary">
     <table class="table table-sm">
         {% for i in dados %}
             <tr>
+                <td>Modelo: {{ i.modelo }}</td>
+                <td>Unidade: {{ i.unidade }}</td>
                 <td>Departamento: {{ i.departamento }}</td>
-                 <td>Unidade: {{ i.unidade }}</td>
                 <td>Total: {{ i.total }}</td>
                 <td class="text-center align-middle">
-                    <a href="{% url 'view_dep' i.departamento_id i.unidade_id i.departamento %}">
+                    <a href="{% url 'view_dep' i.unidade i.departamento %}">
                         <i class="fa-solid fa-eye fs-5"></i>
                     </a>
                 </td>
@@ -62,9 +61,9 @@ d-flex justify-content-center bg-secondary">
     </table>
 </div>
 
-{% endblock content %}
-
 {% block js %}
-    <script src="{% static 'js/relatorio.js' %}"></script>
+    <!-- <script src="{% static 'js/relatorio.js' %}"></script> -->
     <script src="{% static 'js/bar_chart.js' %}"></script>
 {% endblock js %}
+
+{% endblock content %}

@@ -21,6 +21,7 @@ import io
 from . forms import *
 from . models import *
 from . utils import *
+from datetime import date
 
 msgSucesso = 'Operação realizada com sucesso!'
 msgError = 'Ambos os campos devem ser preenchidos!'
@@ -50,8 +51,30 @@ def baseView(request):
 @login_required
 def homeView(request):
     template_name = 'include/home.html'
+
+    relatorio = HistoricoUser.objects.all()
+
+    contador_add = 0
+    contador_dell = 0
+    contador_saida = 0
+
+    hoje = date.today()
+
+    for x in relatorio:
+        if x.acao_realizada == 'Entrada de item' and x.data == hoje:
+            contador_add+=1
+        if x.acao_realizada == 'Exclusão de item' and x.data == hoje:
+            contador_dell+=1
+        if x.acao_realizada == 'Saida de item realizada' and x.data == hoje:
+            contador_saida+=1
+
+    context = {
+        'contador_add': contador_add,
+        'contador_dell': contador_dell,
+        'contador_saida': contador_saida,
+    }
     
-    return render(request, template_name)
+    return render(request, template_name, context)
 
 def logoutView(request):
     auth_logout(request)
@@ -306,6 +329,10 @@ def filtro_view(request, id):
             divisao_field=divisao if divisao else None,  # Definindo None caso esteja vazio
             n_processo=n_processo
         )
+        HistoricoUser.objects.create(
+            nome_user = request.user.first_name,
+            acao_realizada = 'Saida de item realizada'
+        )
         messages.success(request, "Saida de material realizada com sucesso!")
 
         try:
@@ -381,6 +408,7 @@ def salvar_multiplos(request):
                 for material_tipo in materiais:
                     material_tipo.saida_obj = saida
                     material_tipo.save()
+                    # request.session('cached_ids', None)
                 if materiais:
                     messages.success(request, "Saida de material realizada com sucesso!")
                     modelo = material_tipo.modelo if material_tipo else ""
@@ -424,15 +452,21 @@ class ChartDepResponse(APIView):
 
     def get(self, _request):
 
-        objs = MaterialSaida.objects.values('unidade__unidade', 'departamento__nome').annotate(total=Count('*')).order_by('-total')
-        objs = objs[:8]
+        objs = MaterialTipo.objects.values(
+            'saida_obj_id__unidade__unidade', 
+            'saida_obj_id__departamento__nome').annotate(total=Count('*')).exclude(saida_obj__isnull=True)
+        objs = objs[:10]
 
         items_ajust = []
 
         for i in objs:
-            items_ajust.append({ "Unidade": i['unidade__unidade'], "Departamento": i['departamento__nome'], "Total": i['total'] })
+            items_ajust.append({
+                "Unidade": i['saida_obj_id__unidade__unidade'], 
+                "Departamento": i['saida_obj_id__departamento__nome'], 
+                "Total": i['total'] 
+                })
             
-        serializer_saida = MaterialSaidaSerializer(items_ajust, many=True)
+        serializer_saida = MaterialTipoSerializerChart(items_ajust, many=True)
         # serializer_objs = MaterialTipoSerializer(items, many=True)
 
         return Response({'items_saida': serializer_saida.data})
@@ -454,7 +488,21 @@ def relatorioResponse(request):
 def MetricasView(request):
     template_name = 'analise_dados/metricas.html'
 
-    dados = get_estat_divisoes(request)
+    # dados = get_estat_divisoes(request)
+
+    items = MaterialTipo.objects.values(
+                                        'saida_obj_id__unidade__unidade', 
+                                        'saida_obj_id__departamento__nome').annotate(
+                                            total=Count('*')).exclude(saida_obj__isnull=True).order_by('-total')
+
+    dados = [
+        {
+            "unidade": i['saida_obj_id__unidade__unidade'],
+            "departamento": i['saida_obj_id__departamento__nome'],
+            "total": i['total'],
+        }
+        for i in items
+    ]
 
     if request.method == 'POST':
         try:
@@ -517,7 +565,7 @@ def MetricasView(request):
 
     return render(request, template_name, context)
 
-def count_dep(request, dep, uni, dep_nome):
+def count_dep(request, uni, dep):
     template_name = 'include/count_dep.html'
 
     #I have all of the elements in one query when i use select related
@@ -525,12 +573,11 @@ def count_dep(request, dep, uni, dep_nome):
         'saida_obj', 
         'saida_obj__unidade', 
         'saida_obj__departamento', 
-        'saida_obj__divisao_field'
         ).filter(
-            saida_obj__departamento_id=dep, 
-            saida_obj__unidade_id=uni).order_by('-id')
+            saida_obj__departamento__nome=dep, 
+            saida_obj__unidade__unidade=uni).order_by('-id')
 
-    return render(request, template_name, {'itens': itens, 'dep_nome': dep_nome})
+    return render(request, template_name, {'itens': itens, 'dep': dep})
 
 def RetornarExcell(request):
         
@@ -725,7 +772,6 @@ def DivisaoAddView(request):
                 return redirect('divisao_add')
 
     objs = []
-    # Use select_related to fetch related Unidade objects in the same query
     objs_div = Divisao.objects.select_related('departamento').all()
 
     paginator = Paginator(objs_div, 5)

@@ -11,6 +11,7 @@
 
 {% block content %}
 <div class="container-fluid p-4 rounded fundo_papel" id="fundo_adjust">
+
     <form action="{% url 'entrada_material' %}" method="post">
 
         <div class="row d-flex justify-content-center">
@@ -37,13 +38,39 @@
                     </div>
             </div>
         <hr>
-        {% if formset.non_form_errors %}
-            <div class="alert alert-danger mt-2">
-            {{ formset.non_form_errors }}
-            </div>
-        {% endif %}
     
-        <div class="col-md-auto">
+        <div class="col-md-auto ms-4">
+
+            {% if form.errors %}
+                <div class="alert alert-danger w-50">
+                    <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if formset.errors %}
+                <div class="alert alert-danger w-50 ms-4">
+                    <ul>
+                    {% for subform in formset.forms %}
+                        {% for field in subform %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }} (item {{ forloop.parentloop.counter }}):</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in subform.non_field_errors %}
+                            <li>(item {{ forloop.counter }}) {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
 
             <div class="row container" id="box_formset">
                 {{ formset.management_form }}

@@ -10,7 +10,8 @@
 
 {% block content %}
 
-<form method="get" action="{% url 'salvar_multiplos' %}">
+<form method="post" action="{% url 'salvar_multiplos' %}">
+    {% csrf_token %}
     <div class="p-3 bg-secondary rounded">
         <button class="cssbuttons-io-button" type="submit">
             <svg
@@ -64,7 +65,7 @@
                             <td>
                                 <a href="{% url 'excluir_item' item.id %}" 
                                 onclick="return confirm('Tem certeza que deseja excluir este item?');">
-                                    <button class="bin-button">
+                                    <button class="bin-button" type="button">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"

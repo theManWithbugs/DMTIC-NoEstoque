@@ -25,6 +25,11 @@ class MaterialTipoSerializer(serializers.Serializer):
         model = MaterialTipo
         fields = ['modelo']
 
+class MaterialTipoSerializerChart(serializers.Serializer):
+    Unidade = serializers.CharField()
+    Departamento = serializers.CharField()
+    Total = serializers.IntegerField()
+
 class MaterialSaidaSerializer(serializers.Serializer):
     Unidade = serializers.CharField()
     Departamento = serializers.CharField()

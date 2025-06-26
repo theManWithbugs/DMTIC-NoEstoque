@@ -138,6 +138,6 @@ def get_estat_divisoes(request):
         for i in items
     ]
 
-    return dados[:10]
+    return dados[:15]
 
 

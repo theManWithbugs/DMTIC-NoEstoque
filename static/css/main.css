@@ -130,15 +130,16 @@ footer span img {
     margin-left: 5rem;
 }
 
-#saidas_btn_menu {
+.saidas_btn_menu {
     position: relative;
     padding: 10px;
     border: none;
-    background-color: transparent;
+    background-color: whitesmoke;
+    border-radius: 5px;
     outline: none;
 }
 
-#saidas_btn_menu::after {
+.saidas_btn_menu::after {
     content: '';
     position: absolute;
     left: 0;
@@ -151,12 +152,12 @@ footer span img {
     transition: transform 0.3s ease;
 }
 
-#saidas_btn_menu:hover::after,
-#saidas_btn_menu:focus::after {
+.saidas_btn_menu:hover::after,
+.saidas_btn_menu:focus::after {
     transform: scaleX(1);
 }
 
-#saidas_btn_menu span {
+.saidas_btn_menu span {
     font-weight: 600;
 }
 

@@ -1,18 +1,21 @@
- fetch('/response_dep/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            window.responseData = data;
-            responseData = data;
+// Example: fetch data from an API endpoint and then process it
+fetch('/response_dep/')
+    .then(response => {
+        if (window.chartDrawn) return;
+        window.chartDrawn = true;
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        window.responseData = data;
+        responseData = data;
 
-            const departamentos = data.contagem_departamentos;
-            const items_saida = data.items_saida;
-    
-            anychart.onDocumentReady(function () {
+        const departamentos = data.contagem_departamentos;
+        const items_saida = data.items_saida;
+
+        anychart.onDocumentReady(function () {
             // create column chart
             var chart = anychart.column3d();
 
@@ -42,7 +45,7 @@
                 .anchor('center-bottom')
                 .offsetX(0)
                 .offsetY(5)
-                .format('${%Value}');
+                .format('{%Value}');
 
             // set scale minimum
             chart.yScale().minimum(0);
@@ -57,35 +60,11 @@
             // chart.yAxis().title('Revenue in Dollars');
 
             // set container id for the chart
-            chart.container('container');
+            chart.container('chart');
 
             // initiate chart drawing
             chart.draw();
-            });
+        });
 
-            anychart.onDocumentReady(function () {
-            // create pie chart with passed data
-            var chart = anychart.pie([
-                ['Department Stores', 6371664],
-                ['Discount Stores', 7216301],
-                ['Men\'s/Women\'s Stores', 1486621],
-                ['Juvenile Specialty Stores', 786622],
-                ['All other outlets', 900000]
-            ]);
-
-            // set chart title text settings
-            chart
-                .title('ACME Corp. apparel sales through different retail channels')
-                // set chart radius
-                .radius('43%')
-                // create empty area in pie chart
-                .innerRadius('30%');
-
-            // set container id for the chart
-            chart.container('container_two');
-            // initiate chart drawing
-            chart.draw();
-            });
-            
-        })
-        .catch(error => console.error('Erro:', error));
+    })
+    .catch(error => console.error('Erro:', error));
