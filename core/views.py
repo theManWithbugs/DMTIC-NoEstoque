@@ -52,29 +52,7 @@ def baseView(request):
 def homeView(request):
     template_name = 'include/home.html'
 
-    relatorio = HistoricoUser.objects.all()
-
-    contador_add = 0
-    contador_dell = 0
-    contador_saida = 0
-
-    hoje = date.today()
-
-    for x in relatorio:
-        if x.acao_realizada == 'Entrada de item' and x.data == hoje:
-            contador_add+=1
-        if x.acao_realizada == 'Exclusão de item' and x.data == hoje:
-            contador_dell+=1
-        if x.acao_realizada == 'Saida de item realizada' and x.data == hoje:
-            contador_saida+=1
-
-    context = {
-        'contador_add': contador_add,
-        'contador_dell': contador_dell,
-        'contador_saida': contador_saida,
-    }
-    
-    return render(request, template_name, context)
+    return render(request, template_name)
 
 def logoutView(request):
     auth_logout(request)
@@ -221,7 +199,7 @@ def excluirItems(request, id):
                 acao_realizada = 'Exclusão de item'
             )
         messages.success(request, msgSucesso)
-        return redirect('all_disponiveis')
+        return redirect('saida_many', item.modelo)
 
     return request
 
@@ -245,7 +223,7 @@ def saida_ItemView(request, id):
                 acao_realizada = 'Atualização de saida',
             )
             messages.success(request, "Atualizado com sucesso!")
-            return redirect('listar_all')  
+            return redirect('itens_csaida_view', material_tipo.modelo)  
         else:
             messages.error(request, msgError)
     else:
@@ -370,19 +348,23 @@ def saida_many(request, item):
         'objs': objs,
         'ulti_saidas': ultimas_saidas
     }
-
+    
     return render(request, template_name, context)
 
 from django.core.cache import cache
-
 def salvar_multiplos(request):
     template_name = 'include/salvar_multiplos.html'
 
-    ids = request.GET.getlist('ids')
+    # Use POST para obter os ids se o método do form for POST
+    if request.method == 'POST':
+        ids = request.POST.getlist('ids')
+    else:
+        ids = request.GET.getlist('ids')
+
     if ids:
         cache.set('selected_ids', ids, timeout=600)
 
-    form = FiltroForm(data=request.GET)
+    form = FiltroForm(data=request.POST if request.method == 'POST' else request.GET)
 
     if form.is_valid():
         unidade = form.cleaned_data['unidade']
@@ -408,7 +390,6 @@ def salvar_multiplos(request):
                 for material_tipo in materiais:
                     material_tipo.saida_obj = saida
                     material_tipo.save()
-                    # request.session('cached_ids', None)
                 if materiais:
                     messages.success(request, "Saida de material realizada com sucesso!")
                     modelo = material_tipo.modelo if material_tipo else ""
