@@ -1,5 +1,6 @@
 from django import forms
 from . models import *
+import re
 
 class AddMaterialForm(forms.ModelForm):
     class Meta:
@@ -65,6 +66,18 @@ class TipoMaterForm(forms.ModelForm):
         super(TipoMaterForm, self).__init__(*args, **kwargs)
         for i in self.fields:
             self.fields[i].widget.attrs['class'] = 'form-control form-control-sm'
+
+    def clean_marca(self):
+        marca = self.cleaned_data.get('marca')
+        if marca:
+            return re.sub(r'[^\w\s]', '', marca)
+        return marca
+
+    def clean_modelo(self):
+        modelo = self.cleaned_data.get('modelo')
+        if modelo:
+            return re.sub(r'[^\w\s]', '', modelo)
+        return modelo
 
 class SaidaMaterialForm(forms.ModelForm):
     class Meta:
